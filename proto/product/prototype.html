@@ -3,1090 +3,731 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Intelligence</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>Global Product Intelligence | Strategic Industrial Planning</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'slate': { 850: '#1e293b', 900: '#0f172a', 950: '#020617' },
+            'indigo': { 950: '#1e1b4b' },
+            'strategic': { 
+              primary: '#1e293b', 
+              accent: '#3b82f6', 
+              warning: '#f59e0b',
+              danger: '#dc2626',
+              success: '#059669'
+            }
+          },
+          fontFamily: {
+            'serif': ['"Crimson Text"', 'serif'],
+            'sans': ['Inter', 'sans-serif'],
+            'mono': ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    /* ==========================================
-       RESET & VARIABLES
-       ========================================== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #faf8f5;
-      --bg-alt: #f3efe9;
-      --bg-card: #ffffff;
-      --border: #e5dfd6;
-      --border-light: #ece8e0;
-      --text-900: #1c1917;
-      --text-800: #292524;
-      --text-700: #44403c;
-      --text-600: #57534e;
-      --text-500: #78716c;
-      --text-400: #a8a29e;
-      --text-300: #d6d3d1;
-      --accent: #b45309;
-      --accent-light: #f59e0b;
-      --accent-bg: #fef3c7;
-      --accent-border: #fde68a;
-      --danger: #b91c1c;
-      --danger-bg: #fef2f2;
-      --danger-border: #fecaca;
-      --success: #15803d;
-      --success-bg: #f0fdf4;
-      --info: #1e40af;
-      --info-bg: #eff6ff;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans: 'DM Sans', system-ui, sans-serif;
-      --mono: 'DM Mono', 'Consolas', monospace;
-    }
-
-    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
-
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text-800);
-      line-height: 1.7;
-    }
-
-    /* ==========================================
-       DOCUMENT SHELL
-       ========================================== */
-    .doc-page {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-
-    /* ==========================================
-       HEADER
-       ========================================== */
-    .doc-header {
-      padding: 20px 0 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-500);
-      letter-spacing: 0.04em;
-      font-family: var(--mono);
-    }
-    .doc-header .label {
-      text-transform: uppercase;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-    }
-    .doc-header .divider {
-      width: 1px;
-      height: 14px;
-      background: var(--border);
-      margin: 0 12px;
-    }
-    .doc-header .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .doc-header .breadcrumb a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .doc-header .breadcrumb a:hover { text-decoration: underline; }
-
-    /* ==========================================
-       TITLE BLOCK
-       ========================================== */
-    .title-block {
-      padding: 56px 0 48px;
-      border-bottom: 2px solid var(--text-900);
-    }
-    .title-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .title-meta .tag {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 4px 10px;
-      border-radius: 3px;
-      background: var(--accent-bg);
-      color: var(--accent);
-      border: 1px solid var(--accent-border);
-    }
-    .title-meta .cat {
-      font-size: 0.82rem;
-      color: var(--text-500);
-    }
-    .title-block h1 {
-      font-family: var(--serif);
-      font-size: 3rem;
-      font-weight: 600;
-      line-height: 1.12;
-      color: var(--text-900);
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
-    }
-    .title-block .desc {
-      font-size: 1.08rem;
-      line-height: 1.75;
-      color: var(--text-600);
-      max-width: 760px;
-    }
-
-    /* ==========================================
-       METRICS STRIP
-       ========================================== */
-    .metrics-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      border-left: 1px solid var(--border);
-    }
-    .metric-cell {
-      padding: 28px 24px;
-      border-right: 1px solid var(--border);
-      border-top: 1px solid var(--border);
-    }
-    .metric-cell .m-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-400);
-      margin-bottom: 8px;
-    }
-    .metric-cell .m-value {
-      font-family: var(--serif);
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--text-900);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-    .metric-cell .m-sub {
-      font-size: 0.78rem;
-      color: var(--text-500);
-      line-height: 1.4;
-    }
-
-    /* ==========================================
-       SECTIONS
-       ========================================== */
-    .section { padding: 48px 0; }
-    .section + .section { border-top: 1px solid var(--border); }
-
-    .section-head {
-      margin-bottom: 28px;
-    }
-    .section-num {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-    .section-title {
-      font-family: var(--serif);
-      font-size: 1.85rem;
-      font-weight: 600;
-      color: var(--text-900);
-      line-height: 1.2;
-    }
-
-    /* ==========================================
-       TWO-COLUMN LAYOUT
-       ========================================== */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: start;
-    }
-
-    .prose p {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: var(--text-700);
-      margin-bottom: 16px;
-    }
-    .prose p:last-child { margin-bottom: 0; }
-
-    /* ==========================================
-       DATA VIZ: HORIZONTAL BARS
-       ========================================== */
-    .bar-chart { width: 100%; }
-    .bar-row {
-      display: grid;
-      grid-template-columns: 120px 1fr 52px;
-      gap: 12px;
-      align-items: center;
-      padding: 7px 0;
-    }
-    .bar-row + .bar-row { border-top: 1px solid var(--border-light); }
-    .bar-label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-700);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .bar-track {
-      height: 18px;
-      background: var(--bg-alt);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 1s ease;
-    }
-    .bar-fill.dim {
-      background: var(--text-300);
-    }
-    .bar-val {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text-600);
-      text-align: right;
-    }
-
-    /* ==========================================
-       DATA VIZ: SPARKLINE (CSS only)
-       ========================================== */
-    .sparkline {
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      height: 56px;
-      padding-top: 4px;
-    }
-    .spark-bar {
-      flex: 1;
-      background: var(--accent);
-      border-radius: 2px 2px 0 0;
-      min-height: 3px;
-      position: relative;
-      transition: background 0.2s;
-    }
-    .spark-bar.forecast {
-      background: var(--accent-border);
-      border: 1px dashed var(--accent);
-      border-bottom: none;
-    }
-    .spark-bar:hover { background: var(--text-900); }
-    .spark-bar:hover::after {
-      content: attr(data-label);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      color: var(--text-600);
-      white-space: nowrap;
-      padding: 2px 6px;
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+    .font-serif { font-family: 'Crimson Text', serif; }
+    
+    .intelligence-card {
       background: white;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      margin-bottom: 4px;
-      z-index: 10;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      transition: all 0.2s;
     }
-    .spark-labels {
-      display: flex;
-      gap: 3px;
-      margin-top: 4px;
+    .intelligence-card:hover {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      transform: translateY(-1px);
     }
-    .spark-labels span {
-      flex: 1;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: 0.55rem;
-      color: var(--text-400);
+    
+    .metric-large {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
     }
-
-    /* ==========================================
-       DATA TABLE
-       ========================================== */
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
+    
+    .section-header {
+      border-left: 3px solid #3b82f6;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
     }
+    
     .data-table th {
-      text-align: left;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-400);
-      padding: 10px 12px;
-      border-bottom: 2px solid var(--text-900);
-    }
-    .data-table td {
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--border-light);
-      color: var(--text-700);
-      vertical-align: top;
-    }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table .name { font-weight: 600; color: var(--text-800); }
-    .data-table .mono { font-family: var(--mono); font-size: 0.8rem; }
-
-    /* ==========================================
-       BADGE / TAG
-       ========================================== */
-    .badge {
-      display: inline-block;
-      font-family: var(--mono);
       font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      padding: 3px 8px;
-      border-radius: 3px;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      background: #f8fafc;
     }
-    .badge-red { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
-    .badge-amber { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
-    .badge-green { background: var(--success-bg); color: var(--success); border: 1px solid #bbf7d0; }
-    .badge-blue { background: var(--info-bg); color: var(--info); border: 1px solid #bfdbfe; }
-    .badge-gray { background: var(--bg-alt); color: var(--text-500); border: 1px solid var(--border); }
-
-    /* ==========================================
-       RISK CALLOUT
-       ========================================== */
-    .risk-callout {
-      background: var(--danger-bg);
-      border: 1px solid var(--danger-border);
-      border-left: 4px solid var(--danger);
-      border-radius: 4px;
-      padding: 20px 24px;
-      margin-top: 24px;
-    }
-    .risk-callout h4 {
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--danger);
-      margin-bottom: 8px;
-    }
-    .risk-callout p {
-      font-size: 0.9rem;
-      color: var(--text-800);
-      line-height: 1.65;
-    }
-    .risk-callout .risk-list {
-      margin-top: 12px;
-      padding-left: 18px;
-    }
-    .risk-callout .risk-list li {
-      font-size: 0.85rem;
-      color: var(--text-700);
-      margin-bottom: 4px;
-      line-height: 1.5;
-    }
-
-    /* ==========================================
-       CARDS
-       ========================================== */
-    .info-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 20px;
-    }
-    .info-card h4 {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-400);
-      margin-bottom: 12px;
-    }
-
-    /* ==========================================
-       SUBSTITUTES
-       ========================================== */
-    .sub-item {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .sub-item:last-child { border-bottom: none; }
-    .sub-head {
-      display: flex;
+    
+    .tag {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .sub-head .sub-name {
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-800);
-    }
-    .sub-meta {
-      display: flex;
-      gap: 8px;
-    }
-    .sub-desc {
-      font-size: 0.85rem;
-      color: var(--text-600);
-      line-height: 1.6;
-    }
-
-    /* ==========================================
-       SUPPLY CHAIN FLOW
-       ========================================== */
-    .sc-flow {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 32px;
-      position: relative;
-    }
-    .sc-tier {
-      position: relative;
-    }
-    .sc-tier-label {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-400);
-      margin-bottom: 14px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--text-900);
-    }
-    .sc-item {
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .sc-item:last-child { border-bottom: none; }
-    .sc-item .sc-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-800);
-      margin-bottom: 2px;
-    }
-    .sc-item .sc-detail {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
-      color: var(--text-500);
-      font-family: var(--mono);
-    }
-
-    /* ==========================================
-       REQUIREMENTS GRID
-       ========================================== */
-    .req-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    .req-item {
-      padding: 20px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-    }
-    .req-item .ri-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
       font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-400);
-      margin-bottom: 6px;
+      border: 1px solid;
     }
-    .req-item .ri-value {
-      font-family: var(--serif);
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--text-900);
-      line-height: 1.2;
-    }
-    .req-item .ri-sub {
-      font-size: 0.8rem;
-      color: var(--text-500);
-      margin-top: 4px;
-    }
-
-    .req-list {
-      list-style: none;
-      padding: 0;
-    }
-    .req-list li {
-      font-size: 0.85rem;
-      color: var(--text-700);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border-light);
-      line-height: 1.5;
-    }
-    .req-list li:last-child { border-bottom: none; }
-    .req-list li::before {
-      content: '—';
-      margin-right: 8px;
-      color: var(--text-400);
-    }
-
-    /* ==========================================
-       RELATED PRODUCTS
-       ========================================== */
-    .related-item {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 16px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border-light);
-      align-items: baseline;
-    }
-    .related-item:last-child { border-bottom: none; }
-    .related-item .r-name {
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-800);
-    }
-    .related-item .r-rel {
-      font-size: 0.85rem;
-      color: var(--text-600);
-      line-height: 1.5;
-    }
-
-    /* ==========================================
-       FOOTER
-       ========================================== */
-    .doc-footer {
-      padding: 32px 0 48px;
-      border-top: 2px solid var(--text-900);
-      margin-top: 24px;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--text-400);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    /* ==========================================
-       RESPONSIVE
-       ========================================== */
-    @media (max-width: 768px) {
-      .doc-page { padding: 0 20px; }
-      .title-block h1 { font-size: 2.1rem; }
-      .metrics-strip { grid-template-columns: repeat(2, 1fr); }
-      .two-col { grid-template-columns: 1fr; gap: 32px; }
-      .sc-flow { grid-template-columns: 1fr; }
-      .req-grid { grid-template-columns: 1fr; }
-      .bar-row { grid-template-columns: 90px 1fr 44px; }
-      .related-item { grid-template-columns: 1fr; gap: 4px; }
+    
+    .trend-up { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
+    .trend-down { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
+    .trend-neutral { color: #6b7280; background: #f3f4f6; border-color: #d1d5db; }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
 </head>
-<body>
-  <div class="doc-page">
+<body class="min-h-screen bg-slate-50">
 
-    <header class="doc-header">
-      <div class="breadcrumb">
-        <a href="index.html">Registry</a>
-        <span>›</span>
-        <span class="label">Product Intelligence</span>
+  <!-- Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-strategic-primary rounded flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"/>
+            </svg>
+          </div>
+          <span class="font-serif text-xl font-bold text-slate-900">Strategic<span class="text-strategic-accent">Intel</span></span>
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+          <a href="#" class="hover:text-strategic-accent transition-colors">Registry</a>
+          <a href="#" class="text-strategic-accent">Product View</a>
+          <a href="#" class="hover:text-strategic-accent transition-colors">Analytics</a>
+        </nav>
       </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span id="headerDate" class="label"></span>
-        <div class="divider"></div>
-        <span id="headerProductName">Loading…</span>
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-mono text-slate-400 bg-slate-100 px-3 py-1 rounded-full" id="lastUpdated">Updated: Q3 2024</span>
+        <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <div id="app"></div>
-
-    <footer class="doc-footer">
-      <span>Generated for strategic planning purposes. Verify critical data independently.</span>
-      <span id="footerId"></span>
-    </footer>
-
-  </div>
-
-  <script>
-    /* ============================================================
-       INIT
-       ============================================================ */
-    async function init() {
-      const params = new URLSearchParams(window.location.search);
-      const productId = params.get('id');
-      if (!productId) { renderError('No product ID. Use ?id=your-file'); return; }
-      try {
-        const res = await fetch(`./data/2.json`);
-        if (!res.ok) throw new Error('Not found');
-        const data = await res.json();
-        render(data);
-      } catch (e) {
-        renderError(`Could not load data/${productId}.json — ${e.message}`);
-      }
-    }
-
-    function renderError(msg) {
-      document.getElementById('app').innerHTML =
-        `<div style="padding:80px 40px;text-align:center;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;margin:40px 0">${msg}</div>`;
-    }
-
-    /* ============================================================
-       RENDER ORCHESTRATOR
-       ============================================================ */
-    function render(d) {
-      document.title = `${d.name} — Product Intelligence`;
-      document.getElementById('headerProductName').textContent = d.name;
-      document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
-      document.getElementById('footerId').textContent = d.id || '';
-
-      const app = document.getElementById('app');
-      app.innerHTML = `
-        ${titleBlock(d)}
-        ${metricsStrip(d)}
-        ${section('01', 'Product Overview', overviewSection(d))}
-        ${section('02', 'Global Market Analysis', marketSection(d))}
-        ${section('03', 'Competitive Landscape', producersSection(d))}
-        ${section('04', 'Technical Core', technicalSection(d))}
-        ${section('05', 'R&D Investment', rdSection(d))}
-        ${section('06', 'Substitution Analysis', substitutesSection(d))}
-        ${section('07', 'Supply Chain Ecosystem', supplyChainSection(d))}
-        ${section('08', 'Industrial Requirements', requirementsSection(d))}
-        ${section('09', 'Related Products', relatedSection(d))}
-        ${section('10', 'Risk Assessment', riskSection(d))}
-      `;
-
-      animateBars();
-    }
-
-    /* ============================================================
-       HELPERS
-       ============================================================ */
-    function section(num, title, inner) {
-      return `<div class="section">
-        <div class="section-head">
-          <div class="section-num">${num}</div>
-          <h2 class="section-title">${title}</h2>
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Executive Summary Header -->
+    <section id="executiveHeader" class="mb-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 intelligence-card rounded-xl p-8">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span id="productCategory" class="text-xs font-bold tracking-widest text-strategic-accent uppercase">Advanced Materials</span>
+                <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+                <span id="productCode" class="font-mono text-xs text-slate-500">HS 8541.40</span>
+              </div>
+              <h1 id="productName" class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">Photovoltaic Cells & Modules</h1>
+              <p id="productDescription" class="text-lg text-slate-600 leading-relaxed">
+                Semiconductor devices converting light into electrical energy through the photovoltaic effect. 
+                Represents the fundamental building block of solar energy systems, with crystalline silicon 
+                dominating 95% of global production. Critical component for renewable energy transition 
+                and grid decarbonization strategies worldwide.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-6" id="keyAttributes">
+            <!-- Populated by JS -->
+          </div>
         </div>
-        ${inner}
-      </div>`;
-    }
-
-    function badge(level) {
-      const map = {
-        'Critical': 'badge-red', 'Very High': 'badge-red', 'High': 'badge-amber',
-        'Moderate': 'badge-blue', 'Low': 'badge-green', 'Very Low': 'badge-green',
-        'Emerging': 'badge-amber', 'Commercial': 'badge-green', 'Research': 'badge-gray',
-        'Experimental': 'badge-gray', 'Production': 'badge-green', 'Mature': 'badge-green',
-        'Scaling': 'badge-blue'
-      };
-      return `<span class="badge ${map[level] || 'badge-gray'}">${level}</span>`;
-    }
-
-    function barHTML(label, value, max, dim) {
-      const pct = max > 0 ? (value / max * 100) : 0;
-      return `<div class="bar-row">
-        <span class="bar-label">${label}</span>
-        <div class="bar-track"><div class="bar-fill ${dim ? 'dim' : ''}" data-w="${pct}" style="width:0%"></div></div>
-        <span class="bar-val">${value}%</span>
-      </div>`;
-    }
-
-    function sparkline(data) {
-      const max = Math.max(...data.map(d => d.value));
-      const bars = data.map(d => {
-        const h = (d.value / max * 100);
-        const cls = d.note === 'Forecast' ? 'forecast' : '';
-        return `<div class="spark-bar ${cls}" style="height:${h}%" data-label="${d.year}: $${d.value}B"></div>`;
-      }).join('');
-      const labels = data.map(d => `<span>${String(d.year).slice(2)}</span>`).join('');
-      return `<div class="sparkline">${bars}</div><div class="spark-labels">${labels}</div>`;
-    }
-
-    function animateBars() {
-      setTimeout(() => {
-        document.querySelectorAll('.bar-fill[data-w]').forEach(el => {
-          el.style.width = el.dataset.w + '%';
-        });
-      }, 100);
-    }
-
-    /* ============================================================
-       SECTION BUILDERS
-       ============================================================ */
-
-    function titleBlock(d) {
-      return `<div class="title-block">
-        <div class="title-meta">
-          <span class="tag">${d.id || 'Dossier'}</span>
-          <span class="cat">${d.category || ''}</span>
-        </div>
-        <h1>${d.name}</h1>
-        <p class="desc">${d.description}</p>
-      </div>`;
-    }
-
-    function metricsStrip(d) {
-      const m = d.market || {};
-      const rd = d.rdSpending || {};
-      const ir = d.industrialRequirements || {};
-      return `<div class="metrics-strip">
-        <div class="metric-cell">
-          <div class="m-label">Global Market</div>
-          <div class="m-value">${m.size || '—'}</div>
-          <div class="m-sub">as of ${m.sizeYear || '—'}; ${m.cagr || '—'} CAGR</div>
-        </div>
-        <div class="metric-cell">
-          <div class="m-label">Forecast</div>
-          <div class="m-value">${m.forecastSize || '—'}</div>
-          <div class="m-sub">projected ${m.forecastYear || '—'}</div>
-        </div>
-        <div class="metric-cell">
-          <div class="m-label">R&D Spend</div>
-          <div class="m-value">${rd.globalTotal || '—'}</div>
-          <div class="m-sub">${rd.asPercentOfRevenue || '—'}% of revenue (${rd.year || '—'})</div>
-        </div>
-        <div class="metric-cell">
-          <div class="m-label">CapEx per Unit</div>
-          <div class="m-value">${(ir.capitalInvestment || '—').split(';')[0].trim()}</div>
-          <div class="m-sub">${ir.constructionTime || '—'} construction</div>
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 01 Overview ---------- */
-    function overviewSection(d) {
-      const m = d.market || {};
-      const segments = m.segments || [];
-      const maxSeg = Math.max(...segments.map(s => s.share), 1);
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>${d.description}</p>
-          <p>The global ${d.name.toLowerCase()} market, valued at <strong>${m.size}</strong> in ${m.sizeYear}, is projected to reach <strong>${m.forecastSize}</strong> by ${m.forecastYear} at a compound annual growth rate of <strong>${m.cagr}</strong>. Total installed capacity stands at approximately ${m.globalCapacity || '—'} ${m.unit || ''}.</p>
-          <p>Growth is driven by accelerating demand for artificial intelligence workloads, automotive electrification, and the proliferation of connected devices across industrial and consumer segments. The industry continues to invest heavily in next-generation process technologies while expanding mature-node capacity for automotive and IoT applications.</p>
-        </div>
-        <div>
-          <div class="info-card">
-            <h4>Market Segments by Revenue Share</h4>
-            <div class="bar-chart">
-              ${segments.map(s => barHTML(s.name, s.share, maxSeg)).join('')}
+        
+        <div class="space-y-4">
+          <div class="intelligence-card rounded-xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Global Market Value</div>
+            <div class="metric-large text-3xl font-bold mb-1">$52.8B</div>
+            <div class="flex items-center gap-2 text-sm">
+              <span class="tag trend-up text-xs">+12.4% CAGR</span>
+              <span class="text-slate-400">2024-2030</span>
+            </div>
+          </div>
+          
+          <div class="intelligence-card rounded-xl p-6">
+            <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-3">Strategic Classification</div>
+            <div class="space-y-2" id="strategicTags">
+              <!-- Populated by JS -->
             </div>
           </div>
         </div>
-      </div>`;
-    }
+      </div>
+    </section>
 
-    /* ---------- 02 Market ---------- */
-    function marketSection(d) {
-      const m = d.market || {};
-      const regions = m.regions || [];
-      const maxReg = Math.max(...regions.map(r => r.share), 1);
-      const trends = m.trends || [];
+    <!-- Key Metrics Grid -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="intelligence-card rounded-lg p-5 border-l-4 border-blue-500">
+        <div class="text-xs font-medium text-slate-500 uppercase mb-1">R&D Intensity</div>
+        <div class="metric-large text-2xl font-bold text-slate-900">4.2%</div>
+        <div class="text-xs text-slate-500 mt-1">of industry revenue</div>
+      </div>
+      <div class="intelligence-card rounded-lg p-5 border-l-4 border-amber-500">
+        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Market Concentration</div>
+        <div class="metric-large text-2xl font-bold text-slate-900">CR5: 68%</div>
+        <div class="text-xs text-slate-500 mt-1">Oligopolistic structure</div>
+      </div>
+      <div class="intelligence-card rounded-lg p-5 border-l-4 border-emerald-500">
+        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Substitutability Index</div>
+        <div class="metric-large text-2xl font-bold text-slate-900">Low</div>
+        <div class="text-xs text-slate-500 mt-1">Limited alternatives</div>
+      </div>
+      <div class="intelligence-card rounded-lg p-5 border-l-4 border-purple-500">
+        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Supply Chain Complexity</div>
+        <div class="metric-large text-2xl font-bold text-slate-900">High</div>
+        <div class="text-xs text-slate-500 mt-1">Multi-tier dependencies</div>
+      </div>
+    </section>
 
-      return `<div class="two-col">
-        <div class="prose">
-          <p>The market has expanded ${Math.round((m.trends?.[m.trends.length-1]?.value / m.trends?.[0]?.value - 1) * 100) || '—'}% over the past ${m.trends?.length ? m.trends.length - 1 : '—'} years, reflecting sustained structural demand. The ${m.cagr} forward CAGR signals continued expansion through ${m.forecastYear}, though with increasing complexity as geopolitical factors reshape supply geography.</p>
-          <p>Regional concentration remains a defining feature: ${regions[0]?.region} accounts for ${regions[0]?.share}% of global capacity, creating systemic dependencies that governments and corporations are actively working to diversify. Recent policy interventions — including the U.S. CHIPS Act, EU Chips Act, and Japan's semiconductor subsidies — aim to rebalance this distribution over the coming decade.</p>
-          <p>Segment-level growth varies significantly. ${m.segments?.[0]?.name} leads at ${m.segments?.[0]?.growth} CAGR, driven by AI infrastructure buildout, while ${m.segments?.[m.segments.length-2]?.name} grows at ${m.segments?.[m.segments.length-2]?.growth}, reflecting electrification trends across automotive and energy sectors.</p>
-        </div>
-        <div>
-          <div class="info-card" style="margin-bottom:24px">
-            <h4>Production by Region</h4>
-            <div class="bar-chart">
-              ${regions.map(r => barHTML(r.region, r.share, maxReg)).join('')}
-            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Main Content Column -->
+      <div class="lg:col-span-8 space-y-10">
+        
+        <!-- Market Architecture -->
+        <section class="intelligence-card rounded-xl p-8">
+          <div class="section-header">
+            <h2 class="font-serif text-2xl font-bold text-slate-900">Market Architecture & Evolution</h2>
+            <p class="text-sm text-slate-500 mt-1">Global demand dynamics, regional distribution, and value chain migration patterns</p>
           </div>
-          ${trends.length ? `<div class="info-card">
-            <h4>Market Size Trend ($B) — Solid: Actual · Dashed: Forecast</h4>
-            ${sparkline(trends)}
-          </div>` : ''}
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 03 Producers ---------- */
-    function producersSection(d) {
-      const producers = d.producers || [];
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>The competitive landscape is characterized by extreme concentration. <strong>${producers[0]?.name}</strong> (${producers[0]?.country}) commands ${producers[0]?.marketShare}% of global foundry revenue, a dominance built on decades of process expertise, massive capital deployment, and deep integration with equipment suppliers. This concentration creates both efficiency (economies of scale, knowledge spillovers) and fragility (single-point-of-failure risk).</p>
-          <p>The top three producers — ${producers.slice(0,3).map(p => p.name).join(', ')} — collectively control ${producers.slice(0,3).reduce((s,p) => s + p.marketShare, 0)}% of the market. Entry barriers are formidable: establishing competitive production at leading-edge nodes requires ${d.industrialRequirements?.capitalInvestment?.split(';')[0] || '$15B+'} in capital, ${d.industrialRequirements?.constructionTime?.split(';')[0] || '3–5 years'} of construction, and access to equipment with multi-year lead times.</p>
-          <p>Notably, the market is bifurcating: leading-edge logic (sub-7nm) is a three-player race (TSMC, Samsung, Intel), while mature nodes (28nm+) see broader participation from ${producers.slice(3).map(p => p.name).join(', ')}, serving automotive, industrial, and IoT demand where cost sensitivity outweighs performance requirements.</p>
-        </div>
-        <div>
-          <table class="data-table">
-            <thead><tr><th>Producer</th><th>Country</th><th>Share</th><th>Specialty</th></tr></thead>
-            <tbody>
-              ${producers.map(p => `<tr>
-                <td class="name">${p.name}</td>
-                <td>${p.country}</td>
-                <td class="mono">${p.marketShare}%</td>
-                <td style="font-size:0.8rem;color:var(--text-600)">${p.specialty}</td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 04 Technical ---------- */
-    function technicalSection(d) {
-      const tc = d.technicalCore || {};
-      const processes = tc.processes || [];
-      const equipment = tc.equipment || [];
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>Manufacturing ${d.name.toLowerCase()} requires an extraordinary convergence of physics, chemistry, materials science, and precision engineering. Modern leading-edge fabrication involves 800–1,000 process steps over 2–3 months, with individual transistor structures measured in single-digit nanometers — roughly the width of 10 silicon atoms.</p>
-          <p>The technical core rests on three pillars: <strong>photolithography</strong> (pattern transfer using light), <strong>deposition and etching</strong> (material addition and removal at atomic scales), and <strong>metrology</strong> (measurement and quality control at sub-nanometer precision). Each pillar demands equipment of extraordinary complexity, supplied by a small number of specialized manufacturers.</p>
-          <p>Key materials — ultra-pure silicon wafers, photoresists, high-k dielectrics, and process gases — must meet purity standards measured in parts per trillion. A single contaminant particle can render an entire wafer worthless, necessitating Class 1 cleanrooms where fewer than 1 particle ≥0.5μm exists per cubic foot of air.</p>
-        </div>
-        <div>
-          <div class="info-card" style="margin-bottom:24px">
-            <h4>Key Materials</h4>
-            <div style="display:flex;flex-wrap:wrap;gap:6px">
-              ${(tc.keyMaterials || []).map(m => `<span class="badge badge-gray">${m}</span>`).join('')}
-            </div>
-          </div>
-          <div class="info-card" style="margin-bottom:24px">
-            <h4>Critical Equipment</h4>
-            <table class="data-table">
-              <thead><tr><th>Equipment</th><th>Supplier</th><th>Lead Time</th></tr></thead>
-              <tbody>
-                ${(equipment).map(e => `<tr>
-                  <td class="name" style="font-size:0.82rem">${e.name}</td>
-                  <td style="font-size:0.82rem">${e.supplier}</td>
-                  <td class="mono" style="font-size:0.82rem">${e.leadTime}</td>
-                </tr>`).join('')}
-              </tbody>
-            </table>
-          </div>
-          <div class="info-card">
-            <h4>Manufacturing Processes</h4>
-            <table class="data-table">
-              <thead><tr><th>Process</th><th>Barrier</th><th>Maturity</th></tr></thead>
-              <tbody>
-                ${processes.map(p => `<tr>
-                  <td>
-                    <span class="name" style="font-size:0.82rem">${p.name}</span><br>
-                    <span style="font-size:0.75rem;color:var(--text-500)">${p.description || ''}</span>
-                  </td>
-                  <td>${badge(p.barrier)}</td>
-                  <td>${badge(p.maturity)}</td>
-                </tr>`).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 05 R&D ---------- */
-    function rdSection(d) {
-      const rd = d.rdSpending || {};
-      const byCompany = rd.byCompany || [];
-      const maxRd = Math.max(...byCompany.map(c => parseFloat(c.amount)), 1);
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>Global R&D investment in ${d.name.toLowerCase()} reached <strong>${rd.globalTotal}</strong> in ${rd.year}, representing <strong>${rd.asPercentOfRevenue}%</strong> of industry revenue — among the highest R&D intensity ratios of any manufacturing sector. This sustained investment reflects the relentless pace of miniaturization and the multi-billion-dollar cost of developing each new process node.</p>
-          <p>R&D allocation is concentrated among a handful of vertically integrated companies and equipment suppliers. The top spenders — Intel, Samsung, and TSMC — account for a disproportionate share of process development, while equipment makers like ASML invest heavily in next-generation lithography platforms that define the industry's technical frontier.</p>
-          <p>Current research priorities center on extending Moore's Law through architectural innovation (gate-all-around transistors, backside power delivery) and advanced packaging (chiplet integration, hybrid bonding), as physical limits on transistor scaling approach. The transition to High-NA EUV lithography represents the next major capital commitment, with individual scanners expected to cost $350M+.</p>
-        </div>
-        <div>
-          <div class="info-card" style="margin-bottom:24px">
-            <h4>R&D Spending Trend ($B)</h4>
-            ${rd.trends?.length ? sparkline(rd.trends) : '<p style="color:var(--text-400);font-size:0.85rem">No trend data available</p>'}
-          </div>
-          <div class="info-card" style="margin-bottom:24px">
-            <h4>R&D by Company ($B, 2024 est.)</h4>
-            <div class="bar-chart">
-              ${byCompany.map(c => barHTML(c.name, parseFloat(c.amount), maxRd)).join('')}
-            </div>
-          </div>
-          <div class="info-card">
-            <h4>Research Focus Areas</h4>
-            <ul class="req-list">
-              ${(rd.focusAreas || []).map(f => `<li>${f}</li>`).join('')}
-            </ul>
-          </div>
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 06 Substitutes ---------- */
-    function substitutesSection(d) {
-      const subs = d.substitutes || [];
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>Substitutability for ${d.name.toLowerCase()} is <strong>low in the near term</strong> but warrants monitoring across several technology vectors. No alternative currently offers the combination of performance, cost, and manufacturing maturity that silicon-based semiconductor fabrication provides at scale.</p>
-          <p>The most credible near-term disruption comes from <strong>chiplet architectures</strong>, which disaggregate monolithic designs into smaller, specialized dies. This approach doesn't replace semiconductor fabrication but changes how chips are designed and assembled — reducing the premium on leading-edge node adoption for many applications.</p>
-          <p>Longer-term alternatives — photonic computing, neuromorphic architectures, and quantum computing — address specific computational paradigms but remain decades from displacing general-purpose semiconductor manufacturing. Their development is better understood as complementary, creating new computing modalities alongside rather than instead of conventional silicon.</p>
-        </div>
-        <div>
-          ${subs.map(s => `<div class="sub-item">
-            <div class="sub-head">
-              <span class="sub-name">${s.name}</span>
-              <div class="sub-meta">
-                ${badge(s.readiness)}
-                ${badge(s.threatLevel)}
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Regional Production Share</h4>
+              <div class="space-y-3" id="regionalShare">
+                <!-- Populated by JS -->
               </div>
             </div>
-            <p class="sub-desc">${s.description}</p>
-          </div>`).join('')}
-        </div>
-      </div>`;
-    }
-
-    /* ---------- 07 Supply Chain ---------- */
-    function supplyChainSection(d) {
-      const sc = d.supplyChain || {};
-      const tier1 = sc.tier1 || [];
-      const tier2 = sc.tier2 || [];
-      const downstream = sc.downstream || [];
-      const logistics = sc.logistics || [];
-
-      return `
-        <div class="sc-flow" style="margin-bottom:32px">
-          <div class="sc-tier">
-            <div class="sc-tier-label">Tier 1 — Equipment & Materials</div>
-            ${tier1.map(t => `<div class="sc-item">
-              <div class="sc-name">${t.name}</div>
-              <div class="sc-detail">${t.country} · ${t.concentration}</div>
-            </div>`).join('')}
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Demand Growth Vectors</h4>
+              <div class="space-y-3" id="demandVectors">
+                <!-- Populated by JS -->
+              </div>
+            </div>
           </div>
-          <div class="sc-tier">
-            <div class="sc-tier-label">Tier 2 — Critical Components</div>
-            ${tier2.map(t => `<div class="sc-item">
-              <div class="sc-name">${t.name}</div>
-              <div class="sc-detail">${t.country} · ${t.concentration}</div>
-            </div>`).join('')}
+          
+          <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Market Evolution Trajectory</h4>
+            <p id="marketEvolution" class="text-sm text-slate-700 leading-relaxed">
+              The industry is transitioning from polysilicon supply-constrained to installation-demand-constrained. 
+              Vertical integration strategies dominate among top-tier manufacturers, while technology differentiation 
+              shifts from commodity efficiency gains to advanced TOPCon and HJT cell architectures.
+            </p>
           </div>
-          <div class="sc-tier">
-            <div class="sc-tier-label">Downstream — Key Customers</div>
-            ${downstream.map(t => `<div class="sc-item">
-              <div class="sc-name">${t.name}</div>
-              <div class="sc-detail">${t.country} · ${t.concentration}</div>
-            </div>`).join('')}
+        </section>
+
+        <!-- Technical Core & Innovation -->
+        <section class="intelligence-card rounded-xl p-8">
+          <div class="section-header">
+            <h2 class="font-serif text-2xl font-bold text-slate-900">Technical Core & Innovation Landscape</h2>
+            <p class="text-sm text-slate-500 mt-1">Proprietary technologies, patent landscapes, and R&D investment patterns</p>
           </div>
-        </div>
-        ${logistics.length ? `<div class="info-card">
-          <h4>Logistics & Supply Chain Constraints</h4>
-          <ul class="req-list">
-            ${logistics.map(l => `<li>${l}</li>`).join('')}
-          </ul>
-        </div>` : ''}
-      `;
-    }
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="md:col-span-2">
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Critical Technology Parameters</h4>
+              <div class="overflow-hidden rounded-lg border border-slate-200">
+                <table class="w-full text-sm data-table">
+                  <thead>
+                    <tr class="border-b border-slate-200">
+                      <th class="px-4 py-3 text-left">Parameter</th>
+                      <th class="px-4 py-3 text-left">Industry Standard</th>
+                      <th class="px-4 py-3 text-left">Leading Edge</th>
+                      <th class="px-4 py-3 text-left">Barrier</th>
+                    </tr>
+                  </thead>
+                  <tbody id="techSpecs" class="divide-y divide-slate-100">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">R&D Spending Leaders</h4>
+              <div class="space-y-3" id="rdLeaders">
+                <!-- Populated by JS -->
+              </div>
+              <div class="mt-4 pt-4 border-t border-slate-200">
+                <div class="text-xs text-slate-500 mb-1">Total Industry R&D</div>
+                <div class="metric-large text-xl font-bold text-slate-900">$2.2B</div>
+                <div class="text-xs text-slate-400">Annual expenditure (2024)</div>
+              </div>
+            </div>
+          </div>
 
-    /* ---------- 08 Requirements ---------- */
-    function requirementsSection(d) {
-      const ir = d.industrialRequirements || {};
+          <div class="bg-blue-50 rounded-lg p-5 border border-blue-100">
+            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2">Technology Trajectory</h4>
+            <p id="techTrajectory" class="text-sm text-blue-900 leading-relaxed">
+              Migration from P-type PERC (Passivated Emitter and Rear Cell) to N-type TOPCon (Tunnel Oxide Passivated Contact) 
+              and HJT (Heterojunction Technology) architectures. Critical inflection point expected 2025-2026 as 
+              TOPCon achieves cost parity with PERC while offering 1.5-2% absolute efficiency gains.
+            </p>
+          </div>
+        </section>
 
-      return `<div class="req-grid" style="margin-bottom:28px">
-        <div class="req-item">
-          <div class="ri-label">Capital Investment</div>
-          <div class="ri-value">${ir.capitalInvestment || '—'}</div>
-        </div>
-        <div class="req-item">
-          <div class="ri-label">Construction Timeline</div>
-          <div class="ri-value">${ir.constructionTime || '—'}</div>
-        </div>
-        <div class="req-item">
-          <div class="ri-label">Time to Volume Scale</div>
-          <div class="ri-value">${ir.timeToScale || '—'}</div>
-        </div>
-        <div class="req-item">
-          <div class="ri-label">Workforce</div>
-          <div class="ri-value">${ir.workforce || '—'}</div>
-        </div>
+        <!-- Substitution Analysis -->
+        <section class="intelligence-card rounded-xl p-8 border-l-4 border-amber-400">
+          <div class="section-header border-amber-400">
+            <h2 class="font-serif text-2xl font-bold text-slate-900">Substitution Threats & Alternatives</h2>
+            <p class="text-sm text-slate-500 mt-1">Technological disruptors and material alternatives</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="substitutionGrid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- Industrial Requirements -->
+        <section class="intelligence-card rounded-xl p-8">
+          <div class="section-header">
+            <h2 class="font-serif text-2xl font-bold text-slate-900">Industrial Requirements</h2>
+            <p class="text-sm text-slate-500 mt-1">Capital intensity, regulatory frameworks, and operational prerequisites</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-4 bg-slate-50 rounded-lg">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Capital Intensity</div>
+              <div class="metric-large text-lg font-bold text-slate-900">$0.10/Watt</div>
+              <div class="text-xs text-slate-500 mt-1">Module manufacturing CAPEX</div>
+              <div class="mt-3 text-xs text-slate-600">Wafering and cell production require 3-5x higher capital intensity than module assembly.</div>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-lg">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Energy Requirements</div>
+              <div class="metric-large text-lg font-bold text-slate-900">High</div>
+              <div class="text-xs text-slate-500 mt-1">Polysilicon production</div>
+              <div class="mt-3 text-xs text-slate-600"> Metallurgical-grade silicon refining energy-intensive; access to low-cost electricity critical for competitiveness.</div>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-lg">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Regulatory Compliance</div>
+              <div class="text-xs text-slate-700 mt-1 space-y-1">
+                <div>• IEC 61215/61730 certification</div>
+                <div>• ISO 9001 quality systems</div>
+                <div>• Country-specific grid codes</div>
+                <div>• Anti-dumping duty exposure</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
-      <div class="two-col">
-        <div class="info-card">
-          <h4>Infrastructure Prerequisites</h4>
-          <ul class="req-list">
-            ${(ir.infrastructure || []).map(i => `<li>${i}</li>`).join('')}
-          </ul>
-        </div>
-        <div class="info-card">
-          <h4>Regulatory Requirements</h4>
-          <ul class="req-list">
-            ${(ir.regulatory || []).map(r => `<li>${r}</li>`).join('')}
-          </ul>
-        </div>
-      </div>`;
-    }
 
-    /* ---------- 09 Related ---------- */
-    function relatedSection(d) {
-      const related = d.relatedProducts || [];
-
-      return `<div class="prose" style="margin-bottom:24px">
-        <p>${d.name} does not exist in isolation — it is embedded in a dense web of enabling technologies, complementary products, and adjacent industries. Understanding these relationships is essential for assessing investment timing, competitive threats, and ecosystem dynamics.</p>
-      </div>
-      ${related.map(r => `<div class="related-item">
-        <span class="r-name">${r.name}</span>
-        <span class="r-rel">${r.relationship}</span>
-      </div>`).join('')}`;
-    }
-
-    /* ---------- 10 Risk ---------- */
-    function riskSection(d) {
-      const risk = d.risks || {};
-      const additional = risk.additionalRisks || [];
-
-      return `<div class="two-col">
-        <div class="prose">
-          <p>The risk profile for ${d.name.toLowerCase()} is shaped by extreme geographic and supplier concentration. <strong>Geopolitical exposure</strong> is rated <strong>${risk.geopolitical || '—'}</strong>, driven by the concentration of advanced manufacturing capacity in geopolitically sensitive regions. <strong>Supply chain fragility</strong> is similarly <strong>${risk.supplyChain || '—'}</strong>, reflecting single-source dependencies on critical equipment and materials.</p>
-          <p>Substitutability risk remains <strong>${risk.substitutability || 'Low'}</strong>: no viable alternative to semiconductor fabrication exists for the applications it serves. This structural indispensability amplifies the impact of supply disruptions — any interruption reverberates across virtually every industry sector.</p>
-          <p>The industry's risk trajectory is shaped by three converging forces: escalating export controls, increasing capital intensity (which raises the stakes of each investment decision), and the growing strategic importance of semiconductor supply to national security and economic competitiveness.</p>
-        </div>
-        <div>
-          <div class="info-card" style="margin-bottom:20px">
-            <h4>Risk Profile</h4>
-            <table class="data-table">
-              <tbody>
-                <tr><td>Geopolitical Exposure</td><td>${badge(risk.geopolitical || '—')}</td></tr>
-                <tr><td>Supply Chain Fragility</td><td>${badge(risk.supplyChain || '—')}</td></tr>
-                <tr><td>Substitutability</td><td>${badge(risk.substitutability || '—')}</td></tr>
-              </tbody>
-            </table>
+      <!-- Sidebar Column -->
+      <div class="lg:col-span-4 space-y-8">
+        
+        <!-- Competitive Landscape -->
+        <div class="intelligence-card rounded-xl p-6">
+          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Global Competitive Landscape</h3>
+          <div class="space-y-4" id="producerList">
+            <!-- Populated by JS -->
           </div>
-          ${risk.keyBottleneck ? `<div class="risk-callout">
-            <h4>Critical Bottleneck</h4>
-            <p>${risk.keyBottleneck}</p>
-          </div>` : ''}
-          ${additional.length ? `<div class="info-card" style="margin-top:20px">
-            <h4>Additional Risk Factors</h4>
-            <ul class="req-list">
-              ${additional.map(r => `<li>${r}</li>`).join('')}
-            </ul>
-          </div>` : ''}
+          <div class="mt-6 pt-4 border-t border-slate-200">
+            <div class="text-xs font-bold text-slate-500 uppercase mb-2">Market Dynamics</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Chinese manufacturers control 80%+ of global capacity. Vertical integration from polysilicon to modules 
+              is the dominant competitive strategy. Price competition intense with margin compression driving consolidation.
+            </p>
+          </div>
         </div>
-      </div>`;
+
+        <!-- Supply Chain Topology -->
+        <div class="intelligence-card rounded-xl p-6">
+          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Supply Chain Topology</h3>
+          
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Upstream Critical Inputs</h4>
+              <div class="space-y-2" id="upstreamInputs">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            
+            <div class="relative py-2">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-slate-300 border-dashed"></div>
+              </div>
+              <div class="relative flex justify-center">
+                <span class="bg-white px-2 text-xs text-slate-400 font-mono">PROCESSING</span>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Downstream Applications</h4>
+              <div class="space-y-2" id="downstreamApps">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="intelligence-card rounded-xl p-6">
+          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Adjacent & Related Products</h3>
+          <div class="space-y-3" id="relatedProducts">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Risk Matrix -->
+        <div class="intelligence-card rounded-xl p-6 bg-gradient-to-br from-slate-50 to-white">
+          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Strategic Risk Matrix</h3>
+          <div class="space-y-3" id="riskMatrix">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 pt-8 border-t border-slate-200 text-center text-sm text-slate-500">
+      <p>Strategic Industrial Intelligence Platform • Data sources: IEA, IRENA, Company Filings, Trade Statistics</p>
+    </footer>
+
+  </main>
+
+  <script>
+    // ============================================
+    // DATA MODEL & INITIALIZATION
+    // ============================================
+    
+    const productData = {
+      id: "pv-cells-001",
+      name: "Photovoltaic Cells & Modules",
+      category: "Advanced Materials / Renewable Energy Components",
+      hsCode: "8541.40",
+      description: "Semiconductor devices converting light into electrical energy through the photovoltaic effect. Represents the fundamental building block of solar energy systems, with crystalline silicon dominating 95% of global production. Critical component for renewable energy transition and grid decarbonization strategies worldwide.",
+      
+      strategicClassification: [
+        { label: "Energy Transition Critical", color: "blue" },
+        { label: "Capital Intensive", color: "slate" },
+        { label: "Technology Differentiated", color: "purple" }
+      ],
+      
+      keyAttributes: ["High Purity Silicon", "Passivation Layers", "Anti-reflective Coating", "Encapsulation", "Junction Box Integration"],
+      
+      marketMetrics: {
+        globalValue: "$52.8B",
+        cagr: "+12.4%",
+        forecastPeriod: "2024-2030",
+        rdIntensity: "4.2%",
+        concentration: "CR5: 68%",
+        substitutability: "Low",
+        supplyComplexity: "High"
+      },
+      
+      regionalProduction: [
+        { region: "China", share: 80, trend: "stable" },
+        { region: "Southeast Asia", share: 12, trend: "growing" },
+        { region: "Europe/USA", share: 5, trend: "declining" },
+        { region: "Rest of World", share: 3, trend: "stable" }
+      ],
+      
+      demandVectors: [
+        { sector: "Utility Scale Solar", growth: "+18%", share: "45%" },
+        { sector: "Distributed PV", growth: "+14%", share: "35%" },
+        { sector: "Commercial/Industrial", growth: "+11%", share: "20%" }
+      ],
+      
+      marketEvolution: "The industry is transitioning from polysilicon supply-constrained to installation-demand-constrained. Vertical integration strategies dominate among top-tier manufacturers, while technology differentiation shifts from commodity efficiency gains to advanced TOPCon and HJT cell architectures.",
+      
+      technicalSpecs: [
+        { parameter: "Cell Efficiency (Commercial)", standard: "21-22%", leading: "24-26%", barrier: "High" },
+        { parameter: "Degradation Rate", standard: "0.5-0.8%/year", leading: "0.3%/year", barrier: "Medium" },
+        { parameter: "Power Output (Module)", standard: "400-550W", leading: "700W+", barrier: "High" },
+        { parameter: "Thickness (Wafer)", standard: "170μm", leading: "130μm", barrier: "Medium" }
+      ],
+      
+      rdSpending: [
+        { company: "LONGi Green Energy", amount: "$350M", focus: "HJT & BC Cells" },
+        { company: "JinkoSolar", amount: "$280M", focus: "TOPCon Efficiency" },
+        { company: "First Solar", amount: "$190M", focus: "CdTe Thin Film" },
+        { company: "Trina Solar", amount: "$165M", focus: "210mm Technology" }
+      ],
+      
+      techTrajectory: "Migration from P-type PERC (Passivated Emitter and Rear Cell) to N-type TOPCon (Tunnel Oxide Passivated Contact) and HJT (Heterojunction Technology) architectures. Critical inflection point expected 2025-2026 as TOPCon achieves cost parity with PERC while offering 1.5-2% absolute efficiency gains.",
+      
+      majorProducers: [
+        { name: "LONGi Green Energy", hq: "China", share: "18%", focus: "Vertical Integration" },
+        { name: "JinkoSolar", hq: "China", share: "15%", focus: "N-type Technology" },
+        { name: "Trina Solar", hq: "China", share: "12%", focus: "Large Format" },
+        { name: "JA Solar", hq: "China", share: "11%", focus: "Cost Leadership" },
+        { name: "First Solar", hq: "USA", share: "6%", focus: "Thin Film CdTe" }
+      ],
+      
+      substitutionThreats: [
+        { 
+          technology: "Perovskite Tandem Cells", 
+          threatLevel: "Medium-High", 
+          timeline: "5-7 years",
+          description: "Potential to break silicon efficiency limits (33% vs 29% theoretical). Stability and manufacturing challenges remain." 
+        },
+        { 
+          technology: "Concentrated Solar Power (CSP)", 
+          threatLevel: "Low", 
+          timeline: "N/A",
+          description: "Alternative solar technology using mirrors. Complementary rather than substitutive for most applications." 
+        },
+        { 
+          technology: "Wind + Storage", 
+          threatLevel: "Medium", 
+          timeline: "Immediate",
+          description: "Alternative renewable generation. Substitution threat limited by land use profiles and grid requirements." 
+        },
+        { 
+          technology: "Next-gen Nuclear (SMR)", 
+          threatLevel: "Low", 
+          timeline: "10+ years",
+          description: "Baseload power alternative. Different use case, but competes for clean energy capital allocation." 
+        }
+      ],
+      
+      supplyChain: {
+        upstream: [
+          { material: "Polysilicon (Solar Grade)", criticality: "High", concentration: "China 85%" },
+          { material: "Silicon Wafers", criticality: "High", concentration: "China 95%" },
+          { material: "Silver Paste", criticality: "Medium", concentration: "Diversified" },
+          { material: "Aluminum Frames", criticality: "Low", concentration: "Regional" }
+        ],
+        downstream: [
+          { application: "Utility Solar Farms", growth: "High", margin: "Low" },
+          { application: "Rooftop Residential", growth: "Medium", margin: "High" },
+          { application: "Agrivoltaics", growth: "Emerging", margin: "Medium" },
+          { application: "Floating PV", growth: "High", margin: "Medium" }
+        ]
+      },
+      
+      relatedProducts: [
+        { name: "Solar Inverters", relationship: "System Integration", synergy: "High" },
+        { name: "Energy Storage Systems", relationship: "Complementary", synergy: "Critical" },
+        { name: "Mounting Systems", relationship: "Installation", synergy: "Medium" },
+        { name: "Polysilicon Feedstock", relationship: "Upstream", synergy: "High" },
+        { name: "Solar Glass", relationship: "Component", synergy: "Medium" }
+      ],
+      
+      risks: [
+        { type: "Geopolitical", level: "High", description: "Trade wars, anti-dumping duties, forced labor allegations affecting supply chains." },
+        { type: "Technology", level: "Medium", description: "Rapid obsolescence of PERC technology. Stranded asset risk for non-TOPCon capacity." },
+        { type: "Supply", level: "Medium", description: "Silver supply constraints for metallization. Wafer thinning limits." },
+        { type: "Demand", level: "Low", description: "Grid interconnection bottlenecks. Policy incentive volatility." }
+      ]
+    };
+
+    // ============================================
+    // RENDERING FUNCTIONS
+    // ============================================
+
+    function init() {
+      renderPage(productData);
     }
 
-    /* ============================================================
-       GO
-       ============================================================ */
-    init();
+    function renderPage(data) {
+      // Header Section
+      document.getElementById('productName').textContent = data.name;
+      document.getElementById('productCategory').textContent = data.category;
+      document.getElementById('productCode').textContent = data.hsCode;
+      document.getElementById('productDescription').textContent = data.description;
+      
+      // Key Attributes
+      const attrContainer = document.getElementById('keyAttributes');
+      data.keyAttributes.forEach(attr => {
+        const span = document.createElement('span');
+        span.className = 'px-3 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full border border-slate-200';
+        span.textContent = attr;
+        attrContainer.appendChild(span);
+      });
+      
+      // Strategic Tags
+      const tagContainer = document.getElementById('strategicTags');
+      data.strategicClassification.forEach(cls => {
+        const colors = {
+          blue: 'bg-blue-100 text-blue-800 border-blue-200',
+          slate: 'bg-slate-100 text-slate-800 border-slate-200',
+          purple: 'bg-purple-100 text-purple-800 border-purple-200'
+        };
+        const div = document.createElement('div');
+        div.className = `flex items-center justify-between p-2 rounded border ${colors[cls.color]}`;
+        div.innerHTML = `<span class="text-sm font-medium">${cls.label}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+        tagContainer.appendChild(div);
+      });
+      
+      // Regional Share
+      const regionalContainer = document.getElementById('regionalShare');
+      data.regionalProduction.forEach(item => {
+        const trendColors = { growing: 'text-emerald-600', declining: 'text-red-600', stable: 'text-slate-600' };
+        const trendIcons = { growing: '↑', declining: '↓', stable: '→' };
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between text-sm';
+        div.innerHTML = `
+          <span class="text-slate-700 font-medium">${item.region}</span>
+          <div class="flex items-center gap-2">
+            <div class="w-24 bg-slate-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full" style="width: ${item.share}%"></div>
+            </div>
+            <span class="text-slate-900 font-mono font-bold w-8">${item.share}%</span>
+            <span class="${trendColors[item.trend]} text-xs font-mono">${trendIcons[item.trend]}</span>
+          </div>
+        `;
+        regionalContainer.appendChild(div);
+      });
+      
+      // Demand Vectors
+      const demandContainer = document.getElementById('demandVectors');
+      data.demandVectors.forEach(vec => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-100';
+        div.innerHTML = `
+          <span class="text-sm text-slate-700">${vec.sector}</span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono text-slate-500">${vec.share}</span>
+            <span class="tag trend-up text-xs">${vec.growth}</span>
+          </div>
+        `;
+        demandContainer.appendChild(div);
+      });
+      
+      // Technical Specs
+      const specsBody = document.getElementById('techSpecs');
+      data.technicalSpecs.forEach(spec => {
+        const barrierColor = spec.barrier === 'High' ? 'text-red-600 bg-red-50' : 'text-amber-600 bg-amber-50';
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50';
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-slate-900 font-medium">${spec.parameter}</td>
+          <td class="px-4 py-3 text-slate-600 font-mono text-xs">${spec.standard}</td>
+          <td class="px-4 py-3 text-slate-900 font-mono text-xs font-bold">${spec.leading}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded text-xs font-medium ${barrierColor}">${spec.barrier}</span></td>
+        `;
+        specsBody.appendChild(tr);
+      });
+      
+      // R&D Leaders
+      const rdContainer = document.getElementById('rdLeaders');
+      data.rdSpending.forEach(company => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-2 border-b border-slate-100 last:border-0';
+        div.innerHTML = `
+          <div>
+            <div class="text-sm font-medium text-slate-900">${company.company}</div>
+            <div class="text-xs text-slate-500">${company.focus}</div>
+          </div>
+          <span class="font-mono text-sm font-bold text-slate-700">${company.amount}</span>
+        `;
+        rdContainer.appendChild(div);
+      });
+      
+      // Major Producers
+      const producerContainer = document.getElementById('producerList');
+      data.majorProducers.forEach((prod, idx) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-start gap-3 p-3 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors cursor-pointer';
+        div.innerHTML = `
+          <div class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-xs font-bold text-slate-600">${idx + 1}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between mb-1">
+              <h4 class="text-sm font-bold text-slate-900 truncate">${prod.name}</h4>
+              <span class="text-xs font-mono text-slate-500">${prod.share}</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="px-2 py-0.5 bg-slate-100 rounded text-slate-600">${prod.hq}</span>
+              <span class="text-slate-400 truncate">${prod.focus}</span>
+            </div>
+          </div>
+        `;
+        producerContainer.appendChild(div);
+      });
+      
+      // Substitution Grid
+      const subContainer = document.getElementById('substitutionGrid');
+      data.substitutionThreats.forEach(threat => {
+        const levelColors = {
+          'High': 'border-red-200 bg-red-50',
+          'Medium-High': 'border-orange-200 bg-orange-50',
+          'Medium': 'border-amber-200 bg-amber-50',
+          'Low': 'border-slate-200 bg-slate-50'
+        };
+        const div = document.createElement('div');
+        div.className = `p-4 rounded-lg border ${levelColors[threat.threatLevel] || 'border-slate-200'}`;
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-bold text-slate-900 text-sm">${threat.technology}</h4>
+            <span class="text-xs font-bold text-slate-600 bg-white px-2 py-1 rounded border">${threat.threatLevel}</span>
+          </div>
+          <div class="text-xs text-slate-500 mb-2 font-mono">Timeline: ${threat.timeline}</div>
+          <p class="text-xs text-slate-700 leading-relaxed">${threat.description}</p>
+        `;
+        subContainer.appendChild(div);
+      });
+      
+      // Supply Chain
+      const upstreamContainer = document.getElementById('upstreamInputs');
+      data.supplyChain.upstream.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between text-sm p-2 bg-slate-50 rounded border-l-2 border-red-400';
+        div.innerHTML = `
+          <span class="text-slate-700 font-medium">${item.material}</span>
+          <span class="text-xs text-slate-500 bg-white px-2 py-1 rounded border">${item.concentration}</span>
+        `;
+        upstreamContainer.appendChild(div);
+      });
+      
+      const downstreamContainer = document.getElementById('downstreamApps');
+      data.supplyChain.downstream.forEach(app => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between text-sm p-2 bg-slate-50 rounded border-l-2 border-blue-400';
+        div.innerHTML = `
+          <span class="text-slate-700 font-medium">${app.application}</span>
+          <div class="flex gap-2">
+            <span class="text-xs text-slate-500">${app.growth}</span>
+            <span class="text-xs font-mono text-slate-400">${app.margin} margin</span>
+          </div>
+        `;
+        downstreamContainer.appendChild(div);
+      });
+      
+      // Related Products
+      const relatedContainer = document.getElementById('relatedProducts');
+      data.relatedProducts.forEach(prod => {
+        const synergyColors = { High: 'bg-blue-100 text-blue-700', Critical: 'bg-purple-100 text-purple-700', Medium: 'bg-slate-100 text-slate-700' };
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:border-blue-300 transition-colors';
+        div.innerHTML = `
+          <div>
+            <div class="text-sm font-bold text-slate-900">${prod.name}</div>
+            <div class="text-xs text-slate-500">${prod.relationship}</div>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full font-medium ${synergyColors[prod.synergy]}">Synergy: ${prod.synergy}</span>
+        `;
+        relatedContainer.appendChild(div);
+      });
+      
+      // Risk Matrix
+      const riskContainer = document.getElementById('riskMatrix');
+      data.risks.forEach(risk => {
+        const levelColors = { High: 'bg-red-100 text-red-700 border-red-200', Medium: 'bg-amber-100 text-amber-700 border-amber-200', Low: 'bg-green-100 text-green-700 border-green-200' };
+        const div = document.createElement('div');
+        div.className = 'p-3 rounded border bg-white';
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-bold text-slate-800">${risk.type}</span>
+            <span class="text-xs px-2 py-0.5 rounded border ${levelColors[risk.level]}">${risk.level}</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">${risk.description}</p>
+        `;
+        riskContainer.appendChild(div);
+      });
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
