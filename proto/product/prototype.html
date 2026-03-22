@@ -631,7 +631,7 @@
       const productId = params.get('id');
       if (!productId) { renderError('No product ID. Use ?id=your-file'); return; }
       try {
-        const res = await fetch(`./data/${productId}.json`);
+        const res = await fetch(`./data/2.json`);
         if (!res.ok) throw new Error('Not found');
         const data = await res.json();
         render(data);
