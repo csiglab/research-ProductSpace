@@ -1,520 +1,1354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Strategic Industrial Dossier</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'slate': { 850: '#172033', 950: '#0a0f1a' },
-            'brand': { DEFAULT: '#2563eb', light: '#3b82f6', dark: '#1d4ed8' },
-            'accent': { DEFAULT: '#f59e0b', light: '#fbbf24' },
-            'surface': { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0' }
-          },
-          fontFamily: {
-            'display': ['"Playfair Display"', 'serif'],
-            'body': ['Inter', 'sans-serif'],
-            'mono': ['"JetBrains Mono"', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-    .font-display { font-family: 'Playfair Display', serif; }
-    
-    /* Custom Visualizations */
-    .bar-chart-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-    .bar-label { width: 120px; font-size: 0.875rem; color: #475569; flex-shrink: 0; }
-    .bar-track { flex-grow: 1; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin: 0 12px; }
-    .bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; }
-    
-    .flow-arrow {
-      position: relative;
-    }
-    .flow-arrow::after {
-      content: '';
-      position: absolute;
-      right: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      border: 6px solid transparent;
-      border-left-color: #cbd5e1;
-    }
-    
-    /* Gradient Text */
-    .gradient-text {
-      background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    /* Card Hover Effects */
-    .intel-card {
-      transition: all 0.3s ease;
-      border: 1px solid transparent;
-    }
-    .intel-card:hover {
-      border-color: #3b82f6;
-      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
-    }
-  </style>
-</head>
-<body class="bg-surface-50">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUV Lithography Systems — Structural Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <!-- Top Navigation Bar -->
-  <nav class="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-8 h-8 bg-brand rounded flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        </div>
-        <span class="font-display text-lg text-slate-800 font-bold tracking-tight">Industrial Intelligence Unit</span>
+  :root {
+    --bg: #08090c;
+    --bg-elevated: #0e1015;
+    --surface: #13161c;
+    --surface-hover: #1a1e26;
+    --border: #1e2330;
+    --border-accent: #2a3040;
+    --text-primary: #e8eaf0;
+    --text-secondary: #9ea3b2;
+    --text-muted: #5c6172;
+    --accent: #f0c040;
+    --accent-dim: #f0c04022;
+    --accent-glow: #f0c04040;
+    --danger: #ff4d4d;
+    --danger-dim: #ff4d4d18;
+    --info: #4da6ff;
+    --info-dim: #4da6ff18;
+    --success: #4dff91;
+    --success-dim: #4dff9118;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Space Grotesk', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* === NAVIGATION === */
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(8, 9, 12, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* === HERO === */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 400;
+    line-height: 1.05;
+    max-width: 900px;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.35s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.65s;
+  }
+
+  .hero-meta-item {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .hero-meta-item span {
+    display: block;
+    font-size: 13px;
+    color: var(--text-primary);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* === MAIN LAYOUT === */
+  .report-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* === PHASE HEADERS === */
+  .phase-header {
+    padding: 5rem 0 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+
+  .phase-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .phase-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  /* === SECTION === */
+  .section {
+    margin-top: 3rem;
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+  }
+
+  .section-text {
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* === DEFINITION BLOCK === */
+  .definition-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 2rem 2.5rem;
+    margin: 1.5rem 0;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-primary);
+  }
+
+  .definition-block .def-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .definition-block p + p {
+    margin-top: 1rem;
+  }
+
+  /* === Axiom CARDS === */
+  .axiom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .axiom-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .axiom-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .axiom-card .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .axiom-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .axiom-card p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* === PROCESS STEPS === */
+  .process-chain {
+    position: relative;
+    margin: 2rem 0;
+    padding-left: 2.5rem;
+  }
+
+  .process-chain::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--border));
+  }
+
+  .process-step {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .process-step::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 8px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+  }
+
+  .process-step.hard-step::before {
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .process-step .step-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .process-step .step-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 0.5rem;
+  }
+
+  .process-step .step-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .hard-step-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 3px 10px;
+    border: 1px solid var(--accent);
+    margin-left: 0.75rem;
+    vertical-align: middle;
+  }
+
+  /* === DATA TABLE === */
+  .data-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .data-table thead {
+    background: var(--surface);
+  }
+
+  .data-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  .data-table td {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .data-table tr:hover td { background: var(--surface-hover); }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+
+  .tag-danger { background: var(--danger-dim); color: var(--danger); border: 1px solid var(--danger); }
+  .tag-info { background: var(--info-dim); color: var(--info); border: 1px solid var(--info); }
+  .tag-success { background: var(--success-dim); color: var(--success); border: 1px solid var(--success); }
+  .tag-accent { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+
+  /* === CALLOUT === */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--info);
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .callout.danger { border-left-color: var(--danger); }
+  .callout.accent { border-left-color: var(--accent); }
+
+  .callout-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .callout.danger .callout-title { color: var(--danger); }
+  .callout.accent .callout-title { color: var(--accent); }
+  .callout .callout-title { color: var(--info); }
+
+  .callout p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* === NETWORK DIAGRAM === */
+  .network-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 3rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .network-diagram::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 40%, var(--accent-dim) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, var(--info-dim) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .network-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .network-row:last-child { margin-bottom: 0; }
+
+  .network-node {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    text-align: center;
+    min-width: 180px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .network-node:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-dim);
+  }
+
+  .network-node.central {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    box-shadow: 0 0 30px var(--accent-dim);
+  }
+
+  .network-node .node-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .network-node .node-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .network-node.central .node-name { color: var(--accent); }
+
+  .network-connector {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .network-row-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  /* === VERDICT BLOCK === */
+  .verdict-block {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg-elevated) 100%);
+    border: 1px solid var(--accent);
+    padding: 3rem;
+    margin: 3rem 0;
+    position: relative;
+  }
+
+  .verdict-block::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 0%, var(--accent-dim) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .verdict-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .verdict-type {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+  }
+
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .verdict-item .v-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .verdict-item .v-value {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  /* === FAILURE MODES === */
+  .failure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .failure-card {
+    background: var(--surface);
+    border: 1px solid var(--danger);
+    border-top: 3px solid var(--danger);
+    padding: 1.5rem;
+  }
+
+  .failure-card .f-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+    color: var(--danger);
+  }
+
+  .failure-card p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* === METRIC BARS === */
+  .metric-bar-group {
+    margin: 1.5rem 0;
+  }
+
+  .metric-bar-item {
+    margin-bottom: 1.25rem;
+  }
+
+  .metric-bar-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-bar-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .metric-bar-value {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  .metric-bar-track {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .metric-bar-fill.danger { background: var(--danger); }
+  .metric-bar-fill.info { background: var(--info); }
+
+  /* === FOOTER === */
+  .report-footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+  .report-footer p {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .report-body { padding: 0 1.25rem 4rem; }
+    .nav-links { display: none; }
+    .hero-meta { flex-direction: column; gap: 1rem; }
+    .verdict-block { padding: 2rem 1.5rem; }
+    .definition-block { padding: 1.5rem; }
+    .network-diagram { padding: 2rem 1rem; }
+    .network-node { min-width: 140px; padding: 0.75rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav-bar">
+  <div class="nav-brand">Structural Analysis</div>
+  <ul class="nav-links">
+    <li><a href="#phase-i">Definition</a></li>
+    <li><a href="#phase-ii">Structure</a></li>
+    <li><a href="#phase-iii">Dynamics</a></li>
+    <li><a href="#phase-iv">Entry</a></li>
+    <li><a href="#phase-v">Verdict</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Product Ontology Report — Phase I–V</div>
+  <h1 class="hero-title">EUV Lithography <em>Systems</em></h1>
+  <p class="hero-subtitle">A structural reverse-engineering of the single most concentrated, most indispensable capital good in the global semiconductor stack. One company. One geography. No substitute.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      Classification
+      <span>Strategic Bottleneck</span>
+    </div>
+    <div class="hero-meta-item">
+      Producer Concentration
+      <span>100% (Monopoly)</span>
+    </div>
+    <div class="hero-meta-item">
+      Downstream Dependency
+      <span>Sub-7nm Logic, Advanced DRAM</span>
+    </div>
+    <div class="hero-meta-item">
+      System Fragility
+      <span>Critical — No Redundancy</span>
+    </div>
+  </div>
+</header>
+
+<!-- REPORT BODY -->
+<main class="report-body">
+
+  <!-- ==================== PHASE I ==================== -->
+  <div class="phase-header fade-in" id="phase-i">
+    <div class="phase-label">Phase I</div>
+    <h2 class="phase-title">Definition & Ontology</h2>
+  </div>
+
+  <!-- 1. Product Definition -->
+  <div class="section fade-in">
+    <span class="section-number">01</span>
+    <h3 class="section-title">Product Definition — The Axiomatic Base</h3>
+
+    <div class="definition-block">
+      <span class="def-label">Technical Essence</span>
+      <p>An extreme ultraviolet (13.5 nm wavelength) projection lithography system comprising a laser-produced plasma light source, multi-layer Bragg reflector optics, and a vacuum-operated wafer stage — engineered to project circuit patterns at sub-7nm resolution onto silicon wafers.</p>
+    </div>
+
+    <div class="definition-block">
+      <span class="def-label">Functional Role</span>
+      <p>Functions as the sole patterning tool capable of defining transistor features below 7nm, enabling the continued dimensional scaling of logic and memory semiconductors. It is the physical instrument through which Moore's Law is sustained.</p>
+    </div>
+
+    <div class="definition-block">
+      <span class="def-label">System Position</span>
+      <p><strong>Capital Good</strong> — a node consumed exclusively by semiconductor fabrication plants (fabs) to produce intermediate goods (logic/memory dies). No direct consumer interaction. Demand is 100% derived from fab capital expenditure cycles.</p>
+    </div>
+  </div>
+
+  <!-- 2. Technical Core -->
+  <div class="section fade-in">
+    <span class="section-number">02</span>
+    <h3 class="section-title">Technical Core — The Physics of Production</h3>
+
+    <p class="section-text">EUV lithography is not merely difficult. It is an engineering problem that sat unsolved for 20+ years. The physics of 13.5 nm light — which is absorbed by virtually all matter — dictates every design choice.</p>
+
+    <!-- 2.1 Materials Basis -->
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">2.1 Materials Basis</h4>
+
+    <div class="axiom-grid">
+      <div class="axiom-card">
+        <div class="card-label">Constraining Material</div>
+        <h4>Molybdenum/Silicon Multilayer Mirrors</h4>
+        <p>EUV light cannot be refracted through glass — it is absorbed. Instead, it must be reflected using multi-layer Bragg reflectors: alternating Mo/Si layers deposited with atomic-level precision (~0.01nm uniformity). Each mirror reflects only ~67% of incident light. A system uses 10+ mirrors. Cumulative reflectance is ~2%.</p>
       </div>
-      <div class="flex items-center gap-4 text-xs font-mono text-slate-500">
-        <span>CLASSIFICATION: <span class="text-brand font-semibold">RESTRICTED</span></span>
-        <span class="w-px h-4 bg-slate-200"></span>
-        <span>DOSSIER ID: <span id="dossierId">PRD-2024-001</span></span>
+      <div class="axiom-card">
+        <div class="card-label">Constraining Material</div>
+        <h4>Tin (Sn) Plasma Source</h4>
+        <p>EUV photons are generated by bombarding molten tin droplets with a high-power CO₂ laser at 50,000 Hz. The tin plasma emits at 13.5nm. Tin contamination coats optics, requiring a hydrogen radical cleaning system. Source power directly determines throughput (wafers per hour).</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Constraining Material</div>
+        <h4>Ultra-Low Thermal Expansion Glass</h4>
+        <p>Optical elements must maintain sub-nanometer figure accuracy during operation. Any thermal drift distorts the projected pattern. Zeiss manufactures mirrors from substrates that expand less than 5 parts per billion per degree Celsius.</p>
       </div>
     </div>
-  </nav>
 
-  <main class="max-w-7xl mx-auto px-6 py-12">
-    
-    <!-- HEADER SECTION: Identity & Strategic Context -->
-    <header id="mainHeader" class="mb-16"></header>
+    <!-- 2.2 Transformation Logic -->
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--text-primary);">2.2 Transformation Logic</h4>
 
-    <!-- MACRO SECTION: Global Market Dynamics -->
-    <section class="mb-12">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-1 h-8 bg-brand rounded-full"></div>
-        <h2 class="font-display text-2xl text-slate-800">Global Market Dynamics</h2>
+    <div class="process-chain">
+      <div class="process-step">
+        <div class="step-label">Step 01</div>
+        <div class="step-title">Light Source Generation</div>
+        <div class="step-desc">CO₂ laser strikes tin droplets at 50kHz in a vacuum chamber. Each impact creates a plasma that emits 13.5nm photons. Requires >250W of in-band EUV power at intermediate focus for commercial viability.</div>
       </div>
-      <div id="marketSection" class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
-    </section>
-
-    <!-- PRODUCER SECTION: Market Landscape -->
-    <section class="mb-12">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-1 h-8 bg-accent rounded-full"></div>
-        <h2 class="font-display text-2xl text-slate-800">Global Production Landscape</h2>
+      <div class="process-step">
+        <div class="step-label">Step 02</div>
+        <div class="step-title">Illumination Conditioning</div>
+        <div class="step-desc">EUV light is shaped and homogenized through a series of field and pupil mirrors before reaching the reticle. Uniformity of illumination directly impacts pattern fidelity.</div>
       </div>
-      <div id="producerSection" class="bg-white rounded-xl shadow-sm border border-slate-100 p-8"></div>
-    </section>
-
-    <!-- TECHNICAL SECTION: Core & Requirements -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-      <div id="techCore" class="bg-white rounded-xl shadow-sm border border-slate-100 p-8"></div>
-      <div id="industrialReqs" class="bg-slate-50 rounded-xl border border-slate-200 p-8"></div>
-    </section>
-
-    <!-- SUPPLY CHAIN & INNOVATION -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-      <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 p-8">
-        <h3 class="font-display text-xl text-slate-800 mb-6 border-b border-slate-100 pb-4">Supply Chain Ecosystem</h3>
-        <div id="supplyChainFlow"></div>
+      <div class="process-step hard-step">
+        <div class="step-label">Step 03</div>
+        <div class="step-title">Mask & Projection Optics <span class="hard-step-badge">Bottleneck</span></div>
+        <div class="step-desc">Light reflects off the patterned mask (reticle) and passes through a 6-mirror projection lens with 0.33 NA. Each mirror must be figured to <0.1nm RMS. The entire optical path operates in vacuum. <strong>This is the hard step.</strong> Zeiss is the only company on Earth that can manufacture these optics. Yield on defect-free mirrors is low. Each mirror costs ~€1M. The projection lens assembly alone costs ~€30M.</div>
       </div>
-      <div class="bg-slate-800 text-white rounded-xl shadow-lg p-8">
-        <div id="innovationStats"></div>
+      <div class="process-step">
+        <div class="step-label">Step 04</div>
+        <div class="step-title">Wafer Stage & Exposure</div>
+        <div class="step-desc">The wafer is held on a vacuum chuck and scanned beneath the projection lens at speeds up to 500mm/s while maintaining <1nm positioning accuracy. Dual-stage architecture allows one wafer to be exposed while another is aligned.</div>
       </div>
-    </section>
+      <div class="process-step">
+        <div class="step-label">Step 05</div>
+        <div class="step-title">Overlay & Metrology</div>
+        <div class="step-desc">Multiple alignment sensors measure wafer topology, reticle position, and lens heating effects in real-time. Overlay accuracy must be <1.5nm. This requires proprietary algorithms developed over decades of iteration.</div>
+      </div>
+    </div>
 
-    <!-- RELATED PRODUCTS -->
-    <section class="mb-12">
-       <h3 class="font-display text-xl text-slate-800 mb-6">Related Industrial Nodes</h3>
-       <div id="relatedGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    </section>
+    <!-- 2.3 Failure Modes -->
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--text-primary);">2.3 Failure Modes</h4>
 
-  </main>
+    <div class="failure-grid">
+      <div class="failure-card">
+        <div class="f-name">Source Power Degradation</div>
+        <p>Tin debris coats the collector mirror, reducing EUV collection efficiency. Requires periodic hydrogen cleaning. Downtime directly reduces throughput. Target: >90% availability.</p>
+      </div>
+      <div class="failure-card">
+        <div class="f-name">Optic Contamination</div>
+        <p>Carbon deposition or tin contamination on projection optics reduces reflectance. Each 0.1% loss per mirror compounds across 10 mirrors. Irreversible damage requires mirror replacement (€1M+ per element, weeks of downtime).</p>
+      </div>
+      <div class="failure-card">
+        <div class="f-name">Stochastic Defects</div>
+        <p>At 13.5nm, photon shot noise becomes a fundamental limit. Fewer photons per feature = higher randomness in pattern placement. This is the primary barrier to High-NA (0.55 NA) adoption.</p>
+      </div>
+      <div class="failure-card">
+        <div class="f-name">Thermal Lensing</div>
+        <p>Absorbed EUV energy heats projection mirrors, causing nanoscale deformation. Active thermal compensation systems adjust mirror shape in real-time. Failure causes pattern distortion across the exposure field.</p>
+      </div>
+    </div>
 
-  <script>
-    // =============================================
-    // EMBEDDED JSON DATA SOURCE
-    // =============================================
-    const productData = {
-      "meta": {
-        "id": "PRD-SMC-2044",
-        "lastUpdated": "2024-05-15",
-        "classification": "Strategic Resource"
-      },
-      "identity": {
-        "name": "Advanced Semiconductors (Sub-7nm)",
-        "category": "Electronics & Critical Infrastructure",
-        "hsCode": "8542.31",
-        "strategicImportance": "Critical",
-        "description": "High-performance logic chips manufactured at sub-7nm process nodes. These components serve as the foundational infrastructure for advanced computing, artificial intelligence, defense systems, and next-generation telecommunications. Their production is concentrated in a handful of geopolitical regions, creating significant supply chain risk vectors.",
-        "contextEssay": "The strategic value of sub-7nm semiconductors transcends their commercial market value. They act as force multipliers for economic productivity and military capability. As the world approaches the physical limits of Moore's Law, the complexity of production has created a high barrier to entry, effectively locking out nations without access to extreme ultraviolet (EUV) lithography technology. This technological asymmetry defines the current landscape of industrial power."
-      },
-      "globalMarket": {
-        "currentValue": "$540 Billion",
-        "cagr": "8.2%",
-        "forecast2030": "$850 Billion",
-        "dominance": "TSMC holds approximately 90% of sub-7nm manufacturing capacity.",
-        "evolutionNarrative": "The market is shifting from a globalization model to a 'friend-shoring' model. Governments are intervening with subsidies (e.g., US CHIPS Act, EU Chips Act) to secure domestic supply.",
-        "regionalDemand": [
-          { "region": "North America", "share": 35 },
-          { "region": "Asia Pacific", "share": 45 },
-          { "region": "Europe", "share": 15 },
-          { "region": "Rest of World", "share": 5 }
-        ]
-      },
-      "majorProducers": [
-        { "name": "TSMC (Taiwan)", "share": 58, "hq": "Taiwan", "capability": "Leading Edge (3nm)" },
-        { "name": "Samsung Foundry", "share": 18, "hq": "South Korea", "capability": "Leading Edge (3nm)" },
-        { "name": "Intel Foundry", "share": 12, "hq": "USA", "capability": "Advanced (Intel 4)" },
-        { "name": "SMIC", "share": 6, "hq": "China", "capability": "Mature/Advanced (7nm*)" },
-        { "name": "GlobalFoundries", "share": 6, "hq": "USA/UAE", "capability": "Specialized/Mature" }
-      ],
-      "technicalCore": {
-        "barriers": "Extremely High",
-        "processes": [
-          { "name": "EUV Lithography", "maturity": "Early Production", "owner": "ASML (Monopoly)" },
-          { "name": "Gate-All-Around (GAA)", "maturity": "R&D/Pilot", "owner": "Samsung/TSMC/Intel" },
-          { "name": "High-NA EUV", "maturity": "R&D", "owner": "Intel/ASML" }
-        ],
-        "keyInputs": ["Ultra-pure Silicon Wafers", "Neon Gas (Ukraine source)", "Photoresists (Japan source)", "EUV Equipment"]
-      },
-      "industrialRequirements": {
-        "capex": "$20B+ for a state-of-the-art fab.",
-        "workforce": "PhD level material scientists and specialized process engineers.",
-        "infrastructure": ["Ultra-reliable power grid (>99.999% uptime)", "Massive water purification capacity", "Seismic stability zones"],
-        "timeline": "3-5 years to operational capacity."
-      },
-      "rdSpending": {
-        "intensity": "High (15-20% of Revenue)",
-        "totalSpend": "$100 Billion (Industry Annual)",
-        "focusAreas": ["Miniaturization (Sub-2nm)", "Backside Power Delivery", "Chiplet Architectures", "Advanced Packaging"]
-      },
-      "substitutes": {
-        "rating": "Low / None",
-        "analysis": "For high-performance computing tasks, there are currently no viable substitutes to advanced silicon logic. Alternative architectures (Optical, Quantum) are decades from mass industrial deployment.",
-        "options": ["Mature Node Chips (Performance penalty)", "FPGA (Flexibility over efficiency)"]
-      },
-      "supplyChain": {
-        "upstream": [
-          { "item": "EUV Lithography Tools", "source": "Netherlands (ASML)", "risk": "Critical Bottleneck" },
-          { "item": "Photoresists", "source": "Japan (JSR/Tokyo Ohka)", "risk": "Moderate" }
-        ],
-        "downstream": [
-          "Consumer Electronics",
-          "Data Centers & Cloud",
-          "Automotive (EVs)",
-          "Defense Systems"
-        ]
-      },
-      "relatedProducts": [
-        { "id": "silicon-wafers", "name": "Silicon Wafers", "type": "Input" },
-        { "id": "euv-equipment", "name": "Lithography Equipment", "type": "Capital Good" },
-        { "id": "pcb-assembly", "name": "PCB Assembly", "type": "Downstream" }
-      ]
-    };
+    <div class="callout danger">
+      <div class="callout-title">Key Insight — The Physics of the Bottleneck</div>
+      <p>The fundamental constraint is photon economy. At 13.5nm, only ~2% of generated light reaches the wafer. Increasing throughput requires either higher source power (engineering-limited) or faster stages (physics-limited by inertial forces). This is not a software problem. It is a thermodynamic and precision-engineering problem with no shortcut.</p>
+    </div>
+  </div>
 
-    // =============================================
-    // RENDER ENGINE
-    // =============================================
+  <!-- ==================== PHASE II ==================== -->
+  <div class="phase-header fade-in" id="phase-ii">
+    <div class="phase-label">Phase II</div>
+    <h2 class="phase-title">Structure & Production</h2>
+  </div>
 
-    function init() {
-      // Render Header
-      const h = productData.identity;
-      document.getElementById('dossierId').innerText = productData.meta.id;
-      
-      document.getElementById('mainHeader').innerHTML = `
-        <div class="flex flex-col lg:flex-row gap-8 items-start">
-          <div class="flex-1">
-            <div class="flex items-center gap-3 mb-4">
-              <span class="px-3 py-1 text-xs font-bold bg-red-100 text-red-700 rounded-full uppercase tracking-wider border border-red-200">${productData.identity.strategicImportance}</span>
-              <span class="text-xs text-slate-400 font-mono">HS: ${productData.identity.hsCode}</span>
-            </div>
-            <h1 class="font-display text-5xl font-bold text-slate-900 leading-tight mb-6">${h.name}</h1>
-            <div class="prose text-lg text-slate-600 leading-relaxed space-y-4">
-              <p>${h.description}</p>
-              <p class="text-base text-slate-500 border-l-4 border-slate-200 pl-4 italic">${h.contextEssay}</p>
-            </div>
-          </div>
-          <div class="w-full lg:w-72 bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-            <h4 class="font-mono text-xs text-slate-400 uppercase tracking-wider mb-4">Quick Stats</h4>
-            <div class="space-y-4">
-              <div>
-                <div class="text-xs text-slate-500 mb-1">Global Market Value</div>
-                <div class="text-xl font-bold text-slate-800">${productData.globalMarket.currentValue}</div>
-              </div>
-              <div>
-                <div class="text-xs text-slate-500 mb-1">Compound Annual Growth</div>
-                <div class="text-xl font-bold text-brand">${productData.globalMarket.cagr}</div>
-              </div>
-              <div>
-                <div class="text-xs text-slate-500 mb-1">Entry Barrier Level</div>
-                <div class="text-xl font-bold text-red-600">${productData.technicalCore.barriers}</div>
-              </div>
-            </div>
-          </div>
+  <!-- 3. Industrial Architecture -->
+  <div class="section fade-in">
+    <span class="section-number">03</span>
+    <h3 class="section-title">Industrial Architecture — Who & Where</h3>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">3.1 The Producer Map</h4>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Producer</th>
+            <th>Location</th>
+            <th>Concentration</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>System Integration</strong></td>
+            <td>ASML</td>
+            <td>Veldhoven, Netherlands</td>
+            <td>100%</td>
+            <td><span class="tag tag-danger">Monopoly</span></td>
+          </tr>
+          <tr>
+            <td><strong>Projection Optics</strong></td>
+            <td>Carl Zeiss SMT</td>
+            <td>Oberkochen, Germany</td>
+            <td>100%</td>
+            <td><span class="tag tag-danger">Monopoly</span></td>
+          </tr>
+          <tr>
+            <td><strong>Light Source</strong></td>
+            <td>Cymer (ASML subsidiary)</td>
+            <td>San Diego, USA</td>
+            <td>100%</td>
+            <td><span class="tag tag-danger">Monopoly</span></td>
+          </tr>
+          <tr>
+            <td><strong>Wafer Stage</strong></td>
+            <td>ASML / VDL</td>
+            <td>Netherlands</td>
+            <td>100%</td>
+            <td><span class="tag tag-danger">Monopoly</span></td>
+          </tr>
+          <tr>
+            <td><strong>Mirror Substrates</strong></td>
+            <td>Schott / Corning</td>
+            <td>Germany / USA</td>
+            <td>Duopoly</td>
+            <td><span class="tag tag-accent">Constrained</span></td>
+          </tr>
+          <tr>
+            <td><strong>EUV Masks</strong></td>
+            <td>Toppan / DNP / Photronics</td>
+            <td>Japan / USA</td>
+            <td>Oligopoly</td>
+            <td><span class="tag tag-info">Tight</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--text-primary);">3.2 Structural Drivers — Why This Map?</h4>
+
+    <div class="axiom-grid">
+      <div class="axiom-card">
+        <div class="card-label">Driver</div>
+        <h4>Capital Barriers</h4>
+        <p>ASML has spent >€20B in cumulative R&D. A single EUV system sells for €150–350M. The development cost for High-NA alone exceeded €9B. No rational actor can enter without a multi-decade capital commitment and guaranteed customer co-investment.</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Driver</div>
+        <h4>Knowledge Lock-In</h4>
+        <p>Zeiss has been developing EUV optics since the 1990s. The tacit knowledge required — how to polish, coat, and align mirrors to sub-0.1nm precision — exists only in the heads of ~2,000 engineers in Oberkochen. This cannot be replicated by hiring or espionage alone. It requires decades of iteration.</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Driver</div>
+        <h4>Ecosystem Co-Investment</h4>
+        <p>Intel, TSMC, and Samsung each own equity stakes in ASML (~23% combined). They co-funded EUV development. This locked in demand before the product was viable, de-risking ASML's R&D spend. The ecosystem is self-reinforcing: customers fund development → development creates capability → capability creates dependency.</p>
+      </div>
+    </div>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--text-primary);">3.3 Geopolitical Friction</h4>
+
+    <div class="callout accent">
+      <div class="callout-title">Export Control Regime</div>
+      <p>Since 2019, the Dutch government — under US diplomatic pressure — has restricted ASML from exporting EUV systems to China. As of 2023, restrictions expanded to include advanced DUV systems. China's domestic lithography champion (SMEE) can produce only ~90nm-class DUV tools. The gap is approximately 20 years. This is not merely a trade restriction — it is a structural denial of access to the semiconductor scaling frontier.</p>
+    </div>
+  </div>
+
+  <!-- 4. System Topology -->
+  <div class="section fade-in">
+    <span class="section-number">04</span>
+    <h3 class="section-title">System Topology & Adjacency</h3>
+
+    <div class="network-diagram">
+      <div class="network-row">
+        <div class="network-row-label">Upstream Dependencies</div>
+      </div>
+      <div class="network-row">
+        <div class="network-node">
+          <div class="node-label">Substrates</div>
+          <div class="node-name">Schott / Corning</div>
         </div>
-      `;
-
-      // Render Market Dynamics
-      renderMarket();
-      
-      // Render Producers
-      renderProducers();
-      
-      // Render Tech
-      renderTech();
-      
-      // Render Supply Chain
-      renderSupplyChain();
-      
-      // Render Innovation
-      renderInnovation();
-      
-      // Render Related
-      renderRelated();
-    }
-
-    function renderMarket() {
-      const m = productData.globalMarket;
-      const el = document.getElementById('marketSection');
-      
-      const regionBars = m.regionalDemand.map(r => `
-        <div class="bar-chart-row">
-          <div class="bar-label">${r.region}</div>
-          <div class="bar-track">
-            <div class="bar-fill bg-brand" style="width: ${r.share}%"></div>
-          </div>
-          <div class="font-mono text-sm text-slate-600 w-12 text-right">${r.share}%</div>
+        <div class="network-node">
+          <div class="node-label">Coatings</div>
+          <div class="node-name">Zeiss SMT</div>
         </div>
-      `).join('');
-
-      el.innerHTML = `
-        <!-- Narrative Card -->
-        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 p-8 intel-card">
-          <h3 class="font-semibold text-slate-800 mb-4">Market Evolution Analysis</h3>
-          <p class="text-slate-600 leading-relaxed mb-6">${m.evolutionNarrative}</p>
-          <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800 flex gap-3">
-            <svg class="w-5 h-5 flex-shrink-0 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <div><span class="font-bold">Key Insight:</span> ${m.dominance}</div>
-          </div>
+        <div class="network-node">
+          <div class="node-label">Laser Source</div>
+          <div class="node-name">Trumpf</div>
         </div>
-        
-        <!-- Demand Chart -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 intel-card">
-          <h3 class="font-semibold text-slate-800 mb-6">Regional Demand Share</h3>
-          <div class="pt-2">
-            ${regionBars}
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-100">
-            <div class="flex justify-between text-xs text-slate-400">
-              <span>Forecast 2030:</span>
-              <span class="font-bold text-slate-600">${m.forecast2030}</span>
-            </div>
-          </div>
+        <div class="network-node">
+          <div class="node-label">Tin Target</div>
+          <div class="node-name">Specialty Suppliers</div>
         </div>
-      `;
-    }
-
-    function renderProducers() {
-      const p = productData.majorProducers;
-      const el = document.getElementById('producerSection');
-      
-      // Find max share for scaling bars
-      const maxShare = Math.max(...p.map(x => x.share));
-
-      const rows = p.map(company => `
-        <div class="flex items-center group">
-          <div class="w-40 flex-shrink-0 pr-4">
-            <div class="font-medium text-slate-700 group-hover:text-brand transition-colors">${company.name}</div>
-            <div class="text-xs text-slate-400">${company.hq}</div>
-          </div>
-          <div class="flex-grow">
-             <div class="h-10 bg-slate-50 rounded relative overflow-hidden border border-slate-100">
-               <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-brand/80 to-brand rounded transition-all duration-1000" style="width: ${(company.share/maxShare)*100}%"></div>
-               <div class="absolute inset-0 flex items-center px-4">
-                 <span class="text-xs font-bold text-white drop-shadow-sm">${company.share}% Market Share</span>
-               </div>
-             </div>
-          </div>
-          <div class="w-40 flex-shrink-0 pl-4 text-right">
-             <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded">${company.capability}</span>
-          </div>
+      </div>
+      <div class="network-row">
+        <div class="network-connector">▼</div>
+      </div>
+      <div class="network-row">
+        <div class="network-node central">
+          <div class="node-label">System Integration</div>
+          <div class="node-name">ASML EUV</div>
         </div>
-      `).join('');
-
-      el.innerHTML = `
-        <h3 class="font-semibold text-slate-800 mb-6">Market Share by Manufacturer</h3>
-        <div class="space-y-4">
-          ${rows}
+      </div>
+      <div class="network-row">
+        <div class="network-connector">▼</div>
+      </div>
+      <div class="network-row">
+        <div class="network-row-label">Downstream Enablement</div>
+      </div>
+      <div class="network-row">
+        <div class="network-node">
+          <div class="node-label">Logic</div>
+          <div class="node-name">TSMC / Samsung / Intel</div>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-          <span>Data Source: Industrial Intelligence Unit (Simulated)</span>
-          <span>Total Measured Capacity: 100%</span>
+        <div class="network-node">
+          <div class="node-label">DRAM</div>
+          <div class="node-name">Samsung / SK Hynix / Micron</div>
         </div>
-      `;
-    }
-
-    function renderTech() {
-      const t = productData.technicalCore;
-      const r = productData.industrialRequirements;
-      
-      document.getElementById('techCore').innerHTML = `
-        <h3 class="font-display text-xl text-slate-800 mb-6">Technical Core</h3>
-        <div class="space-y-4 mb-6">
-          <div class="flex justify-between border-b border-slate-100 pb-2">
-            <span class="text-slate-600">Barriers to Entry</span>
-            <span class="font-bold text-red-600">${t.barriers}</span>
-          </div>
-          <div>
-            <span class="block text-xs text-slate-400 uppercase mb-2">Key Manufacturing Processes</span>
-            <div class="space-y-2">
-              ${t.processes.map(p => `
-                <div class="bg-slate-50 p-3 rounded border border-slate-100">
-                  <div class="flex justify-between items-center mb-1">
-                    <span class="font-semibold text-sm text-slate-700">${p.name}</span>
-                    <span class="text-xs text-brand bg-blue-50 px-2 py-0.5 rounded">${p.maturity}</span>
-                  </div>
-                  <div class="text-xs text-slate-400">Key Provider: ${p.owner}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
+        <div class="network-node">
+          <div class="node-label">NAND</div>
+          <div class="node-name">Samsung / Kioxia</div>
         </div>
-      `;
-
-      document.getElementById('industrialReqs').innerHTML = `
-        <h3 class="font-display text-xl text-slate-800 mb-6">Establishment Requirements</h3>
-        <div class="space-y-4">
-          <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-            <div class="text-xs text-slate-400 uppercase mb-1">Capital Investment</div>
-            <div class="text-lg font-bold text-slate-800">${r.capex}</div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-400 uppercase mb-2">Infrastructure Prerequisites</div>
-            <ul class="space-y-2">
-              ${r.infrastructure.map(i => `
-                <li class="flex items-center gap-2 text-sm text-slate-600">
-                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  ${i}
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-200">
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600">Time to Operational</span>
-              <span class="font-mono font-bold text-accent">${r.timeline}</span>
-            </div>
-          </div>
+      </div>
+      <div class="network-row" style="margin-top: 1rem;">
+        <div class="network-node" style="border-color: var(--info);">
+          <div class="node-label">End Applications</div>
+          <div class="node-name" style="color: var(--info);">AI Accelerators / Smartphones / HPC / Automotive</div>
         </div>
-      `;
-    }
+      </div>
+    </div>
 
-    function renderSupplyChain() {
-      const s = productData.supplyChain;
-      const el = document.getElementById('supplyChainFlow');
+    <div class="callout">
+      <div class="callout-title">Leverage Points</div>
+      <p><strong>Where the system breaks:</strong> Zeiss optics. If Zeiss cannot scale mirror production, ASML cannot ship systems. Zeiss is currently investing >€1B to expand capacity — but the bottleneck is human expertise, not floor space.<br><br><strong>Where the product is indispensable:</strong> No EUV = no sub-7nm logic. No sub-7nm = no competitive AI training chips. The entire AI infrastructure stack depends on this single machine type.</p>
+    </div>
 
-      const renderFlowBox = (title, items, borderColor, bgColor) => `
-        <div class="flex flex-col gap-3">
-          <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider">${title}</h4>
-          <div class="bg-${bgColor} border border-${borderColor}/20 rounded-lg p-3 space-y-2 flex-1">
-            ${items.map(item => {
-              const isObj = typeof item === 'object';
-              const name = isObj ? item.item : item;
-              const meta = isObj ? `<span class="block text-xs text-slate-400">${item.source}</span>` : '';
-              const riskBadge = isObj && item.risk ? `<span class="text-xs bg-red-100 text-red-600 px-1 rounded">${item.risk}</span>` : '';
-              
-              return `
-                <div class="bg-white p-2 rounded shadow-sm border border-slate-100">
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-slate-700">${name}</span>
-                    ${riskBadge}
-                  </div>
-                  ${meta}
-                </div>
-              `;
-            }).join('')}
-          </div>
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">4.3 Lateral Adjacencies</h4>
+
+    <div class="axiom-grid">
+      <div class="axiom-card">
+        <div class="card-label">Capability Transfer</div>
+        <h4>E-Beam Lithography</h4>
+        <p>ASML's e-beam inspection and metrology capabilities are adjacent to maskless e-beam lithography — a potential long-term alternative for low-throughput patterning.</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Capability Transfer</div>
+        <h4>Computational Lithography</h4>
+        <p>ASML's acquisition of Brion (2007) gave it full-stack computational lithography — the ability to co-optimize hardware and software for pattern fidelity. This is now essential for High-NA.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE III ==================== -->
+  <div class="phase-header fade-in" id="phase-iii">
+    <div class="phase-label">Phase III</div>
+    <h2 class="phase-title">Dynamics & Evolution</h2>
+  </div>
+
+  <!-- 5. Market Causality -->
+  <div class="section fade-in">
+    <span class="section-number">05</span>
+    <h3 class="section-title">Market Causality — Demand Mechanics</h3>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">5.1 Derived vs. Autonomous Demand</h4>
+    <p class="section-text">Demand is <strong>100% derived</strong> from semiconductor fab capital expenditure. No consumer purchases an EUV system. Demand is pulled by:<br>
+    (a) Logic scaling roadmaps (TSMC N3, N2; Intel 18A; Samsung 2nm)<br>
+    (b) DRAM scaling (Samsung/SK Hynix transitioning to EUV for 1α and beyond)<br>
+    (c) AI-driven demand for advanced logic (NVIDIA, AMD, custom ASICs)</p>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">5.2 Cyclicality & Volatility</h4>
+
+    <div class="metric-bar-group">
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Demand Cyclicality (correlation to semi capex cycle)</span>
+          <span class="metric-bar-value">Extremely High</span>
         </div>
-      `;
-
-      el.innerHTML = `
-        <div class="grid grid-cols-3 gap-6">
-          ${renderFlowBox('Upstream Inputs', s.upstream, 'red', 'red-50')}
-          
-          <div class="flex flex-col items-center justify-center">
-            <div class="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center mb-2">
-              <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            </div>
-            <span class="text-xs font-bold text-slate-600">MANUFACTURING</span>
-            <span class="text-xs text-slate-400 text-center mt-2">Concentrated in specific geopolitical zones</span>
-          </div>
-
-          ${renderFlowBox('Downstream Sectors', s.downstream, 'blue', 'blue-50')}
+        <div class="metric-bar-track">
+          <div class="metric-bar-fill danger" style="width: 95%;"></div>
         </div>
-      `;
-    }
-
-    function renderInnovation() {
-      const rd = productData.rdSpending;
-      const sub = productData.substitutes;
-      const el = document.getElementById('innovationStats');
-
-      el.innerHTML = `
-        <div class="h-full flex flex-col">
-          <div class="mb-6">
-            <h3 class="font-display text-xl text-white mb-1">Innovation Index</h3>
-            <div class="w-12 h-1 bg-accent rounded"></div>
-          </div>
-          
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <div class="text-xs text-slate-400 uppercase">R&D Intensity</div>
-              <div class="text-2xl font-bold text-white">${rd.intensity}</div>
-            </div>
-            <div>
-              <div class="text-xs text-slate-400 uppercase">Annual Spend</div>
-              <div class="text-2xl font-bold text-accent">${rd.totalSpend}</div>
-            </div>
-          </div>
-
-          <div class="mb-6">
-            <div class="text-xs text-slate-400 uppercase mb-2">Key Focus Areas</div>
-            <div class="flex flex-wrap gap-2">
-              ${rd.focusAreas.map(a => `<span class="px-2 py-1 bg-slate-700 text-slate-200 text-xs rounded">${a}</span>`).join('')}
-            </div>
-          </div>
-
-          <div class="mt-auto bg-red-900/30 border border-red-700/50 rounded p-4">
-            <h4 class="font-semibold text-red-300 text-sm mb-1">Substitution Risk: ${sub.rating}</h4>
-            <p class="text-xs text-slate-300">${sub.analysis}</p>
-          </div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Order Lead Time</span>
+          <span class="metric-bar-value">18–24 months</span>
         </div>
-      `;
-    }
+        <div class="metric-bar-track">
+          <div class="metric-bar-fill" style="width: 80%;"></div>
+        </div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Revenue Visibility (backlog)</span>
+          <span class="metric-bar-value">€39B+ (2024)</span>
+        </div>
+        <div class="metric-bar-track">
+          <div class="metric-bar-fill info" style="width: 90%;"></div>
+        </div>
+      </div>
+    </div>
 
-    function renderRelated() {
-      const rel = productData.relatedProducts;
-      const el = document.getElementById('relatedGrid');
+    <p class="section-text">Cyclicality is extreme but buffered by multi-year order backlogs. In a downturn, fabs delay deliveries rather than cancel — the systems are too strategic to forfeit queue position.</p>
 
-      el.innerHTML = rel.map(p => `
-        <a href="#" class="group block bg-white border border-slate-200 rounded-lg p-4 hover:border-brand hover:shadow-sm transition-all">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-mono text-slate-400 uppercase">${p.type}</span>
-            <svg class="w-4 h-4 text-slate-300 group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          </div>
-          <div class="font-semibold text-slate-700 group-hover:text-brand">${p.name}</div>
-        </a>
-      `).join('');
-    }
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">5.3 The Substitution Envelope</h4>
 
-    init();
-  </script>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Substitution Type</th>
+            <th>Candidate</th>
+            <th>Viability</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Direct (same wavelength)</strong></td>
+            <td>Multi-beam EUV (ASML internal R&D)</td>
+            <td><span class="tag tag-info">Speculative</span></td>
+            <td>2030s+</td>
+          </tr>
+          <tr>
+            <td><strong>Direct (alternative source)</strong></td>
+            <td>Free-electron laser EUV</td>
+            <td><span class="tag tag-danger">Lab Only</span></td>
+            <td>Unknown</td>
+          </tr>
+          <tr>
+            <td><strong>Indirect (architectural)</strong></td>
+            <td>Gate-all-around (GAA) + backside power</td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td>Extends EUV life, not replaces it</td>
+          </tr>
+          <tr>
+            <td><strong>Indirect (architectural)</strong></td>
+            <td>Chiplet / 3D packaging</td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td>Reduces single-die scaling pressure but still requires EUV per chiplet</td>
+          </tr>
+          <tr>
+            <td><strong>Indirect (paradigm)</strong></td>
+            <td>Optical / photonic computing</td>
+            <td><span class="tag tag-danger">Distant</span></td>
+            <td>Does not address general-purpose logic</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Substitution Verdict</div>
+      <p>There is no viable substitute for EUV lithography in sub-7nm semiconductor manufacturing. Architectural innovations (chiplets, GAA) extend the utility of EUV rather than displacing it. The substitution envelope is effectively zero for the next decade.</p>
+    </div>
+  </div>
+
+  <!-- 6. Innovation Trajectory -->
+  <div class="section fade-in">
+    <span class="section-number">06</span>
+    <h3 class="section-title">Innovation Trajectory — Direction of Travel</h3>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">6.1 The Frontier</h4>
+    <p class="section-text">The current "Holy Grail" is <strong>High-NA EUV (0.55 numerical aperture)</strong>. ASML's TWINSCAN EXE:5000 system, first shipped to Intel in late 2024, increases resolution by ~1.7× over standard EUV (0.33 NA), enabling 2nm-class patterning. Cost per system: ~€350M. Weight: 150+ tonnes. It requires an entirely new anamorphic optical design — 4× magnification in one axis, 8× in the other.</p>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">6.2 Limits to Growth</h4>
+
+    <div class="axiom-grid">
+      <div class="axiom-card">
+        <div class="card-label">Limit</div>
+        <h4>Stochastic Noise Floor</h4>
+        <p>At smaller features, the number of EUV photons per feature drops. Below a threshold, pattern placement becomes probabilistic. This is a fundamental physics limit — not an engineering one. It constrains the minimum usable dose and therefore maximum throughput.</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Limit</div>
+        <h4>Mask Complexity</h4>
+        <p>High-NA uses anamorphic demagnification, meaning only half the reticle field is exposed per pass. Stitching two halves together requires sub-nanometer overlay — pushing mask and stage technology to absolute limits.</p>
+      </div>
+      <div class="axiom-card">
+        <div class="card-label">Limit</div>
+        <h4>Source Power Scaling</h4>
+        <p>Current sources deliver ~400W. High-NA throughput targets require >600W. Each incremental watt requires nonlinear increases in laser power, tin droplet precision, and collector mirror lifetime.</p>
+      </div>
+    </div>
+
+    <h4 style="font-size: 14px; font-weight: 600; margin: 2rem 0 1rem; color: var(--text-primary);">6.3 Knowledge Regime</h4>
+    <p class="section-text">Innovation is <strong>firm-siloed, not open-science</strong>. ASML publishes almost nothing about system internals. Zeiss optic recipes are trade secrets. The academic community contributes to resist chemistry and computational lithography theory, but the core hardware knowledge is proprietary. This is not a field where a university lab can replicate progress.</p>
+
+    <div class="callout accent">
+      <div class="callout-title">S-Curve Phase Assessment</div>
+      <p><strong>Late Growth / Early Maturity (Standard EUV).</strong> Throughput improvements are yielding diminishing returns. High-NA represents a new S-curve superimposed on the current one — essentially a "reset" that buys another decade of scaling. The product is not declining, but the easy gains are gone.</p>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE IV ==================== -->
+  <div class="phase-header fade-in" id="phase-iv">
+    <div class="phase-label">Phase IV</div>
+    <h2 class="phase-title">Industrialization Requirements</h2>
+  </div>
+
+  <!-- 7. Entry Barriers -->
+  <div class="section fade-in">
+    <span class="section-number">07</span>
+    <h3 class="section-title">Entry Barriers — The "Build" Criteria</h3>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Barrier</th>
+            <th>Requirement</th>
+            <th>Severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Infrastructure</strong></td>
+            <td>Cleanroom facilities (Class 1), vacuum test chambers, vibration-isolated metrology labs, high-power laser test infrastructure</td>
+            <td><span class="tag tag-danger">Extreme</span></td>
+          </tr>
+          <tr>
+            <td><strong>Utilities</strong></td>
+            <td>1MW+ power per system, hydrogen gas supply for cleaning, ultra-pure water, helium cooling</td>
+            <td><span class="tag tag-accent">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Human Capital</strong></td>
+            <td>PhD-level optical physicists, plasma physicists, precision-mechanical engineers, control systems engineers. Estimated: 5,000+ specialized engineers across ASML + Zeiss + suppliers</td>
+            <td><span class="tag tag-danger">Extreme</span></td>
+          </tr>
+          <tr>
+            <td><strong>Time-to-Yield</strong></td>
+            <td>From "first system built" to "customer-qualified production tool": estimated 10–15 years minimum</td>
+            <td><span class="tag tag-danger">Extreme</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ecosystem</strong></td>
+            <td>Requires co-located Zeiss-quality optics supplier, Trumpf-class laser supplier, and willing fab customers to co-develop</td>
+            <td><span class="tag tag-danger">Extreme</span></td>
+          </tr>
+          <tr>
+            <td><strong>Capital</strong></td>
+            <td>Estimated >€30B over 15+ years to reach competitive parity. No venture-backed startup can fund this.</td>
+            <td><span class="tag tag-danger">Extreme</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout danger">
+      <div class="callout-title">Ticket to Entry Verdict</div>
+      <p>Entry is feasible only for a <strong>major nation-state with a coordinated industrial policy</strong> — and even then, success is not guaranteed. China's SMEE has been attempting this since 2002 with state funding. After 20+ years, they have not produced a viable DUV immersion system, let alone EUV. This is not a startup opportunity. It is not even a corporate opportunity. It is a civilizational capability.</p>
+    </div>
+  </div>
+
+  <!-- ==================== PHASE V ==================== -->
+  <div class="phase-header fade-in" id="phase-v">
+    <div class="phase-label">Phase V</div>
+    <h2 class="phase-title">Synthesis — The Verdict</h2>
+  </div>
+
+  <!-- 8. Strategic Characterization -->
+  <div class="section fade-in">
+    <span class="section-number">08</span>
+    <h3 class="section-title">Strategic Characterization</h3>
+
+    <div class="verdict-block">
+      <div class="verdict-label">Classification</div>
+      <div class="verdict-type">Strategic Bottleneck</div>
+
+      <div class="verdict-grid">
+        <div class="verdict-item">
+          <div class="v-label">Concentration</div>
+          <div class="v-value">Total monopoly. ASML is the only company that produces, sells, or services EUV lithography systems. No second source exists. No second source is plausible within 15 years.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="v-label">Substitutability</div>
+          <div class="v-value">Effectively zero. No alternative patterning technology can achieve sub-7nm resolution at production throughput. The physics of 13.5nm light reflection is the only known viable path.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="v-label">Binding Constraint</div>
+          <div class="v-value"><strong>Knowledge.</strong> Not capital (though capital is extreme). The binding constraint is the accumulated tacit knowledge embedded in ~5,000 specialized engineers across ASML and Zeiss, developed over 30+ years. This cannot be bought, stolen, or accelerated.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="v-label">Systemic Fragility</div>
+          <div class="v-value">If EUV systems stopped flowing tomorrow: sub-7nm chip production halts within 2 years (existing systems degrade, no replacements). AI training infrastructure, advanced smartphones, and cutting-edge defense systems enter forced stagnation. The global digital economy regresses to 2018-era capability.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="v-label">Value Capture</div>
+          <div class="v-value">ASML captures extraordinary value — ~50% gross margins on a €150–350M product with no competition. But the real value migrates <strong>downstream</strong> to TSMC (which converts EUV into advanced chips) and further to NVIDIA/Apple (which convert advanced chips into AI accelerators and consumer devices). ASML is the indispensable enabler, but not the largest value capturer.</div>
+        </div>
+        <div class="verdict-item">
+          <div class="v-label">Evolutionary Forecast</div>
+          <div class="v-value">Value is migrating <strong>upstream</strong> toward Zeiss (as High-NA optics become more complex and expensive) and <strong>laterally</strong> toward computational lithography (where software co-optimization becomes the differentiator). ASML's long-term moat is not hardware alone — it is the full-stack integration of hardware, software, and service.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout accent" style="margin-top: 2rem;">
+      <div class="callout-title">Final Answer</div>
+      <p><strong>Who captures value, and why?</strong><br><br>
+      ASML captures value because it solved an unsolvable physics problem and then built an ecosystem (Zeiss, Cymer, customer co-investment) that made the solution commercially viable and structurally unassailable. The knowledge barrier is the moat. The ecosystem is the lock. No competitor can replicate either without replicating both simultaneously — and the window for that has been closed since approximately 2015.<br><br>
+      The downstream value, however, accrues disproportionately to those who <em>use</em> EUV to produce differentiated chips (TSMC) and those who design those chips (NVIDIA, Apple). ASML is the gatekeeper, but the toll road's revenue is ultimately determined by what flows through it.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="report-footer">
+  <p>EUV Lithography Systems — Structural Analysis Report</p>
+  <p style="margin-top: 0.5rem;">Generated via Product Ontology Framework — Phase I–V</p>
+  <p style="margin-top: 0.5rem; color: var(--accent);">Data reflects knowledge through May 2025. Verify current figures against ASML annual reports and industry sources.</p>
+</footer>
+
+<!-- SCROLL REVEAL SCRIPT -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
 </body>
 </html>
