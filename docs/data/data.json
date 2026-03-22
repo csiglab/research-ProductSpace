@@ -206,7 +206,27 @@
     {"id": "p197", "name": "Inverters", "category": "Electronics", "description": "Electronic devices that convert direct current (DC) to alternating current (AC).", "tags": ["electronics", "power"], "hsCode": "8504.40", "technicalCore": {"domains": ["Electronics"]}, "metadata": {"source": "Power Industry"}},
     {"id": "p198", "name": "UPS Systems", "category": "Electronics", "description": "Uninterruptible power supplies that provide emergency power.", "tags": ["electronics", "backup"], "hsCode": "8504.40", "technicalCore": {"domains": ["Electronics"]}, "metadata": {"source": "Power Industry"}},
     {"id": "p199", "name": "Cables", "category": "Electronics", "description": "Flexible metallic or nonmetallic conductors for electricity.", "tags": ["electronics", "infrastructure"], "hsCode": "8544.11", "technicalCore": {"materials": ["Copper", "Insulation"]}, "metadata": {"source": "Cable Makers"}},
-    {"id": "p200", "name": "Wiring Harnesses", "category": "Electronics", "description": "Bundles of wires or cables that transmit signals or electrical power.", "tags": ["automotive", "component"], "hsCode": "8544.30", "technicalCore": {"materials": ["Wire", "Connectors"]}, "metadata": {"source": "Auto Industry"}}
+    {"id": "p200", "name": "Wiring Harnesses", "category": "Electronics", "description": "Bundles of wires or cables that transmit signals or electrical power.", "tags": ["automotive", "component"], "hsCode": "8544.30", "technicalCore": {"materials": ["Wire", "Connectors"]}, "metadata": {"source": "Auto Industry"}},
+    {
+  "id": "p201",
+  "name": "Helium",
+  "category": "Industrial Gas",
+  "description": "A noble gas with extremely low boiling point and high thermal conductivity, used in cryogenics, pressurization, leak detection, and controlled atmospheres.",
+  "tags": ["noble gas", "cryogenics", "inert", "industrial gas"],
+  "hsCode": "2804.29",
+  "technicalCore": {
+    "materials": ["Helium"],
+    "processes": [
+      "Natural gas extraction",
+      "Cryogenic separation",
+      "Gas purification",
+      "Liquefaction (cryogenic cooling)"
+    ]
+  },
+  "metadata": {
+    "source": "Industrial Gas Industry"
+  }
+}
   ],
   "edges": [
     {"source": "p001", "target": "p002", "type": "downstream", "weight": 0.95},
