@@ -1,270 +1,132 @@
-# Product Intelligence Dossier — Narrative Specification (v1.0)
+# Product Spec
 
-> ...
+**Ontological Stance:**
+This document rejects surface-level description. It is a **reverse-engineering of a techno-industrial system**.
 
-## **0. Nature of the Document**
+**The "Is / Is Not" Matrix:**
 
-This is **not**:
+| It is NOT... | It IS... |
+| :--- | :--- |
+| A market summary | A structural analysis of causality |
+| A list of features | An explanation of functional necessity |
+| A descriptive overview | A diagnosis of constraints and leverage points |
 
-* a summary
-* a market report
-* a descriptive overview
-
-This **is**:
-
-> A **data-driven analytical essay** that reconstructs a product as a **techno-industrial system**, explaining its structure, constraints, and evolution.
-
----
-
-## **1. Opening: Product Definition (Dense, Precise, Foundational)**
-
-**Objective:** Establish immediate conceptual clarity.
-
-**Must answer:**
-
-* What is the product *in essence*?
-* What function does it perform?
-* Where does it sit in the industrial system?
-
-**Structure:**
-
-* Sentence 1: Technical identity
-* Sentence 2: Functional role
-* Sentence 3: System position (input / intermediate / capital / final)
-
-**Constraint:**
-
-* No fluff, no history, no market talk yet
+**Core Directive:**
+> Reconstruct the product as a node in a network. Explain not just what it is, but *why it exists where it does* and *what holds its production system together*.
 
 ---
 
-## **2. Technical Core (What It Is Made Of and How It Exists)**
+## **PHASE I: DEFINITION & ONTOLOGY**
 
-**Objective:** Explain the *ontological difficulty* of the product.
+### **1. Product Definition (The Axiomatic Base)**
+*Establish immediate conceptual clarity. No context, no history. Pure function.*
 
-### 2.1 Materials Basis
+*   **Sentence 1 (Technical Essence):** Define the physical/informational object (e.g., "A crystalline lattice structure capable of switching electrical signals...").
+*   **Sentence 2 (Functional Role):** Define the job performed (e.g., "...functioning as the fundamental logic gate for digital computation").
+*   **Sentence 3 (System Position):** Classify the node (Input / Intermediate / Capital Good / Final Consumer Good).
 
-* What are the essential materials?
-* How specialized are they?
+**Constraint:** No fluff. No marketing language. Use the language of physics or engineering.
 
-### 2.2 Process Structure
+### **2. Technical Core (The Physics of Production)**
+*Explain the ontological difficulty. Why is this product non-trivial?*
 
-* Stepwise transformation logic (not just listing)
-* Highlight the **hard steps**
-
-### 2.3 Complexity Profile
-
-* Where does difficulty come from?
-
-  * precision?
-  * scale?
-  * tacit knowledge?
-  * defect sensitivity?
+*   **2.1 Materials Basis:** What material constraints define the product? (Scarcity, purity requirements, processing difficulty).
+*   **2.2 Transformation Logic:** Map the process stepwise. Identify the **"Hard Step"**—the specific phase where yield drops, capital intensity spikes, or tacit knowledge is highest.
+*   **2.3 Failure Modes:** How does the product fail? (Precision drift, thermal sensitivity, contamination). This reveals the true complexity.
 
 **Key Requirement:**
-
-> The reader must understand *why this product is hard (or easy) to produce*.
+> The reader must understand the *physics of the bottleneck*. If the product is easy to make, explain why (commoditization). If hard, explain the barrier (yield/precision).
 
 ---
 
-## **3. Industrial Production System (Who Produces It and Why)**
+## **PHASE II: STRUCTURE & PRODUCTION**
 
-**Objective:** Explain the structure of global production.
+### **3. Industrial Architecture (Who & Where)**
+*Explain the geography and concentration of production capability.*
 
-### 3.1 Producer Landscape
-
-* Who dominates?
-* Where are they located?
-
-### 3.2 Structural Characteristics
-
-* Concentrated vs fragmented
-* Clustered vs dispersed
-
-### 3.3 Causal Explanation
-
-* WHY is production structured this way?
-
-  * capital barriers?
-  * knowledge lock-in?
-  * ecosystem dependencies?
+*   **3.1 The Producer Map:** Is the landscape fragmented (competitive) or oligopolistic (concentrated)? Who holds the "Crown Jewels"?
+*   **3.2 Structural Drivers:** *Why* is the map shaped this way?
+    *   *Capital Barriers:* High CAPEX requirements?
+    *   *Knowledge Lock-in:* Tacit knowledge clusters?
+    *   *Ecosystem Effects:* Proximity to suppliers/R&D centers?
+*   **3.3 Geopolitical Friction:** Are there sanctions, export controls, or strategic stockpiles influencing location?
 
 **Key Requirement:**
+> Do not list companies. Explain the *structural logic* that allows these specific companies to dominate.
 
-> Do not list producers without explaining structural causes.
+### **4. System Topology & Adjacency (The Flow)**
+*Represent the product as a node in a broader network. (Merges previous "Supply Chain" and "Product Space" sections).*
 
----
-
-## **4. Market Dynamics (What Drives Demand Over Time)**
-
-**Objective:** Explain demand as a system, not a number.
-
-### 4.1 Demand Drivers
-
-* Which industries require this product?
-* Is demand derived or autonomous?
-
-### 4.2 Growth Logic
-
-* What drives expansion?
-* What limits it?
-
-### 4.3 Evolution
-
-* How has the product changed over time?
-* What structural shifts are occurring?
+*   **4.1 Upstream Dependencies:** Critical inputs. Which inputs are "chokepoints"?
+*   **4.2 Downstream Enablement:** What does this product unlock? Is it a "bottleneck" for downstream industries?
+*   **4.3 Lateral Adjacencies:** Capability transferability. If you can make *this*, what *else* can you easily make? (e.g., "Ability to produce high-purity silicon enables solar PV entry").
 
 **Key Requirement:**
-
-> Replace “market size” thinking with **demand causality**.
+> Map the **Leverage Points**. Where does the system break? Where is the product indispensable?
 
 ---
 
-## **5. Substitution & Functional Alternatives**
+## **PHASE III: DYNAMICS & EVOLUTION**
 
-**Objective:** Define the product’s **replaceability envelope**.
+### **5. Market Causality (Demand System)**
+*Replace "Market Size" with "Demand Mechanics."*
 
-### 5.1 Direct Substitutes
-
-* Same function, different product
-
-### 5.2 Indirect Substitutes
-
-* Different technological pathways
-
-### 5.3 Constraints on Substitution
-
-* Switching costs
-* Performance gaps
-* System dependencies
+*   **5.1 Derived vs. Autonomous Demand:** Is demand pulled by end-consumers (autonomous) or by capital expenditure cycles (derived)?
+*   **5.2 Cyclicality & Volatility:** Is the market cyclical? How does demand react to macro shocks?
+*   **5.3 The Substitution Envelope:**
+    *   *Direct Substitutes:* Same function, different chemistry/material.
+    *   *Indirect Obsolescence:* Does a new architecture make this product irrelevant?
 
 **Key Requirement:**
+> Explain the *elasticity* of demand. How trapped are the buyers?
 
-> Explain *why substitution is limited or viable*.
+### **6. Innovation Trajectory (Direction of Travel)**
+*Capture the vector of technical change.*
 
----
-
-## **6. Research & Innovation Dynamics**
-
-**Objective:** Capture the **direction of technical change**.
-
-### 6.1 Innovation Focus
-
-* What problems are being solved?
-
-### 6.2 Nature of Progress
-
-* Incremental vs radical
-
-### 6.3 Frontier Constraints
-
-* What is currently limiting advancement?
+*   **6.1 The Frontier:** What is the current "Holy Grail" of R&D for this product?
+*   **6.2 Limits to Growth:** Are we hitting physical limits (Moore’s Law walls, thermodynamic limits)?
+*   **6.3 Knowledge Regime:** Is innovation happening in universities (open science) or inside firm silos (proprietary trade secrets)?
 
 **Key Requirement:**
-
-> Show where the product is *technologically heading*.
+> Determine if the product is in the "Growth," "Maturity," or "Decline" phase of the S-Curve.
 
 ---
 
-## **7. Supply Chain Topology (System Flow)**
+## **PHASE IV: INDUSTRIALIZATION REQUIREMENTS**
 
-**Objective:** Represent the product as a **flow system**.
+### **7. Entry Barriers (The "Build" Criteria)**
+*Define the conditions required to create a new competitor.*
 
-### 7.1 Upstream Dependencies
-
-* Inputs and enabling industries
-
-### 7.2 Transformation Layer
-
-* Core production stages
-
-### 7.3 Downstream Uses
-
-* Where it goes next
-
-### 7.4 Chokepoints
-
-* Fragile or irreplaceable nodes
+*   **7.1 Infrastructure & Utilities:** Does it require specialized power, water, or logistics?
+*   **7.2 Human Capital:** What rare skills are needed? (e.g., "PhD-level process engineers").
+*   **7.3 Time-to-Yield:** How long does it take to go from "Factory Built" to "Profitable Yield"?
+*   **7.4 Ecosystem Dependencies:** Can this be built in a vacuum, or does it require a local cluster?
 
 **Key Requirement:**
-
-> Identify **where the system can break**.
-
----
-
-## **8. Industrialization Requirements (What It Takes to Build It)**
-
-**Objective:** Define the **conditions for production capability**.
-
-### 8.1 Infrastructure
-
-* Physical and environmental needs
-
-### 8.2 Human Capital
-
-* Skills and knowledge domains
-
-### 8.3 Capital & Time
-
-* Investment scale
-* Time to operational maturity
-
-### 8.4 Ecosystem Dependencies
-
-* Supporting industries and institutions
-
-**Key Requirement:**
-
-> Make clear *why entry is difficult or feasible*.
+> Calculate the "Ticket to Entry." Is entry feasible for a startup, a nation-state, or only an incumbent?
 
 ---
 
-## **9. Product Space Position (Relational Context)**
+## **PHASE V: SYNTHESIS (THE VERDICT)**
 
-**Objective:** Situate the product within a broader system.
+### **8. Strategic Characterization (Non-Negotiable)**
+*Convert data into a strategic posture.*
 
-### 9.1 Upstream Links
+**8.1 Typology Classification:**
+Select one:
+*   *Strategic Bottleneck:* High concentration, low substitutability (e.g., EUV Lithography).
+*   *Commoditized Input:* Low concentration, high substitutability (e.g., Generic Steel).
+*   *High-Complexity Intermediate:* Moderate concentration, high entry barriers (e.g., Turbofan Engines).
+*   *Critical Enabler:* Essential for downstream value but low capture (e.g., Specialty Chemicals).
 
-* What feeds into it
+**8.2 The Binding Constraint:**
+What is the single biggest limiter on this system? (Capital? Knowledge? Materials? Regulation?)
 
-### 9.2 Downstream Links
+**8.3 Systemic Fragility:**
+If this product stopped flowing tomorrow, what happens? (Immediate halt? Gradual degradation?)
 
-* What it enables
+**8.4 Evolutionary Forecast:**
+Where is the value migrating? Upstream? Downstream? Or to a substitute?
 
-### 9.3 Lateral Links
-
-* Technologically adjacent products
-
-**Key Requirement:**
-
-> Show how capabilities transfer across products.
-
----
-
-## **10. Synthesis (Non-Negotiable — The Core of the Document)**
-
-**Objective:** Convert description into **insight**.
-
-### 10.1 Structural Characterization
-
-* What *kind* of product is this?
-
-  * (e.g., strategic bottleneck, commoditized input, high-complexity intermediate)
-
-### 10.2 System Properties
-
-* Concentration
-* Substitutability
-* Knowledge intensity
-* Fragility
-
-### 10.3 Binding Constraints
-
-* What fundamentally limits expansion or entry?
-
-### 10.4 Evolution Trajectory
-
-* Where is this system going?
-
----
-
+**Final Output Requirement:**
+> The synthesis must provide a definitive answer to the question: **"Who captures the value in this chain, and why?"**
