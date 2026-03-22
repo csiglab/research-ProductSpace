@@ -1,0 +1,54 @@
+{
+  "id": "p001",
+  "name": "Monocrystalline Silicon Wafers",
+  "headline": "Foundational substrate for advanced semiconductor manufacturing.",
+  "description": "Ultra-pure silicon wafers serve as the substrate for fabricating integrated circuits. Domestic capability is critical for supply chain sovereignty, yet current capacity meets only 12% of national demand.",
+  "category": "Electronics",
+  "tags": ["semiconductor", "substrate", "strategic"],
+
+  "strategicMetrics": {
+    "domesticCapacity": 12,
+    "importDependency": 88,
+    "globalMarketShare": 4,
+    "timeToScale": "36-48 months",
+    "strategicPriority": "Critical"
+  },
+
+  "riskProfile": {
+    "geopolitical": "High",
+    "supplyChain": "Critical",
+    "substitutability": "Low",
+    "keyBottleneck": "High-purity polysilicon refining"
+  },
+
+  "technicalCore": {
+    "domains": ["semiconductor physics", "crystallography"],
+    "materials": ["Electronic Grade Silicon", "Argon Gas"],
+    "processes": [
+      { "name": "Czochralski Pulling", "maturity": "Mature", "barrier": "High" },
+      { "name": "Chemical Mechanical Polishing", "maturity": "Mature", "barrier": "Medium" }
+    ],
+    "standards": ["SEMI Standard", "IEEE 1493"]
+  },
+
+  "ecosystem": {
+    "upstream": [
+      { "name": "Polysilicon Refining", "status": "At Risk", "dependency": "High" }
+    ],
+    "downstream": [
+      { "name": "Logic Chip Fabrication", "status": "Growing", "dependency": "Mutual" }
+    ],
+    "globalLeaders": ["Shin-Etsu (JP)", "SUMCO (JP)", "Siltronic (DE)"],
+    "localPlayers": ["NanoSilicon Inc."]
+  },
+
+  "policyLever": {
+    "currentTariffs": "0%",
+    "incentives": ["CHIPS Act Tier 1", "Manufacturing Tax Credit"],
+    "recommendations": [
+      "Subsidize energy costs for crystal growth facilities.",
+      "Establish strategic reserve of high-purity polysilicon.",
+      "Fund R&D for 450mm wafer transition."
+    ]
+  }
+}

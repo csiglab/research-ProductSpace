@@ -1,0 +1,204 @@
+{
+  "id": "semiconductor-fabs",
+  "name": "Semiconductor Fabrication Facilities",
+  "category": "Electronics & Advanced Manufacturing",
+  "description": "Semiconductor fabrication facilities (fabs) are highly capital-intensive manufacturing plants that produce integrated circuits from silicon wafers through photolithography, etching, doping, and packaging processes. Modern leading-edge fabs represent the pinnacle of precision manufacturing, operating in controlled environments with tolerances measured in nanometers. A single advanced fab can cost $20B+ to construct and require 3–5 years from groundbreaking to volume production.",
+
+  "market": {
+    "size": "$580B",
+    "sizeYear": 2024,
+    "cagr": "8.2%",
+    "forecastYear": 2030,
+    "forecastSize": "$930B",
+    "unit": "wafer capacity (12\" equivalent, millions per month)",
+    "globalCapacity": "12.8M",
+    "trends": [
+      { "year": 2019, "value": 380 },
+      { "year": 2020, "value": 410 },
+      { "year": 2021, "value": 480 },
+      { "year": 2022, "value": 520 },
+      { "year": 2023, "value": 540 },
+      { "year": 2024, "value": 580 },
+      { "year": 2025, "value": 630, "note": "Forecast" },
+      { "year": 2026, "value": 680, "note": "Forecast" },
+      { "year": 2027, "value": 750, "note": "Forecast" },
+      { "year": 2028, "value": 820, "note": "Forecast" },
+      { "year": 2029, "value": 875, "note": "Forecast" },
+      { "year": 2030, "value": 930, "note": "Forecast" }
+    ],
+    "segments": [
+      { "name": "Logic (Advanced)", "share": 32, "growth": "12.4%" },
+      { "name": "Memory (DRAM/NAND)", "share": 26, "growth": "7.8%" },
+      { "name": "Analog & Mixed-Signal", "share": 18, "growth": "6.1%" },
+      { "name": "Power Semiconductors", "share": 12, "growth": "15.2%" },
+      { "name": "Sensors & MEMS", "share": 7, "growth": "9.3%" },
+      { "name": "Other", "share": 5, "growth": "4.0%" }
+    ],
+    "regions": [
+      { "region": "Taiwan", "share": 46 },
+      { "region": "South Korea", "share": 18 },
+      { "region": "China", "share": 15 },
+      { "region": "United States", "share": 12 },
+      { "region": "Japan", "share": 5 },
+      { "region": "Europe", "share": 3 },
+      { "region": "Other", "share": 1 }
+    ]
+  },
+
+  "producers": [
+    { "name": "TSMC", "country": "Taiwan", "marketShare": 62, "specialty": "Leading-edge logic (N3, N5)", "capacity": "2.6M wpm" },
+    { "name": "Samsung Foundry", "country": "South Korea", "marketShare": 11, "specialty": "Advanced logic, GAA architecture", "capacity": "1.4M wpm" },
+    { "name": "Intel Foundry", "country": "United States", "marketShare": 6, "specialty": "IDM + foundry services", "capacity": "0.8M wpm" },
+    { "name": "GlobalFoundries", "country": "United States", "marketShare": 5, "specialty": "Mature nodes, RF, automotive", "capacity": "0.6M wpm" },
+    { "name": "SMIC", "country": "China", "marketShare": 5, "specialty": "Mature nodes, domestic demand", "capacity": "0.7M wpm" },
+    { "name": "UMC", "country": "Taiwan", "marketShare": 5, "specialty": "Mature/specialty nodes", "capacity": "0.5M wpm" },
+    { "name": "SK Hynix (Memory)", "country": "South Korea", "marketShare": 3, "specialty": "DRAM, NAND flash", "capacity": "1.0M wpm" },
+    { "name": "Micron (Memory)", "country": "United States", "marketShare": 2, "specialty": "DRAM, NAND flash", "capacity": "0.8M wpm" }
+  ],
+
+  "technicalCore": {
+    "keyMaterials": [
+      "Ultra-pure silicon wafers (300mm)",
+      "Photoresists (EUV & DUV)",
+      "High-k dielectrics (HfO₂)",
+      "Copper & cobalt interconnects",
+      "Process gases (NF₃, WF₆, SiH₄)",
+      "CMP slurries",
+      "Extreme ultraviolet (EUV) pellicles"
+    ],
+    "processes": [
+      { "name": "Photolithography (EUV)", "barrier": "Very High", "maturity": "Production", "description": "13.5nm wavelength patterning for ≤7nm nodes" },
+      { "name": "Atomic Layer Deposition", "barrier": "High", "maturity": "Production", "description": "Angstrom-level thin film deposition" },
+      { "name": "Plasma Etching", "barrier": "High", "maturity": "Production", "description": "Anisotropic material removal at nanoscale" },
+      { "name": "Ion Implantation", "barrier": "Moderate", "maturity": "Mature", "description": "Precise dopant introduction into silicon" },
+      { "name": "Chemical Mechanical Planarization", "barrier": "Moderate", "maturity": "Mature", "description": "Surface flattening between layers" },
+      { "name": "Advanced Packaging (CoWoS)", "barrier": "High", "maturity": "Scaling", "description": "Chiplet integration and 3D stacking" }
+    ],
+    "standards": [
+      "SEMI Standards (S2, S8, E79)",
+      "ISO 14644-1 (Cleanroom Classification)",
+      "ITRS/IRDS Roadmap Compliance",
+      "IATF 16949 (Automotive Grade)",
+      "AEC-Q100/Q101 Reliability Standards"
+    ],
+    "equipment": [
+      { "name": "EUV Lithography Scanner", "supplier": "ASML", "leadTime": "24–36 months" },
+      { "name": "DUV Lithography Scanner", "supplier": "ASML / Nikon", "leadTime": "12–18 months" },
+      { "name": "Etch Systems", "supplier": "Lam Research / TEL", "leadTime": "6–12 months" },
+      { "name": "CVD/PVD Systems", "supplier": "Applied Materials", "leadTime": "6–12 months" },
+      { "name": "Metrology & Inspection", "supplier": "KLA / ASML HMI", "leadTime": "6–9 months" },
+      { "name": "Wafer Handling & Automation", "supplier": "Brooks / TDK", "leadTime": "3–6 months" }
+    ]
+  },
+
+  "substitutes": [
+    { "name": "Chiplet-based architectures", "readiness": "Emerging", "threatLevel": "High", "description": "Disaggregating monolithic SoCs into smaller, specialized dies connected via advanced packaging (UCIe, EMIB). Reduces dependency on leading-edge scaling." },
+    { "name": "GaN / SiC power devices", "readiness": "Commercial", "threatLevel": "Moderate", "description": "Wide-bandgap semiconductors replacing silicon in power electronics, EV inverters, and RF applications. Not a direct substitute for logic/memory." },
+    { "name": "Photonic computing", "readiness": "Research", "threatLevel": "Low", "description": "Optical interconnects and photonic processors for specific workloads (matrix multiplication, AI inference). Decades from general-purpose substitution." },
+    { "name": "Neuromorphic / analog compute", "readiness": "Research", "threatLevel": "Low", "description": "Brain-inspired architectures using memristive devices for AI workloads. Complementary rather than substitutive in near term." },
+    { "name": "Quantum computing", "readiness": "Experimental", "threatLevel": "Very Low", "description": "Relevant only for specific optimization and simulation problems. Will not substitute classical semiconductor manufacturing." }
+  ],
+
+  "rdSpending": {
+    "globalTotal": "$72B",
+    "asPercentOfRevenue": 14.5,
+    "year": 2024,
+    "trends": [
+      { "year": 2019, "value": 42 },
+      { "year": 2020, "value": 46 },
+      { "year": 2021, "value": 52 },
+      { "year": 2022, "value": 60 },
+      { "year": 2023, "value": 66 },
+      { "year": 2024, "value": 72 }
+    ],
+    "byCompany": [
+      { "name": "Intel", "amount": "16.5B" },
+      { "name": "TSMC", "amount": "5.8B" },
+      { "name": "Samsung Semiconductor", "amount": "12.1B" },
+      { "name": "Applied Materials", "amount": "2.9B" },
+      { "name": "ASML", "amount": "3.8B" },
+      { "name": "Qualcomm", "amount": "7.3B" },
+      { "name": "Broadcom", "amount": "5.8B" }
+    ],
+    "focusAreas": [
+      "Gate-All-Around (GAA) transistor architecture",
+      "High-NA EUV lithography",
+      "Backside power delivery networks",
+      "Advanced packaging (hybrid bonding, chiplets)",
+      "3D NAND stacking beyond 300 layers",
+      "Silicon photonics integration"
+    ]
+  },
+
+  "industrialRequirements": {
+    "capitalInvestment": "$15–25B for leading-edge fab; $3–8B for mature node",
+    "constructionTime": "3–5 years (leading-edge); 2–3 years (mature)",
+    "timeToScale": "12–18 months post-construction for volume ramp",
+    "workforce": "8,000–12,000 direct employees per advanced fab",
+    "infrastructure": [
+      "Ultra-pure water supply (10M+ gallons/day)",
+      "Reliable power grid (100+ MW capacity)",
+      "Seismic isolation (in applicable regions)",
+      "Advanced waste treatment facilities",
+      "Proximity to skilled engineering talent pool"
+    ],
+    "regulatory": [
+      "Environmental impact assessments (chemical handling)",
+      "Export control compliance (Wassenaar Arrangement)",
+      "National security review (CFIUS equivalent)",
+      "Water usage and discharge permits",
+      "Cleanroom emission standards"
+    ]
+  },
+
+  "supplyChain": {
+    "tier1": [
+      { "name": "ASML (Lithography)", "concentration": "Monopoly", "country": "Netherlands" },
+      { "name": "Applied Materials (Deposition/Etch)", "concentration": "High", "country": "United States" },
+      { "name": "Lam Research (Etch)", "concentration": "High", "country": "United States" },
+      { "name": "Tokyo Electron (Coating/Develop)", "concentration": "Moderate", "country": "Japan" },
+      { "name": "KLA (Metrology)", "concentration": "High", "country": "United States" },
+      { "name": "Shin-Etsu / SUMCO (Wafers)", "concentration": "High", "country": "Japan" }
+    ],
+    "tier2": [
+      { "name": "Zeiss SMT (Optics)", "concentration": "Monopoly", "country": "Germany" },
+      { "name": "Cymer/ASML (Light Sources)", "concentration": "Monopoly", "country": "United States" },
+      { "name": "JSR / TOK (Photoresists)", "concentration": "High", "country": "Japan" },
+      { "name": "Entegris (Chemicals/Filtration)", "concentration": "Moderate", "country": "United States" }
+    ],
+    "downstream": [
+      { "name": "Apple", "concentration": "Very High", "country": "United States" },
+      { "name": "NVIDIA", "concentration": "High", "country": "United States" },
+      { "name": "AMD", "concentration": "Moderate", "country": "United States" },
+      { "name": "Qualcomm", "concentration": "Moderate", "country": "United States" },
+      { "name": "Automotive OEMs", "concentration": "Fragmented", "country": "Global" }
+    ],
+    "logistics": [
+      "EUV machines weigh 180+ tons and require 40 shipping containers",
+      "Lead times for critical equipment exceed 24 months",
+      "Single-source dependencies on optics and light sources",
+      "Photoresists require cold-chain logistics (−20°C)"
+    ]
+  },
+
+  "relatedProducts": [
+    { "name": "Semiconductor Equipment", "relationship": "Enabling — fabs cannot exist without lithography, etch, and deposition tools" },
+    { "name": "Electronic Design Automation (EDA)", "relationship": "Enabling — chip design software determines fab utilization and node adoption" },
+    { "name": "Advanced Packaging Substrates", "relationship": "Complementary — fan-out and interposer technology extends Moore's Law" },
+    { "name": "Silicon Photonics", "relationship": "Emerging convergence — optical I/O integrated with CMOS logic" },
+    { "name": "Compound Semiconductors (GaN/SiC)", "relationship": "Parallel track — serves power and RF markets alongside silicon" }
+  ],
+
+  "risks": {
+    "geopolitical": "Critical",
+    "supplyChain": "Critical",
+    "substitutability": "Low",
+    "keyBottleneck": "ASML's EUV lithography monopoly — a single company in a single country (Netherlands) controls the only viable technology for sub-7nm manufacturing. No alternative supplier exists or is expected within the next decade.",
+    "additionalRisks": [
+      "Concentration of advanced manufacturing in Taiwan (geopolitical risk)",
+      "Export control escalation between US/EU and China",
+      "Talent shortage — estimated 100K+ unfilled positions globally by 2030",
+      "Single-source dependencies on Zeiss optics and Cymer light sources"
+    ]
+  }
+}
