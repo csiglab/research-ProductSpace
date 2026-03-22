@@ -1,711 +1,1222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turbofan Engine Systems: Thermodynamic Constraint Analysis</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0b;
-            --bg-secondary: #111113;
-            --bg-tertiary: #1a1a1d;
-            --text-primary: #e8e8e6;
-            --text-secondary: #9a9a95;
-            --accent-heat: #ff6b35;
-            --accent-tech: #00d4ff;
-            --accent-warn: #ffb800;
-            --border-subtle: #2a2a2d;
-            --border-active: #3d3d42;
-            --font-mono: 'Courier New', Consolas, monospace;
-            --font-serif: 'Georgia', 'Times New Roman', serif;
-            --font-sans: system-ui, -apple-system, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EUV Lithography Systems — Structural Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e14;
+      --bg-secondary: #111820;
+      --bg-tertiary: #1a222d;
+      --fg-primary: #e8edf4;
+      --fg-secondary: #8b99ab;
+      --fg-muted: #5a6778;
+      --accent-cyan: #00d4ff;
+      --accent-amber: #ffaa00;
+      --accent-red: #ff4757;
+      --accent-green: #00ff88;
+      --border: #2a3544;
+      --glow-cyan: rgba(0, 212, 255, 0.15);
+      --glow-amber: rgba(255, 170, 0, 0.15);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.4;
-        }
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg-primary);
+      color: var(--fg-primary);
+      overflow-x: hidden;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
 
-        header {
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 4rem 0 2rem;
-            margin-bottom: 4rem;
-            position: relative;
-        }
+    /* Animated Grid Background */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .classification-banner {
-            display: inline-block;
-            background: var(--accent-heat);
-            color: var(--bg-primary);
-            padding: 0.25rem 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: bold;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
+    .grid-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, var(--glow-cyan) 0%, transparent 60%);
+    }
 
-        h1 {
-            font-family: var(--font-serif);
-            font-size: 3rem;
-            font-weight: 400;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
+    /* Floating Particles */
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: float 20s infinite ease-in-out;
+    }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            font-style: italic;
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+      25% { transform: translateY(-100px) translateX(20px); opacity: 0.6; }
+      50% { transform: translateY(-50px) translateX(-30px); opacity: 0.3; }
+      75% { transform: translateY(-150px) translateX(10px); opacity: 0.5; }
+    }
 
-        .metadata-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-subtle);
-        }
+    /* Section Animations */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        .meta-item {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-        }
+    .reveal-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .meta-label {
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.25rem;
-        }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-section {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .particle {
+        animation: none;
+      }
+    }
 
-        .meta-value {
-            color: var(--accent-tech);
-        }
+    /* Matrix Table */
+    .matrix-cell {
+      position: relative;
+      transition: all 0.3s ease;
+    }
 
-        section {
-            margin-bottom: 6rem;
-            position: relative;
-        }
+    .matrix-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-        h2 {
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border-active);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    .matrix-cell:hover::before {
+      opacity: 1;
+    }
 
-        .section-number {
-            font-family: var(--font-mono);
-            color: var(--accent-heat);
-            font-size: 0.9rem;
-        }
+    .matrix-is-not::before {
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), transparent);
+    }
 
-        .definition-block {
-            background: var(--bg-secondary);
-            border-left: 3px solid var(--accent-heat);
-            padding: 2rem;
-            margin: 2rem 0;
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
+    .matrix-is::before {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), transparent);
+    }
 
-        .constraint-matrix {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px;
-            background: var(--border-subtle);
-            margin: 2rem 0;
-            border: 1px solid var(--border-subtle);
-        }
+    /* Network Visualization */
+    #network-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
 
-        .matrix-header {
-            background: var(--bg-tertiary);
-            padding: 1rem;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-secondary);
-        }
+    /* Timeline */
+    .timeline-node {
+      position: relative;
+      padding-left: 2rem;
+    }
 
-        .matrix-cell {
-            background: var(--bg-secondary);
-            padding: 1.5rem;
-            font-size: 0.9rem;
-        }
+    .timeline-node::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent-cyan), var(--border));
+    }
 
-        .matrix-cell.negative {
-            color: var(--text-secondary);
-            font-style: italic;
-        }
+    .timeline-node::after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 0.5rem;
+      width: 10px;
+      height: 10px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--accent-cyan);
+    }
 
-        .matrix-cell.positive {
-            color: var(--text-primary);
-            border-left: 2px solid var(--accent-tech);
-        }
+    /* Data Cards */
+    .data-card {
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+      border: 1px solid var(--border);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        .physics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
+    .data-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -20px rgba(0, 212, 255, 0.2);
+    }
 
-        .physics-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
+    /* Progress Bars */
+    .progress-track {
+      height: 6px;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
+    }
 
-        .physics-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-heat), transparent);
-        }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        .card-label {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--accent-heat);
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-        }
+    .progress-fill.animate {
+      transform: scaleX(1);
+    }
 
-        .card-title {
-            font-family: var(--font-serif);
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
+    /* Typing Animation */
+    .typing-text {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--accent-cyan);
+      animation: typing 3s steps(60) forwards, blink 0.8s step-end infinite;
+    }
 
-        .hard-step {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--accent-warn);
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-        }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
 
-        .hard-step::after {
-            content: 'BINDING CONSTRAINT';
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--accent-warn);
-            color: var(--bg-primary);
-            padding: 0.25rem 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
 
-        .topology-map {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            padding: 3rem 2rem;
-            margin: 2rem 0;
-            position: relative;
-        }
+    /* Focus States */
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 2px;
+    }
 
-        .node {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-active);
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            margin: 0.5rem;
-            position: relative;
-            cursor: help;
-            transition: all 0.3s ease;
-        }
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
 
-        .node:hover {
-            border-color: var(--accent-tech);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-        }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
 
-        .node.critical {
-            border-color: var(--accent-heat);
-            background: rgba(255, 107, 53, 0.1);
-        }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
 
-        .node.downstream {
-            border-color: var(--accent-tech);
-            background: rgba(0, 212, 255, 0.05);
-        }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--fg-muted);
+    }
 
-        .connector {
-            display: inline-block;
-            width: 60px;
-            height: 1px;
-            background: var(--border-active);
-            vertical-align: middle;
-            margin: 0 0.5rem;
-            position: relative;
-        }
+    /* Badge Styles */
+    .badge-critical {
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(255, 71, 87, 0.05));
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+    }
 
-        .connector::after {
-            content: '→';
-            position: absolute;
-            right: -5px;
-            top: -10px;
-            color: var(--border-active);
-            font-size: 0.8rem;
-        }
+    .badge-strategic {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.05));
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
 
-        .chokepoint-indicator {
-            color: var(--accent-heat);
-            font-size: 0.7rem;
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-        }
-
-        .verdict-box {
-            background: var(--bg-secondary);
-            border: 2px solid var(--text-primary);
-            padding: 3rem;
-            margin-top: 3rem;
-        }
-
-        .verdict-title {
-            font-family: var(--font-serif);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .verdict-classification {
-            display: inline-block;
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 0.5rem 1rem;
-            font-family: var(--font-mono);
-            font-weight: bold;
-            margin-bottom: 2rem;
-        }
-
-        .fragility-meter {
-            margin: 2rem 0;
-        }
-
-        .meter-label {
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .meter-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--bg-tertiary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .meter-fill {
-            height: 100%;
-            background: var(--accent-heat);
-            width: 92%;
-            position: relative;
-        }
-
-        .meter-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-heat), transparent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .technical-spec {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--accent-tech);
-            background: rgba(0, 212, 255, 0.05);
-            padding: 0.2rem 0.4rem;
-            border-radius: 2px;
-        }
-
-        .highlight {
-            color: var(--accent-heat);
-            font-weight: 600;
-        }
-
-        ul.spec-list {
-            list-style: none;
-            margin: 1rem 0;
-        }
-
-        ul.spec-list li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        ul.spec-list li::before {
-            content: '—';
-            position: absolute;
-            left: 0;
-            color: var(--accent-heat);
-        }
-
-        @media (max-width: 768px) {
-            .constraint-matrix {
-                grid-template-columns: 1fr;
-            }
-            .connector {
-                display: block;
-                width: 1px;
-                height: 30px;
-                margin: 0.5rem auto;
-            }
-            .connector::after {
-                content: '↓';
-                right: -4px;
-                top: auto;
-                bottom: -10px;
-            }
-            h1 { font-size: 2rem; }
-        }
-    </style>
-<base target="_blank">
+    .badge-warning {
+      background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(255, 170, 0, 0.05));
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+    }
+  </style>
 </head>
-<body>
+<body class="min-h-screen">
+  <!-- Background Grid -->
+  <div class="grid-bg"></div>
+  
+  <!-- Floating Particles -->
+  <div id="particles" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
 
-<header>
-    <div class="container">
-        <div class="classification-banner">Strategic Industrial Analysis</div>
-        <h1>High-Bypass Turbofan Engines</h1>
-        <p class="subtitle">Thermodynamic constraints and metallurgical chokepoints in aviation's critical path</p>
-        
-        <div class="metadata-grid">
-            <div class="meta-item">
-                <div class="meta-label">System Node Type</div>
-                <div class="meta-value">Capital Good / Mobility Enabler</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">Market Concentration</div>
-                <div class="meta-value">Duopoly (Effective)</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">Binding Constraint</div>
-                <div class="meta-value">Single-Crystal Cast Yield</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">Substitutability</div>
-                <div class="meta-value">None (Propulsion Essential)</div>
-            </div>
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[rgba(10,14,20,0.8)] border-b border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-green)] flex items-center justify-center">
+          <svg class="w-5 h-5 text-[var(--bg-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+          </svg>
         </div>
+        <span class="font-display font-semibold text-sm tracking-wider">INDUSTRIAL ONTOLOGY</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-xs tracking-widest uppercase text-[var(--fg-secondary)]">
+        <a href="#definition" class="hover:text-[var(--accent-cyan)] transition-colors">Definition</a>
+        <a href="#structure" class="hover:text-[var(--accent-cyan)] transition-colors">Structure</a>
+        <a href="#topology" class="hover:text-[var(--accent-cyan)] transition-colors">Topology</a>
+        <a href="#synthesis" class="hover:text-[var(--accent-cyan)] transition-colors">Synthesis</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden p-2 rounded-lg border border-[var(--border)] hover:border-[var(--accent-cyan)] transition-colors" aria-label="Toggle menu">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
-</header>
+  </nav>
 
-<main class="container">
+  <!-- Hero Section -->
+  <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent-cyan)] opacity-5 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[var(--accent-amber)] opacity-5 rounded-full blur-[80px]"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-6xl mx-auto px-6 text-center">
+      <div class="mb-8">
+        <span class="inline-block px-4 py-2 text-xs tracking-[0.3em] uppercase border border-[var(--border)] text-[var(--fg-muted)] rounded-full">
+          Reverse-Engineered Analysis
+        </span>
+      </div>
+      
+      <h1 class="font-display font-bold text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 leading-[1.1]">
+        <span class="block text-[var(--fg-primary)]">EUV Lithography</span>
+        <span class="block text-[var(--accent-cyan)]">Systems</span>
+      </h1>
+      
+      <p class="text-lg md:text-xl text-[var(--fg-secondary)] max-w-3xl mx-auto mb-12 leading-relaxed">
+        A structural analysis of the most precise manufacturing machines ever constructed — 
+        where light becomes a sculpting tool at the atomic scale.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button onclick="document.getElementById('definition').scrollIntoView({behavior: 'smooth'})" 
+                class="group px-8 py-4 bg-[var(--accent-cyan)] text-[var(--bg-primary)] font-display font-semibold rounded-lg hover:bg-[var(--fg-primary)] transition-all duration-300 flex items-center gap-3">
+          Enter Analysis
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </button>
+        <button onclick="document.getElementById('synthesis').scrollIntoView({behavior: 'smooth'})" 
+                class="px-8 py-4 border border-[var(--border)] text-[var(--fg-secondary)] font-display font-medium rounded-lg hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)] transition-all duration-300">
+          Jump to Verdict
+        </button>
+      </div>
 
-    <section>
-        <h2><span class="section-number">01</span> Physical Definition</h2>
+      <!-- Key Metrics -->
+      <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="data-card p-6 rounded-xl text-center">
+          <div class="font-display font-bold text-3xl md:text-4xl text-[var(--accent-cyan)] mb-2" data-counter="100">0</div>
+          <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Million Parts</div>
+        </div>
+        <div class="data-card p-6 rounded-xl text-center">
+          <div class="font-display font-bold text-3xl md:text-4xl text-[var(--accent-amber)] mb-2" data-counter="380">0</div>
+          <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Million USD</div>
+        </div>
+        <div class="data-card p-6 rounded-xl text-center">
+          <div class="font-display font-bold text-3xl md:text-4xl text-[var(--accent-green)] mb-2" data-counter="1">0</div>
+          <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Producer</div>
+        </div>
+        <div class="data-card p-6 rounded-xl text-center">
+          <div class="font-display font-bold text-3xl md:text-4xl text-[var(--accent-red)] mb-2" data-counter="13.5">0</div>
+          <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">nm Wavelength</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--fg-muted)]">
+      <span class="text-xs tracking-widest uppercase">Scroll</span>
+      <div class="w-6 h-10 border-2 border-[var(--border)] rounded-full flex justify-center">
+        <div class="w-1 h-2 bg-[var(--accent-cyan)] rounded-full mt-2 animate-bounce"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Is / Is Not Matrix -->
+  <section class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <div class="w-12 h-[2px] bg-[var(--accent-cyan)]"></div>
+          <span class="text-xs tracking-[0.3em] uppercase text-[var(--fg-muted)]">Ontological Framework</span>
+        </div>
         
-        <div class="definition-block">
-            A rotating thermal machine converting hydrocarbon bond energy into kinetic momentum via multi-stage axial compression (pressure ratio 40:1 to 60:1), annular combustion (TIT 1,700°C+), and cooled expansion through directionally-solidified nickel superalloy turbines, producing 20,000–130,000 lbf thrust through bypass ratios exceeding 10:1.
-        </div>
-
-        <div class="constraint-matrix">
-            <div class="matrix-header">It is NOT</div>
-            <div class="matrix-header">It IS</div>
-            
-            <div class="matrix-cell negative">A transportation service or logistics capability</div>
-            <div class="matrix-cell positive">A thermodynamic transformation system bound by metallurgical phase diagrams</div>
-            
-            <div class="matrix-cell negative">A standardized commodity with interchangeable suppliers</div>
-            <div class="matrix-cell positive">A geographically-concentrated precision casting monopoly with 10+ year lead times</div>
-            
-            <div class="matrix-cell negative">An end-user product</div>
-            <div class="matrix-cell positive">A captive intermediate good determining the operational envelope of global aviation</div>
-        </div>
-    </section>
-
-    <section>
-        <h2><span class="section-number">02</span> Thermodynamic Constraints</h2>
-        
-        <div class="physics-grid">
-            <div class="physics-card">
-                <div class="card-label">Materials Basis</div>
-                <div class="card-title">The Rhenium Bottleneck</div>
-                <p>High-pressure turbine blades utilize <span class="technical-spec">CMSX-4/RR3010</span> single-crystal alloys containing 3–6 wt% rhenium to retard creep at operating temperatures <span class="highlight">200°C above the alloy's melting point</span>. Rhenium is not mined directly; it exists only as a byproduct of Chilean copper porphyry deposits (90% of global supply).</p>
-                <br>
-                <p><strong>Purity requirement:</strong> 99.99% Re for superalloy doping. Supply inelastic to aviation demand.</p>
-            </div>
-
-            <div class="physics-card">
-                <div class="card-label">Thermal Physics</div>
-                <div class="card-title">Thermal Barrier Coating (TBC) Architecture</div>
-                <p>Electron-beam physical vapor deposition (EB-PVD) of <span class="technical-spec">YSZ (Yttria-Stabilized Zirconia)</span> creates a strain-tolerant columnar structure reducing metal temperature by 150–200°C. Failure mode: spallation during thermal cycling (takeoff-cruise-descent) due to CTE mismatch with bond coat.</p>
-                <br>
-                <p><strong>Hard limit:</strong> TBCs cannot exceed 1,200°C surface temperature; beyond this, sintering destroys strain tolerance.</p>
-            </div>
-
-            <div class="physics-card">
-                <div class="card-label">Mechanical Stress</div>
-                <div class="card-title">Centrifugal Loading</div>
-                <p>A single high-pressure turbine blade (50g mass) experiences <span class="highlight">18 tonnes of centrifugal force</span> at redline RPM (15,000+). Creep life is determined by grain boundary sliding; hence the necessity of single-crystal elimination of grain boundaries entirely.</p>
-            </div>
-        </div>
-
-        <div class="hard-step">
-            <h3 style="font-family: var(--font-serif); margin-bottom: 1rem;">The Hard Step: Directional Solidification</h3>
-            <p>The production of turbine blades requires maintaining a <span class="highlight">unidirectional thermal gradient of 100°C/cm</span> across a ceramic mold containing 50+ internal cooling channels (0.5mm wall thickness). The liquid metal must solidify from root to tip along the <span class="technical-spec">[001] crystallographic axis</span> with zero stray grains.</p>
-            <br>
-            <p><strong>Yield collapse point:</strong> 40% of castings fail grain orientation inspection. Each blade requires 3–6 weeks furnace time. This process, known as the Bridgman technique, represents the <span class="highlight">highest tacit knowledge density</span> in aerospace manufacturing—operators require 10+ years to master temperature ramp profiles.</p>
-            <br>
-            <p style="font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-warn);">
-                Result: Only PCC Structurals (US) and Howmet Aerospace (US/Europe) possess qualified capacity for single-crystal blade casting at aviation scale.
-            </p>
-        </div>
-    </section>
-
-    <section>
-        <h2><span class="section-number">03</span> Industrial Topology</h2>
-        
-        <div class="topology-map">
-            <div style="text-align: center;">
-                <div class="node critical">Chilean Cu Mines<br><span style="font-size:0.7rem; color:var(--accent-heat)">Re byproduct</span></div>
-                <span class="connector"></span>
-                <div class="node critical">PCC/Howmet<br><span style="font-size:0.7rem; color:var(--accent-heat)">SC Casting</span></div>
-                <span class="connector"></span>
-                <div class="node">GE/Safran<br>Pratt & Whitney</div>
-                <span class="connector"></span>
-                <div class="node downstream">Airbus/Boeing</div>
-                <span class="connector"></span>
-                <div class="node downstream">Global Aviation</div>
-                
-                <div class="chokepoint-indicator">Single Point of Failure</div>
-            </div>
-        </div>
-
-        <p style="margin-top: 2rem; color: var(--text-secondary);">
-            <strong>Structural Logic:</strong> The industry is not merely concentrated—it is <span class="highlight">vertically integrated by necessity</span>. CFM International (GE/Safran joint venture) and Pratt & Whitney control 90% of the narrowbody market not through collusion, but because the <span class="technical-spec">$5B+</span> R&D entry cost and 10-year certification timeline create a natural duopoly. Rolls-Royce exited the narrowbody segment (2000s) due to inability to amortize development costs across sufficient volume.
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-4">The Is / Is Not Matrix</h2>
+        <p class="text-[var(--fg-secondary)] mb-12 max-w-2xl">
+          This document rejects surface-level description. It is a reverse-engineering of a techno-industrial system.
         </p>
 
-        <ul class="spec-list" style="margin-top: 2rem;">
-            <li><strong>Geographic Concentration:</strong> Final assembly occurs in Ohio, Connecticut, and France, but the critical path runs through Albany, Oregon and Muskegon, Michigan (casting facilities).</li>
-            <li><strong>Export Control Regime:</strong> ITAR (International Traffic in Arms Regulations) and EAR (Export Administration Regulations) classify turbofans as munitions. Maintenance requires OEM technical data; MRO (Maintenance, Repair, Overhaul) shops cannot produce replacement single-crystal blades—they must source from OEM-controlled foundries.</li>
-            <li><strong>Certificate Limitation:</strong> Type certificates are non-transferable. A new entrant cannot simply "copy" a CFM56; FAA/EASA certification requires 100,000+ hours of icing, bird strike, and blade-off testing.</li>
-        </ul>
-    </section>
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Is Not Column -->
+          <div class="relative">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--accent-red)] to-transparent rounded-full"></div>
+            <div class="text-xs tracking-[0.2em] uppercase text-[var(--accent-red)] mb-6 font-semibold">It is NOT...</div>
+            <div class="space-y-3">
+              <div class="matrix-cell matrix-is-not p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-secondary)]">A market summary</p>
+              </div>
+              <div class="matrix-cell matrix-is-not p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-secondary)]">A list of features</p>
+              </div>
+              <div class="matrix-cell matrix-is-not p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-secondary)]">A descriptive overview</p>
+              </div>
+            </div>
+          </div>
 
-    <section>
-        <h2><span class="section-number">04</span> Network Position & Dependencies</h2>
-        
-        <h3 style="font-family: var(--font-serif); margin: 2rem 0 1rem;">Upstream Chokepoints</h3>
-        <div class="physics-grid">
-            <div class="physics-card">
-                <div class="card-label">Raw Material</div>
-                <div class="card-title">Rhenium Supply Constraint</div>
-                <p>Annual production: <span class="highlight">45–50 tonnes</span>. Aviation consumes 75%. No viable substitute exists for creep resistance in single-crystal alloys. Price volatility: $3,000–$15,000/kg.</p>
+          <!-- Is Column -->
+          <div class="relative">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--accent-green)] to-transparent rounded-full"></div>
+            <div class="text-xs tracking-[0.2em] uppercase text-[var(--accent-green)] mb-6 font-semibold">It IS...</div>
+            <div class="space-y-3">
+              <div class="matrix-cell matrix-is p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-primary)]">A structural analysis of causality</p>
+              </div>
+              <div class="matrix-cell matrix-is p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-primary)]">An explanation of functional necessity</p>
+              </div>
+              <div class="matrix-cell matrix-is p-5 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                <p class="text-[var(--fg-primary)]">A diagnosis of constraints and leverage points</p>
+              </div>
             </div>
-            <div class="physics-card">
-                <div class="card-label">Component</div>
-                <div class="card-title">CMC (Ceramic Matrix Composite) Turbine Shrouds</div>
-                <p>Silicon carbide fibers (Hi-Nicalon Type S) woven into enhanced SiC matrices. Only two qualified suppliers: <span class="technical-spec">COIC (China)</span> and <span class="technical-spec">NGS Advanced Fibers (Japan)</span>. Used exclusively in LEAP and GE9X engines for 1,300°C+ zones.</p>
-            </div>
+          </div>
         </div>
 
-        <h3 style="font-family: var(--font-serif); margin: 2rem 0 1rem;">Downstream Enablement</h3>
-        <p>Without these propulsion systems:</p>
-        <ul class="spec-list">
-            <li>Single-aisle commercial aviation ceases (A320neo, B737MAX, C919 dependent on LEAP/PW1100G)</li>
-            <li>Global perishable goods logistics collapses (no narrowbody belly cargo capacity)</li>
-            <li>Low-cost carrier business model becomes thermodynamically impossible (turbofans provide 40% better TSFC than legacy engines)</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2><span class="section-number">05</span> Demand Mechanics</h2>
-        
-        <div class="physics-card" style="margin: 2rem 0;">
-            <div class="card-label">Cyclicality Analysis</div>
-            <p>Demand is <span class="highlight">derived and cyclical</span>, tracking airline CAPEX cycles and oil price volatility (fuel efficiency drives replacement demand). 2020-2023 demonstrated extreme fragility: 60% order deferrals during demand collapse, followed by supply-constrained recovery where engine deliveries limit aircraft output.</p>
-            <br>
-            <p><strong>Substitution Envelope:</strong> None. Hydrogen fuel cells and battery electric propulsion lack the power density (specific energy) for narrowbody missions >500nm. Sustainable Aviation Fuel (SAF) requires identical engine architecture. This product is <span class="highlight">technologically locked-in</span> through 2050.</p>
-        </div>
-    </section>
-
-    <section>
-        <h2><span class="section-number">06</span> Innovation Trajectory</h2>
-        
-        <div class="physics-grid">
-            <div class="physics-card">
-                <div class="card-label">Current Frontier</div>
-                <div class="card-title">CMC Expansion & Additive Manufacturing</div>
-                <p>Transitioning from superalloy turbine blades to SiC/SiC CMC blades (weight reduction 1/3) requires solving the <span class="highlight">"creep" problem in ceramics</span>—currently unsolved for rotating components. Additive manufacturing (3D printed fuel nozzles) now standard for complex internal cooling geometries.</p>
+        <div class="mt-12 p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-[var(--glow-cyan)] flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-[var(--accent-cyan)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
             </div>
-            
-            <div class="physics-card">
-                <div class="card-label">Physical Limits</div>
-                <div class="card-title">The Temperature Wall</div>
-                <p>Turbine Entry Temperature (TIT) approaches <span class="technical-spec">1,750°C</span>—near the melting point of refractory metals. Cooling effectiveness (internal convective + film cooling) approaching theoretical maximum (70% of heat flux rejected). <span class="highlight">Moore's Law equivalent ending.</span></p>
+            <div>
+              <div class="font-display font-semibold text-[var(--fg-primary)] mb-2">Core Directive</div>
+              <p class="text-[var(--fg-secondary)] text-sm leading-relaxed">
+                Reconstruct the product as a node in a network. Explain not just what it is, but <em class="text-[var(--fg-primary)]">why it exists where it does</em> and <em class="text-[var(--fg-primary)]">what holds its production system together</em>.
+              </p>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section>
-        <h2><span class="section-number">07</span> Entry Conditions</h2>
-        
-        <p style="margin-bottom: 2rem;">To build a competing turbofan system:</p>
-        
-        <ul class="spec-list">
-            <li><strong>Capital Requirement:</strong> $8–12B development cost (GE90 program reference), $2B+ for production tooling</li>
-            <li><strong>Time to Market:</strong> 12–15 years from concept to Entry Into Service (EIS)</li>
-            <li><strong>Human Capital:</strong> 500+ PhD-level aerothermal engineers, 200+ metallurgists specializing in nickel superalloys (aging workforce, retirement cliff)</li>
-            <li><strong>Ecosystem:</strong> Requires immediate proximity to single-crystal foundry capacity (currently fully booked through 2030)</li>
-            <li><strong>Certification:</strong> FAA/EASA dual certification requires 5+ years of destructive testing</li>
-        </ul>
-
-        <div class="hard-step" style="border-color: var(--accent-tech); margin-top: 2rem;">
-            <p style="font-family: var(--font-mono); color: var(--accent-tech);">
-                VERDICT: Entry feasible only for nation-state actors (China's CJ-1000A program) with 20-year horizons and tolerance for $20B+ losses. Commercial entry by private capital: Impossible.
-            </p>
+  <!-- Phase I: Definition -->
+  <section id="definition" class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <span class="px-3 py-1 text-xs tracking-wider uppercase bg-[var(--bg-tertiary)] border border-[var(--border)] rounded text-[var(--accent-cyan)]">Phase I</span>
+          <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
         </div>
-    </section>
 
-    <section>
-        <h2><span class="section-number">08</span> System Verdict</h2>
-        
-        <div class="verdict-box">
-            <div class="verdict-classification">Strategic Bottleneck</div>
-            
-            <div class="verdict-title">Classification</div>
-            <p style="margin-bottom: 2rem; font-size: 1.1rem;">
-                This system exhibits <span class="highlight">extreme fragility</span> masked by industrial maturity. A geological event in Chile (copper belt) or industrial accident at PCC Structurals (Albany, OR) would halt global narrowbody production within 6 months. No strategic reserve exists for single-crystal turbine blades; they cannot be stockpiled (creep life begins at casting).
-            </p>
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-2">Definition & Ontology</h2>
+        <p class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mb-12">Establish immediate conceptual clarity. No context, no history. Pure function.</p>
 
-            <div class="fragility-meter">
-                <div class="meter-label">
-                    <span>Systemic Fragility Index</span>
-                    <span>92/100</span>
-                </div>
-                <div class="meter-bar">
-                    <div class="meter-fill"></div>
-                </div>
-            </div>
-
-            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle);">
-                <h4 style="font-family: var(--font-serif); margin-bottom: 1rem;">Value Capture Analysis</h4>
-                <p style="color: var(--text-secondary); line-height: 1.8;">
-                    <strong>Upstream:</strong> Rhenium traders and superalloy foundries capture scarcity rents.<br>
-                    <strong>OEMs:</strong> CFM and Pratt capture 60% gross margins on aftermarket (spare blades), creating <span class="highlight">captive demand</span>—airlines cannot source blades elsewhere.<br>
-                    <strong>Downstream:</strong> Airlines commoditize, competing on routes while paying engine OEMs monopoly rents for maintenance.<br><br>
-                    
-                    <span style="color: var(--text-primary);">The value concentrates at the metallurgical chokepoint: whoever controls the Bridgman furnaces controls aviation.</span>
+        <!-- Axiomatic Base -->
+        <div class="mb-16">
+          <h3 class="font-display font-semibold text-xl mb-8 text-[var(--fg-primary)]">1. Product Definition (The Axiomatic Base)</h3>
+          
+          <div class="grid gap-6">
+            <!-- Sentence 1 -->
+            <div class="group relative p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl hover:border-[var(--accent-cyan)] transition-all duration-300">
+              <div class="absolute top-6 left-6 w-8 h-8 rounded-full bg-[var(--glow-cyan)] flex items-center justify-center text-[var(--accent-cyan)] font-display font-bold text-sm">1</div>
+              <div class="pl-12">
+                <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-2">Technical Essence</div>
+                <p class="text-[var(--fg-primary)] leading-relaxed">
+                  A <span class="text-[var(--accent-cyan)]">vacuum-chambered optical projection system</span> utilizing extreme ultraviolet radiation at 13.5nm wavelength, generated by plasma-excited tin droplets, to pattern sub-7nm features on photoresist-coated silicon wafers through reflective multilayer mirror optics.
                 </p>
+              </div>
             </div>
+
+            <!-- Sentence 2 -->
+            <div class="group relative p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl hover:border-[var(--accent-cyan)] transition-all duration-300">
+              <div class="absolute top-6 left-6 w-8 h-8 rounded-full bg-[var(--glow-amber)] flex items-center justify-center text-[var(--accent-amber)] font-display font-bold text-sm">2</div>
+              <div class="pl-12">
+                <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-2">Functional Role</div>
+                <p class="text-[var(--fg-primary)] leading-relaxed">
+                  Functioning as the <span class="text-[var(--accent-amber)]">bottleneck node</span> for advanced semiconductor manufacturing — without which, no sub-7nm logic chip can be produced at scale.
+                </p>
+              </div>
+            </div>
+
+            <!-- Sentence 3 -->
+            <div class="group relative p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl hover:border-[var(--accent-cyan)] transition-all duration-300">
+              <div class="absolute top-6 left-6 w-8 h-8 rounded-full bg-[var(--glow-cyan)] flex items-center justify-center text-[var(--accent-cyan)] font-display font-bold text-sm">3</div>
+              <div class="pl-12">
+                <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-2">System Position</div>
+                <p class="text-[var(--fg-primary)] leading-relaxed">
+                  Classification: <span class="badge-strategic px-2 py-1 rounded text-xs">Capital Good — Strategic Bottleneck</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <footer style="border-top: 1px solid var(--border-subtle); padding: 3rem 0; margin-top: 6rem; text-align: center; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.8rem;">
-        <p>Analysis generated: 2026-03-22 // System Status: Critical Path Identified</p>
-    </footer>
+        <!-- Technical Core -->
+        <div>
+          <h3 class="font-display font-semibold text-xl mb-8 text-[var(--fg-primary)]">2. Technical Core (The Physics of Production)</h3>
+          
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Materials Basis -->
+            <div class="data-card p-6 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-[var(--accent-cyan)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+              </div>
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-3">Materials Basis</h4>
+              <ul class="space-y-2 text-sm text-[var(--fg-secondary)]">
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-cyan)] mt-1">&#9656;</span>
+                  Ultra-pure tin (Sn) for plasma generation
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-cyan)] mt-1">&#9656;</span>
+                  Molybdenum-silicon multilayer mirrors (40+ bilayers)
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-cyan)] mt-1">&#9656;</span>
+                  Molecular-contaminant-free vacuum environment
+                </li>
+              </ul>
+            </div>
 
-</main>
+            <!-- Transformation Logic -->
+            <div class="data-card p-6 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-[var(--accent-amber)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </div>
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-3">Transformation Logic</h4>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center text-xs text-[var(--fg-muted)]">1</span>
+                  <span class="text-[var(--fg-secondary)]">Tin droplet generation (50,000/sec)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center text-xs text-[var(--fg-muted)]">2</span>
+                  <span class="text-[var(--fg-secondary)]">CO₂ laser vaporization</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded bg-[var(--accent-red)] text-[var(--bg-primary)] flex items-center justify-center text-xs font-bold">3</span>
+                  <span class="text-[var(--accent-red)] font-medium">HARD STEP: Plasma → EUV emission</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center text-xs text-[var(--fg-muted)]">4</span>
+                  <span class="text-[var(--fg-secondary)]">Mirror collection & wafer projection</span>
+                </div>
+              </div>
+            </div>
 
-<script>
-    // Interactive hover effects for topology nodes
-    document.querySelectorAll('.node').forEach(node => {
-        node.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.05)';
-            this.style.zIndex = '10';
-        });
-        node.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-            this.style.zIndex = '1';
-        });
-    });
+            <!-- Failure Modes -->
+            <div class="data-card p-6 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-[var(--bg-primary)] border border-[var(--border)] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-[var(--accent-red)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+              </div>
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-3">Failure Modes</h4>
+              <ul class="space-y-2 text-sm text-[var(--fg-secondary)]">
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-red)] mt-1">&#9656;</span>
+                  Mirror contamination from tin debris
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-red)] mt-1">&#9656;</span>
+                  EUV source power instability
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[var(--accent-red)] mt-1">&#9656;</span>
+                  Sub-nanometer positioning drift
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    // Scroll-triggered animations for cards
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+  <!-- Phase II: Structure -->
+  <section id="structure" class="relative py-24 z-10 bg-[var(--bg-secondary)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <span class="px-3 py-1 text-xs tracking-wider uppercase bg-[var(--bg-tertiary)] border border-[var(--border)] rounded text-[var(--accent-amber)]">Phase II</span>
+          <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
+        </div>
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-2">Structure & Production</h2>
+        <p class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mb-12">The geography and concentration of production capability.</p>
+
+        <!-- Producer Map -->
+        <div class="mb-16">
+          <h3 class="font-display font-semibold text-xl mb-8 text-[var(--fg-primary)]">3. Industrial Architecture</h3>
+
+          <!-- Monopoly Visualization -->
+          <div class="relative p-8 bg-[var(--bg-primary)] border border-[var(--border)] rounded-2xl overflow-hidden mb-8">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-cyan)] opacity-5 rounded-full blur-[60px]"></div>
+            
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-8">
+                <div>
+                  <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-2">Market Concentration</div>
+                  <div class="font-display font-bold text-4xl text-[var(--accent-cyan)]">100%</div>
+                </div>
+                <span class="badge-critical px-4 py-2 rounded-lg text-sm font-medium">Absolute Monopoly</span>
+              </div>
+
+              <div class="flex items-end gap-2 h-32 mb-6">
+                <div class="flex-1 bg-gradient-to-t from-[var(--accent-cyan)] to-[var(--accent-cyan)]/30 rounded-t-lg" style="height: 100%"></div>
+                <div class="flex-1 bg-[var(--bg-tertiary)] rounded-t-lg" style="height: 5%"></div>
+                <div class="flex-1 bg-[var(--bg-tertiary)] rounded-t-lg" style="height: 3%"></div>
+                <div class="flex-1 bg-[var(--bg-tertiary)] rounded-t-lg" style="height: 2%"></div>
+              </div>
+
+              <div class="grid grid-cols-4 gap-4 text-center text-xs">
+                <div>
+                  <div class="font-semibold text-[var(--fg-primary)]">ASML</div>
+                  <div class="text-[var(--fg-muted)]">Netherlands</div>
+                </div>
+                <div>
+                  <div class="text-[var(--fg-muted)]">Nikon</div>
+                  <div class="text-[var(--fg-muted)]">Japan</div>
+                </div>
+                <div>
+                  <div class="text-[var(--fg-muted)]">Canon</div>
+                  <div class="text-[var(--fg-muted)]">Japan</div>
+                </div>
+                <div>
+                  <div class="text-[var(--fg-muted)]">Others</div>
+                  <div class="text-[var(--fg-muted)]">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Structural Drivers -->
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="data-card p-6 rounded-xl">
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-4 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-[var(--glow-cyan)] flex items-center justify-center text-[var(--accent-cyan)] text-sm">$</span>
+                Capital Barriers
+              </h4>
+              <p class="text-sm text-[var(--fg-secondary)] leading-relaxed mb-4">
+                $380M per unit. 10+ year R&D cycles. Requires ecosystem of 500+ specialized suppliers.
+              </p>
+              <div class="progress-track">
+                <div class="progress-fill bg-[var(--accent-cyan)]" style="--width: 98%"></div>
+              </div>
+              <div class="flex justify-between mt-2 text-xs text-[var(--fg-muted)]">
+                <span>Entry Barrier</span>
+                <span>Extreme</span>
+              </div>
+            </div>
+
+            <div class="data-card p-6 rounded-xl">
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-4 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-[var(--glow-amber)] flex items-center justify-center text-[var(--accent-amber)] text-sm">K</span>
+                Knowledge Lock-in
+              </h4>
+              <p class="text-sm text-[var(--fg-secondary)] leading-relaxed mb-4">
+                30+ years of accumulated tacit knowledge. 10,000+ patents. Proprietary integration knowledge.
+              </p>
+              <div class="progress-track">
+                <div class="progress-fill bg-[var(--accent-amber)]" style="--width: 95%"></div>
+              </div>
+              <div class="flex justify-between mt-2 text-xs text-[var(--fg-muted)]">
+                <span>Knowledge Moat</span>
+                <span>Impenetrable</span>
+              </div>
+            </div>
+
+            <div class="data-card p-6 rounded-xl">
+              <h4 class="font-display font-semibold text-[var(--fg-primary)] mb-4 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-[rgba(255,71,87,0.15)] flex items-center justify-center text-[var(--accent-red)] text-sm">G</span>
+                Geopolitical Friction
+              </h4>
+              <p class="text-sm text-[var(--fg-secondary)] leading-relaxed mb-4">
+                US export controls restrict sales to China. Strategic technology with national security implications.
+              </p>
+              <div class="progress-track">
+                <div class="progress-fill bg-[var(--accent-red)]" style="--width: 90%"></div>
+              </div>
+              <div class="flex justify-between mt-2 text-xs text-[var(--fg-muted)]">
+                <span>Restriction Level</span>
+                <span>Critical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase II Continued: Topology -->
+  <section id="topology" class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <h3 class="font-display font-semibold text-xl mb-8 text-[var(--fg-primary)]">4. System Topology (The Flow)</h3>
+
+        <div class="relative bg-[var(--bg-secondary)] border border-[var(--border)] rounded-2xl p-8 overflow-hidden min-h-[500px]">
+          <canvas id="network-canvas"></canvas>
+          
+          <div class="relative z-10 pointer-events-none">
+            <!-- Upstream -->
+            <div class="absolute top-8 left-8 pointer-events-auto">
+              <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-4">Upstream Dependencies</div>
+              <div class="space-y-2">
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm">
+                  <span class="text-[var(--accent-amber)]">Zeiss</span> — Mirror Optics
+                </div>
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm">
+                  <span class="text-[var(--accent-amber)]">Trumpf</span> — CO₂ Lasers
+                </div>
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm">
+                  <span class="text-[var(--accent-amber)]">Cymer</span> — Light Sources
+                </div>
+              </div>
+            </div>
+
+            <!-- Central Node -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
+              <div class="w-48 h-48 rounded-full bg-gradient-to-br from-[var(--accent-cyan)]/20 to-transparent border-2 border-[var(--accent-cyan)] flex items-center justify-center animate-pulse">
+                <div class="text-center">
+                  <div class="font-display font-bold text-2xl text-[var(--accent-cyan)]">EUV</div>
+                  <div class="text-xs text-[var(--fg-muted)]">BOTTLENECK NODE</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Downstream -->
+            <div class="absolute bottom-8 right-8 pointer-events-auto">
+              <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-4 text-right">Downstream Enablement</div>
+              <div class="space-y-2">
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm text-right">
+                  TSMC — Logic Foundry
+                </div>
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm text-right">
+                  Samsung — Memory & Logic
+                </div>
+                <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm text-right">
+                  Intel — Advanced Logic
+                </div>
+              </div>
+            </div>
+
+            <!-- Lateral -->
+            <div class="absolute bottom-8 left-8 pointer-events-auto">
+              <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-4">Lateral Adjacencies</div>
+              <div class="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg text-sm">
+                DUV Lithography (Legacy)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leverage Points -->
+        <div class="mt-8 grid md:grid-cols-2 gap-6">
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--accent-red)]/30 rounded-xl">
+            <div class="flex items-center gap-3 mb-4">
+              <svg class="w-5 h-5 text-[var(--accent-red)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <span class="font-display font-semibold text-[var(--accent-red)]">System Break Point</span>
+            </div>
+            <p class="text-sm text-[var(--fg-secondary)]">
+              Without EUV lithography, advanced semiconductor manufacturing stops. No alternative technology exists for sub-7nm production at scale.
+            </p>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--accent-green)]/30 rounded-xl">
+            <div class="flex items-center gap-3 mb-4">
+              <svg class="w-5 h-5 text-[var(--accent-green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              <span class="font-display font-semibold text-[var(--accent-green)]">Indispensable Node</span>
+            </div>
+            <p class="text-sm text-[var(--fg-secondary)]">
+              Controls the pace of all downstream computing advancement. AI accelerators, smartphones, data centers — all depend on EUV.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase III: Dynamics -->
+  <section class="relative py-24 z-10 bg-[var(--bg-secondary)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <span class="px-3 py-1 text-xs tracking-wider uppercase bg-[var(--bg-tertiary)] border border-[var(--border)] rounded text-[var(--accent-green)]">Phase III</span>
+          <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
+        </div>
+
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-2">Dynamics & Evolution</h2>
+        <p class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mb-12">Market causality and innovation trajectory.</p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Demand Mechanics -->
+          <div>
+            <h3 class="font-display font-semibold text-xl mb-6 text-[var(--fg-primary)]">5. Market Causality</h3>
+            
+            <div class="space-y-6">
+              <div class="timeline-node pb-6">
+                <div class="font-semibold text-[var(--fg-primary)] mb-1">Derived Demand</div>
+                <p class="text-sm text-[var(--fg-secondary)]">
+                  Demand is pulled by capital expenditure cycles of semiconductor foundries, not end consumers. Highly cyclical.
+                </p>
+              </div>
+
+              <div class="timeline-node pb-6">
+                <div class="font-semibold text-[var(--fg-primary)] mb-1">Inelastic Substitution</div>
+                <p class="text-sm text-[var(--fg-secondary)]">
+                  No direct substitute exists. Buyers are price-insensitive because the alternative is exiting the advanced node market entirely.
+                </p>
+              </div>
+
+              <div class="timeline-node">
+                <div class="font-semibold text-[var(--fg-primary)] mb-1">Obsolescence Horizon</div>
+                <p class="text-sm text-[var(--fg-secondary)]">
+                  Next-generation High-NA EUV is already in development. Current tools will face capability obsolescence within 5-7 years.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Innovation Trajectory -->
+          <div>
+            <h3 class="font-display font-semibold text-xl mb-6 text-[var(--fg-primary)]">6. Innovation Trajectory</h3>
+            
+            <div class="p-6 bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl mb-6">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-[var(--fg-muted)]">S-Curve Position</span>
+                <span class="badge-strategic px-3 py-1 rounded text-xs">Growth Phase</span>
+              </div>
+              <div class="h-4 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-[var(--accent-cyan)] to-[var(--accent-green)] rounded-full" style="width: 35%"></div>
+              </div>
+              <div class="flex justify-between mt-2 text-xs text-[var(--fg-muted)]">
+                <span>Introduction</span>
+                <span>Maturity</span>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg bg-[var(--glow-cyan)] flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-[var(--accent-cyan)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-[var(--fg-primary)] text-sm mb-1">The Frontier</div>
+                  <p class="text-xs text-[var(--fg-secondary)]">High-NA EUV with 0.55 numerical aperture for 2nm nodes</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg bg-[var(--glow-amber)] flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-[var(--accent-amber)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-[var(--fg-primary)] text-sm mb-1">Physical Limits</div>
+                  <p class="text-xs text-[var(--fg-secondary)]">Approaching quantum limits of photon-matter interaction</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase IV: Entry Barriers -->
+  <section class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <span class="px-3 py-1 text-xs tracking-wider uppercase bg-[var(--bg-tertiary)] border border-[var(--border)] rounded text-[var(--accent-red)]">Phase IV</span>
+          <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
+        </div>
+
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-2">Industrialization Requirements</h2>
+        <p class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mb-12">The conditions required to create a new competitor.</p>
+
+        <div class="grid md:grid-cols-4 gap-4">
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl text-center group hover:border-[var(--accent-red)] transition-colors">
+            <div class="text-5xl font-display font-bold text-[var(--accent-red)] mb-2">$20B+</div>
+            <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">R&D Investment</div>
+            <div class="mt-4 text-xs text-[var(--fg-secondary)]">Minimum viable development cost</div>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl text-center group hover:border-[var(--accent-amber)] transition-colors">
+            <div class="text-5xl font-display font-bold text-[var(--accent-amber)] mb-2">15+</div>
+            <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Years to Yield</div>
+            <div class="mt-4 text-xs text-[var(--fg-secondary)]">Time to production parity</div>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl text-center group hover:border-[var(--accent-cyan)] transition-colors">
+            <div class="text-5xl font-display font-bold text-[var(--accent-cyan)] mb-2">500+</div>
+            <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Suppliers</div>
+            <div class="mt-4 text-xs text-[var(--fg-secondary)]">Specialized ecosystem required</div>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl text-center group hover:border-[var(--accent-green)] transition-colors">
+            <div class="text-5xl font-display font-bold text-[var(--accent-green)] mb-2">10K</div>
+            <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase">Engineers</div>
+            <div class="mt-4 text-xs text-[var(--fg-secondary)]">PhD-level specialists</div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-6 bg-gradient-to-r from-[var(--accent-red)]/10 to-transparent border-l-4 border-[var(--accent-red)] rounded-r-xl">
+          <div class="font-display font-semibold text-[var(--fg-primary)] mb-2">Ticket to Entry</div>
+          <p class="text-[var(--fg-secondary)] text-sm">
+            Entry is <strong class="text-[var(--accent-red)]">only feasible for a nation-state</strong> with sustained multi-decade commitment. No startup or even conventional corporation can marshal the required resources, knowledge, and ecosystem.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase V: Synthesis -->
+  <section id="synthesis" class="relative py-32 z-10">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--accent-cyan)]/5 to-transparent pointer-events-none"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 relative">
+      <div class="reveal-section">
+        <div class="flex items-center gap-4 mb-12">
+          <span class="px-3 py-1 text-xs tracking-wider uppercase bg-[var(--accent-cyan)] text-[var(--bg-primary)] rounded font-semibold">Phase V</span>
+          <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
+        </div>
+
+        <h2 class="font-display font-bold text-3xl md:text-5xl mb-4">The Verdict</h2>
+        <p class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mb-12">Strategic characterization and final synthesis.</p>
+
+        <!-- Typology -->
+        <div class="mb-12">
+          <div class="inline-flex items-center gap-4 p-6 bg-[var(--bg-secondary)] border-2 border-[var(--accent-cyan)] rounded-xl">
+            <div class="w-16 h-16 rounded-xl bg-[var(--glow-cyan)] flex items-center justify-center">
+              <svg class="w-8 h-8 text-[var(--accent-cyan)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-xs text-[var(--fg-muted)] tracking-wider uppercase mb-1">Typology Classification</div>
+              <div class="font-display font-bold text-2xl text-[var(--accent-cyan)]">Strategic Bottleneck</div>
+              <div class="text-sm text-[var(--fg-secondary)] mt-1">High concentration + Low substitutability + Critical downstream dependency</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Three Column Verdict -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-[var(--glow-amber)] flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-[var(--accent-amber)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div class="font-display font-semibold text-[var(--fg-primary)] mb-2">Binding Constraint</div>
+            <p class="text-sm text-[var(--fg-secondary)]">
+              <strong class="text-[var(--accent-amber)]">Knowledge.</strong> Not capital, not materials. The integration of 100,000+ components into a coherent system requires tacit knowledge accumulated over decades.
+            </p>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-[rgba(255,71,87,0.15)] flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-[var(--accent-red)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="font-display font-semibold text-[var(--fg-primary)] mb-2">Systemic Fragility</div>
+            <p class="text-sm text-[var(--fg-secondary)]">
+              <strong class="text-[var(--accent-red)]">Immediate halt.</strong> If ASML stopped shipping tomorrow, advanced chip production would cease within months. No buffer, no alternative.
+            </p>
+          </div>
+
+          <div class="p-6 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-[var(--glow-cyan)] flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-[var(--accent-cyan)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+            </div>
+            <div class="font-display font-semibold text-[var(--fg-primary)] mb-2">Value Migration</div>
+            <p class="text-sm text-[var(--fg-secondary)]">
+              <strong class="text-[var(--accent-cyan)]">Upstream.</strong> Value is consolidating at the constraint point. ASML's margins expand as nodes shrink.
+            </p>
+          </div>
+        </div>
+
+        <!-- Final Answer -->
+        <div class="relative p-8 md:p-12 bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-tertiary)] border border-[var(--accent-cyan)]/50 rounded-2xl overflow-hidden">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--accent-cyan)] opacity-5 rounded-full blur-[100px]"></div>
+          
+          <div class="relative z-10">
+            <div class="text-xs text-[var(--fg-muted)] tracking-[0.3em] uppercase mb-4">Final Output Requirement</div>
+            
+            <blockquote class="font-display text-xl md:text-2xl lg:text-3xl font-light text-[var(--fg-primary)] leading-relaxed mb-6">
+              "Who captures the value in this chain, and why?"
+            </blockquote>
+            
+            <div class="border-l-4 border-[var(--accent-cyan)] pl-6">
+              <p class="text-[var(--fg-secondary)] leading-relaxed">
+                <strong class="text-[var(--fg-primary)]">ASML captures the value because they hold the knowledge.</strong> Not the patents — those can be licensed or invented around. Not the capital — sovereign wealth funds have more. They hold the <em class="text-[var(--accent-cyan)]">integration knowledge</em>: the invisible understanding of how to make 100,000 components work together at atomic precision. This knowledge cannot be bought, stolen, or reverse-engineered. It must be built, step by step, failure by failure, over decades. And that is why this monopoly is durable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative py-12 z-10 border-t border-[var(--border)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-green)] flex items-center justify-center">
+            <svg class="w-5 h-5 text-[var(--bg-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+            </svg>
+          </div>
+          <span class="font-display font-semibold text-sm tracking-wider text-[var(--fg-muted)]">INDUSTRIAL ONTOLOGY</span>
+        </div>
+        
+        <div class="text-xs text-[var(--fg-muted)] tracking-wider">
+          Structural Analysis of Techno-Industrial Systems
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize particles
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 20 + 's';
+      particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+      particlesContainer.appendChild(particle);
+    }
+
+    // Scroll reveal
+    const revealSections = document.querySelectorAll('.reveal-section');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    revealSections.forEach(section => revealObserver.observe(section));
+
+    // Counter animation
+    const counters = document.querySelectorAll('[data-counter]');
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = parseFloat(entry.target.dataset.counter);
+          const duration = 2000;
+          const start = performance.now();
+          
+          const animate = (currentTime) => {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 4);
+            const current = target * eased;
+            
+            entry.target.textContent = target % 1 === 0 ? 
+              Math.round(current) : 
+              current.toFixed(1);
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
             }
+          };
+          
+          requestAnimationFrame(animate);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    // Progress bar animation
+    const progressBars = document.querySelectorAll('.progress-fill');
+    
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('animate');
+            entry.target.style.transform = 'scaleX(0.98)';
+          }, 300);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    progressBars.forEach(bar => progressObserver.observe(bar));
+
+    // Network canvas visualization
+    const canvas = document.getElementById('network-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      const parent = canvas.parentElement;
+      
+      let width = 0;
+      let height = 0;
+      let nodes = [];
+      let animationId = null;
+      
+      function resize() {
+        width = parent.offsetWidth;
+        height = parent.offsetHeight;
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        
+        // Generate nodes
+        nodes = [];
+        const nodeCount = 40;
+        for (let i = 0; i < nodeCount; i++) {
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 2 + 1
+          });
+        }
+      }
+      
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Draw connections
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+        ctx.lineWidth = 1;
+        
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[j].x - nodes[i].x;
+            const dy = nodes[j].y - nodes[i].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 150) {
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+        
+        // Draw nodes
+        nodes.forEach(node => {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, Math.max(0.5, node.radius), 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+          ctx.fill();
+          
+          // Update position
+          node.x += node.vx;
+          node.y += node.vy;
+          
+          // Bounce off edges
+          if (node.x < 0 || node.x > width) node.vx *= -1;
+          if (node.y < 0 || node.y > height) node.vy *= -1;
         });
-    }, observerOptions);
+        
+        animationId = requestAnimationFrame(draw);
+      }
+      
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      resize();
+      window.addEventListener('resize', resize);
+      
+      if (!prefersReducedMotion) {
+        draw();
+      } else {
+        // Draw static version
+        ctx.clearRect(0, 0, width, height);
+        nodes.forEach(node => {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, Math.max(0.5, node.radius), 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+          ctx.fill();
+        });
+      }
+    }
 
-    document.querySelectorAll('.physics-card, .hard-step').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        // Simple toggle for demo - would expand with mobile menu
+        menuToggle.classList.toggle('active');
+      });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
     });
-</script>
-
+  </script>
 </body>
 </html>
