@@ -3,28 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Product Intelligence | Strategic Industrial Planning</title>
+  <title>Strategic Product Profile</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'slate': { 850: '#1e293b', 900: '#0f172a', 950: '#020617' },
-            'indigo': { 950: '#1e1b4b' },
-            'strategic': { 
-              primary: '#1e293b', 
-              accent: '#3b82f6', 
-              warning: '#f59e0b',
-              danger: '#dc2626',
-              success: '#059669'
-            }
+            'base': { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#64748b', 500: '#475569', 600: '#334155', 700: '#1e293b', 800: '#0f172a', 900: '#020617' },
+            'accent': { DEFAULT: '#0f766e', light: '#14b8a6', dark: '#0d9488' },
           },
           fontFamily: {
-            'serif': ['"Crimson Text"', 'serif'],
-            'sans': ['Inter', 'sans-serif'],
+            'display': ['Merriweather', 'serif'],
+            'body': ['Inter', 'sans-serif'],
             'mono': ['"JetBrains Mono"', 'monospace'],
           }
         }
@@ -33,701 +25,377 @@
   </script>
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-    .font-serif { font-family: 'Crimson Text', serif; }
+    .font-display { font-family: 'Merriweather', serif; }
     
-    .intelligence-card {
+    /* Editorial Styles for the "Essay" feel */
+    .prose-content p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose-content h2 { border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1.5rem; margin-top: 3rem; }
+    
+    .data-card {
       background: white;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
-    .intelligence-card:hover {
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-      transform: translateY(-1px);
-    }
-    
-    .metric-large {
-      font-family: 'JetBrains Mono', monospace;
-      font-variant-numeric: tabular-nums;
-    }
-    
-    .section-header {
-      border-left: 3px solid #3b82f6;
-      padding-left: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .data-table th {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.05em;
-      color: #64748b;
-      background: #f8fafc;
-    }
-    
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border: 1px solid;
-    }
-    
-    .trend-up { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
-    .trend-down { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
-    .trend-neutral { color: #6b7280; background: #f3f4f6; border-color: #d1d5db; }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .data-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50">
+<body class="min-h-screen">
 
-  <!-- Navigation -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-6">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-strategic-primary rounded flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"/>
-            </svg>
-          </div>
-          <span class="font-serif text-xl font-bold text-slate-900">Strategic<span class="text-strategic-accent">Intel</span></span>
-        </div>
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-          <a href="#" class="hover:text-strategic-accent transition-colors">Registry</a>
-          <a href="#" class="text-strategic-accent">Product View</a>
-          <a href="#" class="hover:text-strategic-accent transition-colors">Analytics</a>
-        </nav>
+  <!-- Minimal Header -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-base-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs text-base-400 uppercase tracking-widest font-semibold">Industrial Planning</span>
+        <div class="h-4 w-px bg-base-200"></div>
+        <span id="headerCategory" class="text-sm text-base-500 font-medium">Loading...</span>
       </div>
-      <div class="flex items-center gap-4">
-        <span class="text-xs font-mono text-slate-400 bg-slate-100 px-3 py-1 rounded-full" id="lastUpdated">Updated: Q3 2024</span>
-        <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-          <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        </button>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-base-400">Last Updated:</span>
+        <span id="headerDate" class="font-mono text-xs text-base-600 bg-base-100 px-2 py-1 rounded">--</span>
       </div>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-6 py-8">
+  <main class="max-w-6xl mx-auto px-6 py-12">
     
-    <!-- Executive Summary Header -->
-    <section id="executiveHeader" class="mb-10">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 intelligence-card rounded-xl p-8">
-          <div class="flex items-start justify-between mb-4">
-            <div>
-              <div class="flex items-center gap-3 mb-2">
-                <span id="productCategory" class="text-xs font-bold tracking-widest text-strategic-accent uppercase">Advanced Materials</span>
-                <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
-                <span id="productCode" class="font-mono text-xs text-slate-500">HS 8541.40</span>
-              </div>
-              <h1 id="productName" class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">Photovoltaic Cells & Modules</h1>
-              <p id="productDescription" class="text-lg text-slate-600 leading-relaxed">
-                Semiconductor devices converting light into electrical energy through the photovoltaic effect. 
-                Represents the fundamental building block of solar energy systems, with crystalline silicon 
-                dominating 95% of global production. Critical component for renewable energy transition 
-                and grid decarbonization strategies worldwide.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-6" id="keyAttributes">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-        
-        <div class="space-y-4">
-          <div class="intelligence-card rounded-xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Global Market Value</div>
-            <div class="metric-large text-3xl font-bold mb-1">$52.8B</div>
-            <div class="flex items-center gap-2 text-sm">
-              <span class="tag trend-up text-xs">+12.4% CAGR</span>
-              <span class="text-slate-400">2024-2030</span>
-            </div>
-          </div>
-          
-          <div class="intelligence-card rounded-xl p-6">
-            <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-3">Strategic Classification</div>
-            <div class="space-y-2" id="strategicTags">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Hero Section: The Product Identity -->
+    <section id="productHero" class="mb-12 border-b border-base-200 pb-10">
+      <!-- Rendered via JS -->
     </section>
 
-    <!-- Key Metrics Grid -->
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-      <div class="intelligence-card rounded-lg p-5 border-l-4 border-blue-500">
-        <div class="text-xs font-medium text-slate-500 uppercase mb-1">R&D Intensity</div>
-        <div class="metric-large text-2xl font-bold text-slate-900">4.2%</div>
-        <div class="text-xs text-slate-500 mt-1">of industry revenue</div>
-      </div>
-      <div class="intelligence-card rounded-lg p-5 border-l-4 border-amber-500">
-        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Market Concentration</div>
-        <div class="metric-large text-2xl font-bold text-slate-900">CR5: 68%</div>
-        <div class="text-xs text-slate-500 mt-1">Oligopolistic structure</div>
-      </div>
-      <div class="intelligence-card rounded-lg p-5 border-l-4 border-emerald-500">
-        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Substitutability Index</div>
-        <div class="metric-large text-2xl font-bold text-slate-900">Low</div>
-        <div class="text-xs text-slate-500 mt-1">Limited alternatives</div>
-      </div>
-      <div class="intelligence-card rounded-lg p-5 border-l-4 border-purple-500">
-        <div class="text-xs font-medium text-slate-500 uppercase mb-1">Supply Chain Complexity</div>
-        <div class="metric-large text-2xl font-bold text-slate-900">High</div>
-        <div class="text-xs text-slate-500 mt-1">Multi-tier dependencies</div>
-      </div>
+    <!-- Section 1: Strategic Overview (The "Essay" Intro) -->
+    <section id="strategicOverview" class="mb-12">
+      <!-- Rendered via JS -->
     </section>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Grid Layout for Data-Driven Sections -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
       
-      <!-- Main Content Column -->
-      <div class="lg:col-span-8 space-y-10">
+      <!-- Main Column (Left) -->
+      <div class="lg:col-span-2 space-y-8">
         
-        <!-- Market Architecture -->
-        <section class="intelligence-card rounded-xl p-8">
-          <div class="section-header">
-            <h2 class="font-serif text-2xl font-bold text-slate-900">Market Architecture & Evolution</h2>
-            <p class="text-sm text-slate-500 mt-1">Global demand dynamics, regional distribution, and value chain migration patterns</p>
+        <!-- Global Market & Evolution -->
+        <div class="data-card rounded-lg overflow-hidden">
+          <div class="bg-base-50 px-6 py-4 border-b border-base-200 flex items-center justify-between">
+            <h3 class="font-display text-lg text-base-800">Global Market Landscape</h3>
+            <span class="text-xs font-mono text-accent bg-accent/10 px-2 py-1 rounded">MARKET DATA</span>
           </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Regional Production Share</h4>
-              <div class="space-y-3" id="regionalShare">
-                <!-- Populated by JS -->
-              </div>
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Demand Growth Vectors</h4>
-              <div class="space-y-3" id="demandVectors">
-                <!-- Populated by JS -->
-              </div>
-            </div>
-          </div>
-          
-          <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Market Evolution Trajectory</h4>
-            <p id="marketEvolution" class="text-sm text-slate-700 leading-relaxed">
-              The industry is transitioning from polysilicon supply-constrained to installation-demand-constrained. 
-              Vertical integration strategies dominate among top-tier manufacturers, while technology differentiation 
-              shifts from commodity efficiency gains to advanced TOPCon and HJT cell architectures.
-            </p>
-          </div>
-        </section>
+          <div id="marketDynamics" class="p-6 prose-content"></div>
+        </div>
 
-        <!-- Technical Core & Innovation -->
-        <section class="intelligence-card rounded-xl p-8">
-          <div class="section-header">
-            <h2 class="font-serif text-2xl font-bold text-slate-900">Technical Core & Innovation Landscape</h2>
-            <p class="text-sm text-slate-500 mt-1">Proprietary technologies, patent landscapes, and R&D investment patterns</p>
+        <!-- Technical Core & Industrial Requirements -->
+        <div class="data-card rounded-lg overflow-hidden">
+          <div class="bg-base-50 px-6 py-4 border-b border-base-200">
+            <h3 class="font-display text-lg text-base-800">Technical Core & Requirements</h3>
+            <p class="text-xs text-base-400 mt-1">Prerequisites for industrial establishment and scaling.</p>
           </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="md:col-span-2">
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Critical Technology Parameters</h4>
-              <div class="overflow-hidden rounded-lg border border-slate-200">
-                <table class="w-full text-sm data-table">
-                  <thead>
-                    <tr class="border-b border-slate-200">
-                      <th class="px-4 py-3 text-left">Parameter</th>
-                      <th class="px-4 py-3 text-left">Industry Standard</th>
-                      <th class="px-4 py-3 text-left">Leading Edge</th>
-                      <th class="px-4 py-3 text-left">Barrier</th>
-                    </tr>
-                  </thead>
-                  <tbody id="techSpecs" class="divide-y divide-slate-100">
-                    <!-- Populated by JS -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">R&D Spending Leaders</h4>
-              <div class="space-y-3" id="rdLeaders">
-                <!-- Populated by JS -->
-              </div>
-              <div class="mt-4 pt-4 border-t border-slate-200">
-                <div class="text-xs text-slate-500 mb-1">Total Industry R&D</div>
-                <div class="metric-large text-xl font-bold text-slate-900">$2.2B</div>
-                <div class="text-xs text-slate-400">Annual expenditure (2024)</div>
-              </div>
-            </div>
-          </div>
+          <div id="technicalSpecs" class="p-6 divide-y divide-base-100"></div>
+        </div>
 
-          <div class="bg-blue-50 rounded-lg p-5 border border-blue-100">
-            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2">Technology Trajectory</h4>
-            <p id="techTrajectory" class="text-sm text-blue-900 leading-relaxed">
-              Migration from P-type PERC (Passivated Emitter and Rear Cell) to N-type TOPCon (Tunnel Oxide Passivated Contact) 
-              and HJT (Heterojunction Technology) architectures. Critical inflection point expected 2025-2026 as 
-              TOPCon achieves cost parity with PERC while offering 1.5-2% absolute efficiency gains.
-            </p>
+        <!-- Innovation & Substitution -->
+        <div class="data-card rounded-lg overflow-hidden border-l-4 border-accent">
+          <div class="px-6 py-4 border-b border-base-200 bg-accent/5">
+            <h3 class="font-display text-lg text-accent-dark">Innovation & Substitution</h3>
           </div>
-        </section>
-
-        <!-- Substitution Analysis -->
-        <section class="intelligence-card rounded-xl p-8 border-l-4 border-amber-400">
-          <div class="section-header border-amber-400">
-            <h2 class="font-serif text-2xl font-bold text-slate-900">Substitution Threats & Alternatives</h2>
-            <p class="text-sm text-slate-500 mt-1">Technological disruptors and material alternatives</p>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="substitutionGrid">
-            <!-- Populated by JS -->
-          </div>
-        </section>
-
-        <!-- Industrial Requirements -->
-        <section class="intelligence-card rounded-xl p-8">
-          <div class="section-header">
-            <h2 class="font-serif text-2xl font-bold text-slate-900">Industrial Requirements</h2>
-            <p class="text-sm text-slate-500 mt-1">Capital intensity, regulatory frameworks, and operational prerequisites</p>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="p-4 bg-slate-50 rounded-lg">
-              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Capital Intensity</div>
-              <div class="metric-large text-lg font-bold text-slate-900">$0.10/Watt</div>
-              <div class="text-xs text-slate-500 mt-1">Module manufacturing CAPEX</div>
-              <div class="mt-3 text-xs text-slate-600">Wafering and cell production require 3-5x higher capital intensity than module assembly.</div>
-            </div>
-            <div class="p-4 bg-slate-50 rounded-lg">
-              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Energy Requirements</div>
-              <div class="metric-large text-lg font-bold text-slate-900">High</div>
-              <div class="text-xs text-slate-500 mt-1">Polysilicon production</div>
-              <div class="mt-3 text-xs text-slate-600"> Metallurgical-grade silicon refining energy-intensive; access to low-cost electricity critical for competitiveness.</div>
-            </div>
-            <div class="p-4 bg-slate-50 rounded-lg">
-              <div class="text-xs font-bold text-slate-500 uppercase mb-2">Regulatory Compliance</div>
-              <div class="text-xs text-slate-700 mt-1 space-y-1">
-                <div>• IEC 61215/61730 certification</div>
-                <div>• ISO 9001 quality systems</div>
-                <div>• Country-specific grid codes</div>
-                <div>• Anti-dumping duty exposure</div>
-              </div>
-            </div>
-          </div>
-        </section>
+          <div id="innovationSection" class="p-6"></div>
+        </div>
 
       </div>
 
-      <!-- Sidebar Column -->
-      <div class="lg:col-span-4 space-y-8">
+      <!-- Sidebar Column (Right) -->
+      <div class="lg:col-span-1 space-y-8">
         
-        <!-- Competitive Landscape -->
-        <div class="intelligence-card rounded-xl p-6">
-          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Global Competitive Landscape</h3>
-          <div class="space-y-4" id="producerList">
-            <!-- Populated by JS -->
+        <!-- Major Producers -->
+        <div class="data-card rounded-lg overflow-hidden">
+          <div class="bg-base-50 px-5 py-3 border-b border-base-200">
+            <h3 class="font-semibold text-base-700 text-sm uppercase tracking-wide">Major Global Producers</h3>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-200">
-            <div class="text-xs font-bold text-slate-500 uppercase mb-2">Market Dynamics</div>
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Chinese manufacturers control 80%+ of global capacity. Vertical integration from polysilicon to modules 
-              is the dominant competitive strategy. Price competition intense with margin compression driving consolidation.
-            </p>
-          </div>
+          <div id="producerList" class="p-4"></div>
         </div>
 
-        <!-- Supply Chain Topology -->
-        <div class="intelligence-card rounded-xl p-6">
-          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Supply Chain Topology</h3>
-          
-          <div class="space-y-4">
-            <div>
-              <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Upstream Critical Inputs</h4>
-              <div class="space-y-2" id="upstreamInputs">
-                <!-- Populated by JS -->
-              </div>
-            </div>
-            
-            <div class="relative py-2">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-slate-300 border-dashed"></div>
-              </div>
-              <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-xs text-slate-400 font-mono">PROCESSING</span>
-              </div>
-            </div>
-
-            <div>
-              <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Downstream Applications</h4>
-              <div class="space-y-2" id="downstreamApps">
-                <!-- Populated by JS -->
-              </div>
-            </div>
+        <!-- Supply Chain -->
+        <div class="data-card rounded-lg overflow-hidden">
+          <div class="bg-base-50 px-5 py-3 border-b border-base-200">
+            <h3 class="font-semibold text-base-700 text-sm uppercase tracking-wide">Supply Chain Ecosystem</h3>
           </div>
+          <div id="supplyChainMap" class="p-4 space-y-4"></div>
         </div>
 
         <!-- Related Products -->
-        <div class="intelligence-card rounded-xl p-6">
-          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Adjacent & Related Products</h3>
-          <div class="space-y-3" id="relatedProducts">
-            <!-- Populated by JS -->
+        <div class="data-card rounded-lg overflow-hidden">
+          <div class="bg-base-50 px-5 py-3 border-b border-base-200">
+            <h3 class="font-semibold text-base-700 text-sm uppercase tracking-wide">Related Products</h3>
           </div>
-        </div>
-
-        <!-- Risk Matrix -->
-        <div class="intelligence-card rounded-xl p-6 bg-gradient-to-br from-slate-50 to-white">
-          <h3 class="font-serif text-lg font-bold text-slate-900 mb-4">Strategic Risk Matrix</h3>
-          <div class="space-y-3" id="riskMatrix">
-            <!-- Populated by JS -->
-          </div>
+          <div id="relatedProducts" class="p-4"></div>
         </div>
 
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="mt-12 pt-8 border-t border-slate-200 text-center text-sm text-slate-500">
-      <p>Strategic Industrial Intelligence Platform • Data sources: IEA, IRENA, Company Filings, Trade Statistics</p>
-    </footer>
-
   </main>
 
   <script>
-    // ============================================
-    // DATA MODEL & INITIALIZATION
-    // ============================================
-    
-    const productData = {
-      id: "pv-cells-001",
-      name: "Photovoltaic Cells & Modules",
-      category: "Advanced Materials / Renewable Energy Components",
-      hsCode: "8541.40",
-      description: "Semiconductor devices converting light into electrical energy through the photovoltaic effect. Represents the fundamental building block of solar energy systems, with crystalline silicon dominating 95% of global production. Critical component for renewable energy transition and grid decarbonization strategies worldwide.",
-      
-      strategicClassification: [
-        { label: "Energy Transition Critical", color: "blue" },
-        { label: "Capital Intensive", color: "slate" },
-        { label: "Technology Differentiated", color: "purple" }
-      ],
-      
-      keyAttributes: ["High Purity Silicon", "Passivation Layers", "Anti-reflective Coating", "Encapsulation", "Junction Box Integration"],
-      
-      marketMetrics: {
-        globalValue: "$52.8B",
-        cagr: "+12.4%",
-        forecastPeriod: "2024-2030",
-        rdIntensity: "4.2%",
-        concentration: "CR5: 68%",
-        substitutability: "Low",
-        supplyComplexity: "High"
-      },
-      
-      regionalProduction: [
-        { region: "China", share: 80, trend: "stable" },
-        { region: "Southeast Asia", share: 12, trend: "growing" },
-        { region: "Europe/USA", share: 5, trend: "declining" },
-        { region: "Rest of World", share: 3, trend: "stable" }
-      ],
-      
-      demandVectors: [
-        { sector: "Utility Scale Solar", growth: "+18%", share: "45%" },
-        { sector: "Distributed PV", growth: "+14%", share: "35%" },
-        { sector: "Commercial/Industrial", growth: "+11%", share: "20%" }
-      ],
-      
-      marketEvolution: "The industry is transitioning from polysilicon supply-constrained to installation-demand-constrained. Vertical integration strategies dominate among top-tier manufacturers, while technology differentiation shifts from commodity efficiency gains to advanced TOPCon and HJT cell architectures.",
-      
-      technicalSpecs: [
-        { parameter: "Cell Efficiency (Commercial)", standard: "21-22%", leading: "24-26%", barrier: "High" },
-        { parameter: "Degradation Rate", standard: "0.5-0.8%/year", leading: "0.3%/year", barrier: "Medium" },
-        { parameter: "Power Output (Module)", standard: "400-550W", leading: "700W+", barrier: "High" },
-        { parameter: "Thickness (Wafer)", standard: "170μm", leading: "130μm", barrier: "Medium" }
-      ],
-      
-      rdSpending: [
-        { company: "LONGi Green Energy", amount: "$350M", focus: "HJT & BC Cells" },
-        { company: "JinkoSolar", amount: "$280M", focus: "TOPCon Efficiency" },
-        { company: "First Solar", amount: "$190M", focus: "CdTe Thin Film" },
-        { company: "Trina Solar", amount: "$165M", focus: "210mm Technology" }
-      ],
-      
-      techTrajectory: "Migration from P-type PERC (Passivated Emitter and Rear Cell) to N-type TOPCon (Tunnel Oxide Passivated Contact) and HJT (Heterojunction Technology) architectures. Critical inflection point expected 2025-2026 as TOPCon achieves cost parity with PERC while offering 1.5-2% absolute efficiency gains.",
-      
-      majorProducers: [
-        { name: "LONGi Green Energy", hq: "China", share: "18%", focus: "Vertical Integration" },
-        { name: "JinkoSolar", hq: "China", share: "15%", focus: "N-type Technology" },
-        { name: "Trina Solar", hq: "China", share: "12%", focus: "Large Format" },
-        { name: "JA Solar", hq: "China", share: "11%", focus: "Cost Leadership" },
-        { name: "First Solar", hq: "USA", share: "6%", focus: "Thin Film CdTe" }
-      ],
-      
-      substitutionThreats: [
-        { 
-          technology: "Perovskite Tandem Cells", 
-          threatLevel: "Medium-High", 
-          timeline: "5-7 years",
-          description: "Potential to break silicon efficiency limits (33% vs 29% theoretical). Stability and manufacturing challenges remain." 
-        },
-        { 
-          technology: "Concentrated Solar Power (CSP)", 
-          threatLevel: "Low", 
-          timeline: "N/A",
-          description: "Alternative solar technology using mirrors. Complementary rather than substitutive for most applications." 
-        },
-        { 
-          technology: "Wind + Storage", 
-          threatLevel: "Medium", 
-          timeline: "Immediate",
-          description: "Alternative renewable generation. Substitution threat limited by land use profiles and grid requirements." 
-        },
-        { 
-          technology: "Next-gen Nuclear (SMR)", 
-          threatLevel: "Low", 
-          timeline: "10+ years",
-          description: "Baseload power alternative. Different use case, but competes for clean energy capital allocation." 
-        }
-      ],
-      
-      supplyChain: {
-        upstream: [
-          { material: "Polysilicon (Solar Grade)", criticality: "High", concentration: "China 85%" },
-          { material: "Silicon Wafers", criticality: "High", concentration: "China 95%" },
-          { material: "Silver Paste", criticality: "Medium", concentration: "Diversified" },
-          { material: "Aluminum Frames", criticality: "Low", concentration: "Regional" }
-        ],
-        downstream: [
-          { application: "Utility Solar Farms", growth: "High", margin: "Low" },
-          { application: "Rooftop Residential", growth: "Medium", margin: "High" },
-          { application: "Agrivoltaics", growth: "Emerging", margin: "Medium" },
-          { application: "Floating PV", growth: "High", margin: "Medium" }
-        ]
-      },
-      
-      relatedProducts: [
-        { name: "Solar Inverters", relationship: "System Integration", synergy: "High" },
-        { name: "Energy Storage Systems", relationship: "Complementary", synergy: "Critical" },
-        { name: "Mounting Systems", relationship: "Installation", synergy: "Medium" },
-        { name: "Polysilicon Feedstock", relationship: "Upstream", synergy: "High" },
-        { name: "Solar Glass", relationship: "Component", synergy: "Medium" }
-      ],
-      
-      risks: [
-        { type: "Geopolitical", level: "High", description: "Trade wars, anti-dumping duties, forced labor allegations affecting supply chains." },
-        { type: "Technology", level: "Medium", description: "Rapid obsolescence of PERC technology. Stranded asset risk for non-TOPCon capacity." },
-        { type: "Supply", level: "Medium", description: "Silver supply constraints for metallization. Wafer thinning limits." },
-        { type: "Demand", level: "Low", description: "Grid interconnection bottlenecks. Policy incentive volatility." }
-      ]
-    };
+    // =============================================
+    // DATA LOADING
+    // =============================================
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id') || 'semiconductors'; // Default fallback
 
-    // ============================================
-    // RENDERING FUNCTIONS
-    // ============================================
-
-    function init() {
-      renderPage(productData);
+      try {
+        const response = await fetch(`../data/src/${productId}.json`);
+        if (!response.ok) throw new Error('File not found');
+        const data = await response.json();
+        renderPage(data);
+      } catch (err) {
+        console.error(err);
+        renderError(`Could not load data/src/${productId}.json`);
+      }
     }
 
-    function renderPage(data) {
-      // Header Section
-      document.getElementById('productName').textContent = data.name;
-      document.getElementById('productCategory').textContent = data.category;
-      document.getElementById('productCode').textContent = data.hsCode;
-      document.getElementById('productDescription').textContent = data.description;
+    function renderError(msg) {
+      document.body.innerHTML = `<div class="p-10 text-center text-red-600 bg-red-50 m-10 rounded border border-red-200">${msg}</div>`;
+    }
+
+    // =============================================
+    // RENDERING ORCHESTRATION
+    // =============================================
+    function renderPage(p) {
+      document.title = `${p.name} | Strategic Profile`;
+      document.getElementById('headerCategory').textContent = p.category || 'Industrial Good';
+      document.getElementById('headerDate').textContent = p.lastUpdated || new Date().toISOString().split('T')[0];
+
+      renderHero(p);
+      renderStrategicOverview(p);
+      renderMarketDynamics(p.globalMarket);
+      renderTechnicalSpecs(p.technicalCore, p.industrialRequirements);
+      renderInnovation(p.rdSpending, p.substitution);
+      renderProducers(p.majorProducers);
+      renderSupplyChain(p.supplyChain);
+      renderRelated(p.relatedProducts);
+    }
+
+    // =============================================
+    // SECTION RENDERERS
+    // =============================================
+
+    function renderHero(p) {
+      const el = document.getElementById('productHero');
+      el.innerHTML = `
+        <div class="flex items-center gap-2 mb-4">
+          <span class="font-mono text-xs bg-base-200 text-base-600 px-2 py-1 rounded uppercase tracking-wider">${p.id}</span>
+          <span class="text-xs text-accent font-semibold">${p.strategicImportance || 'Critical Infrastructure'}</span>
+        </div>
+        <h1 class="font-display text-4xl font-bold text-base-900 tracking-tight mb-4">${p.name}</h1>
+        <p class="text-xl text-base-600 leading-relaxed max-w-3xl">${p.description}</p>
+      `;
+    }
+
+    function renderStrategicOverview(p) {
+      const el = document.getElementById('strategicOverview');
+      // This section creates the "Essay" feel by combining executive summary with context
+      el.innerHTML = `
+        <div class="prose-content">
+          <h2 class="font-display text-2xl text-base-800 border-none pt-0 mt-0">Strategic Context</h2>
+          <p class="text-base-600">${p.strategicContext || "This product represents a critical node in the modern industrial value chain. Its production and availability are directly linked to broader economic stability and technological sovereignty."}</p>
+          
+          <div class="grid grid-cols-2 gap-4 my-6 not-prose">
+            <div class="bg-base-100 p-4 rounded border border-base-200">
+              <div class="text-xs text-base-400 uppercase font-semibold mb-1">Market Maturity</div>
+              <div class="text-lg font-bold text-base-800">${p.marketMaturity || 'Growth Phase'}</div>
+            </div>
+            <div class="bg-base-100 p-4 rounded border border-base-200">
+              <div class="text-xs text-base-400 uppercase font-semibold mb-1">Barriers to Entry</div>
+              <div class="text-lg font-bold text-base-800">${p.barriersToEntry || 'High'}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMarketDynamics(m) {
+      if(!m) return;
+      const el = document.getElementById('marketDynamics');
       
-      // Key Attributes
-      const attrContainer = document.getElementById('keyAttributes');
-      data.keyAttributes.forEach(attr => {
-        const span = document.createElement('span');
-        span.className = 'px-3 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full border border-slate-200';
-        span.textContent = attr;
-        attrContainer.appendChild(span);
-      });
+      el.innerHTML = `
+        <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+          <div class="bg-base-50 p-3 rounded">
+            <div class="text-2xl font-bold text-base-800">${m.globalMarketSize || 'N/A'}</div>
+            <div class="text-xs text-base-400">Market Size</div>
+          </div>
+          <div class="bg-base-50 p-3 rounded">
+            <div class="text-2xl font-bold text-accent">${m.cagr || 'N/A'}</div>
+            <div class="text-xs text-base-400">CAGR</div>
+          </div>
+          <div class="bg-base-50 p-3 rounded">
+            <div class="text-2xl font-bold text-base-800">${m.projected20230 || 'N/A'}</div>
+            <div class="text-xs text-base-400">2030 Projection</div>
+          </div>
+        </div>
+        
+        <h4 class="font-semibold text-base-700 mb-2">Market Evolution</h4>
+        <p class="text-sm text-base-600 mb-4">${m.evolutionNarrative || "The market is undergoing significant structural shifts driven by geopolitical realignments and technological transitions."}</p>
+        
+        <div class="bg-accent/5 border-l-4 border-accent p-4 rounded-r">
+          <h5 class="font-semibold text-accent-dark text-sm mb-1">Key Trends</h5>
+          <ul class="list-disc list-inside text-sm text-base-600 space-y-1">
+            ${m.keyTrends ? m.keyTrends.map(t => `<li>${t}</li>`).join('') : '<li>Market consolidation</li><li>Regional diversification</li>'}
+          </ul>
+        </div>
+      `;
+    }
+
+    function renderTechnicalSpecs(tc, req) {
+      const el = document.getElementById('technicalSpecs');
       
-      // Strategic Tags
-      const tagContainer = document.getElementById('strategicTags');
-      data.strategicClassification.forEach(cls => {
-        const colors = {
-          blue: 'bg-blue-100 text-blue-800 border-blue-200',
-          slate: 'bg-slate-100 text-slate-800 border-slate-200',
-          purple: 'bg-purple-100 text-purple-800 border-purple-200'
-        };
-        const div = document.createElement('div');
-        div.className = `flex items-center justify-between p-2 rounded border ${colors[cls.color]}`;
-        div.innerHTML = `<span class="text-sm font-medium">${cls.label}</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-        tagContainer.appendChild(div);
-      });
-      
-      // Regional Share
-      const regionalContainer = document.getElementById('regionalShare');
-      data.regionalProduction.forEach(item => {
-        const trendColors = { growing: 'text-emerald-600', declining: 'text-red-600', stable: 'text-slate-600' };
-        const trendIcons = { growing: '↑', declining: '↓', stable: '→' };
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between text-sm';
-        div.innerHTML = `
-          <span class="text-slate-700 font-medium">${item.region}</span>
+      // Processes
+      const processes = (tc?.processes || []).map(p => `
+        <div class="flex justify-between items-center py-2">
           <div class="flex items-center gap-2">
-            <div class="w-24 bg-slate-200 rounded-full h-2">
-              <div class="bg-blue-600 h-2 rounded-full" style="width: ${item.share}%"></div>
-            </div>
-            <span class="text-slate-900 font-mono font-bold w-8">${item.share}%</span>
-            <span class="${trendColors[item.trend]} text-xs font-mono">${trendIcons[item.trend]}</span>
+            <span class="w-2 h-2 rounded-full bg-accent"></span>
+            <span class="font-medium text-base-700">${p.name}</span>
           </div>
-        `;
-        regionalContainer.appendChild(div);
-      });
-      
-      // Demand Vectors
-      const demandContainer = document.getElementById('demandVectors');
-      data.demandVectors.forEach(vec => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-100';
-        div.innerHTML = `
-          <span class="text-sm text-slate-700">${vec.sector}</span>
-          <div class="flex items-center gap-3">
-            <span class="text-xs font-mono text-slate-500">${vec.share}</span>
-            <span class="tag trend-up text-xs">${vec.growth}</span>
+          <span class="text-xs font-mono bg-base-100 text-base-500 px-2 py-1 rounded">${p.techReadiness || 'TRL 7'}</span>
+        </div>
+      `).join('');
+
+      // Requirements
+      const requirements = (req?.keyRequirements || []).map(r => `
+        <li class="flex items-start gap-2 text-sm text-base-600">
+          <svg class="w-4 h-4 text-base-300 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          ${r}
+        </li>
+      `).join('');
+
+      el.innerHTML = `
+        <div class="mb-6">
+          <h4 class="text-xs font-bold text-base-400 uppercase tracking-wider mb-3">Core Manufacturing Processes</h4>
+          <div class="space-y-1 bg-base-50 p-3 rounded">
+            ${processes || '<p class="text-sm text-base-400 italic">Process data unavailable</p>'}
           </div>
-        `;
-        demandContainer.appendChild(div);
-      });
-      
-      // Technical Specs
-      const specsBody = document.getElementById('techSpecs');
-      data.technicalSpecs.forEach(spec => {
-        const barrierColor = spec.barrier === 'High' ? 'text-red-600 bg-red-50' : 'text-amber-600 bg-amber-50';
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-50';
-        tr.innerHTML = `
-          <td class="px-4 py-3 text-slate-900 font-medium">${spec.parameter}</td>
-          <td class="px-4 py-3 text-slate-600 font-mono text-xs">${spec.standard}</td>
-          <td class="px-4 py-3 text-slate-900 font-mono text-xs font-bold">${spec.leading}</td>
-          <td class="px-4 py-3"><span class="px-2 py-1 rounded text-xs font-medium ${barrierColor}">${spec.barrier}</span></td>
-        `;
-        specsBody.appendChild(tr);
-      });
-      
-      // R&D Leaders
-      const rdContainer = document.getElementById('rdLeaders');
-      data.rdSpending.forEach(company => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-2 border-b border-slate-100 last:border-0';
-        div.innerHTML = `
-          <div>
-            <div class="text-sm font-medium text-slate-900">${company.company}</div>
-            <div class="text-xs text-slate-500">${company.focus}</div>
+        </div>
+        
+        <div>
+          <h4 class="text-xs font-bold text-base-400 uppercase tracking-wider mb-3">Industrial Prerequisites</h4>
+          <ul class="space-y-2 pl-1">
+            ${requirements || '<p class="text-sm text-base-400 italic">Requirements data unavailable</p>'}
+          </ul>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-base-100">
+          <div class="flex flex-wrap gap-2">
+            ${(tc?.materials || []).map(m => `<span class="px-2 py-1 bg-white border border-base-200 text-xs font-mono text-base-600 rounded">${m}</span>`).join('')}
           </div>
-          <span class="font-mono text-sm font-bold text-slate-700">${company.amount}</span>
-        `;
-        rdContainer.appendChild(div);
-      });
-      
-      // Major Producers
-      const producerContainer = document.getElementById('producerList');
-      data.majorProducers.forEach((prod, idx) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-start gap-3 p-3 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors cursor-pointer';
-        div.innerHTML = `
-          <div class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-xs font-bold text-slate-600">${idx + 1}</div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between mb-1">
-              <h4 class="text-sm font-bold text-slate-900 truncate">${prod.name}</h4>
-              <span class="text-xs font-mono text-slate-500">${prod.share}</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs">
-              <span class="px-2 py-0.5 bg-slate-100 rounded text-slate-600">${prod.hq}</span>
-              <span class="text-slate-400 truncate">${prod.focus}</span>
-            </div>
-          </div>
-        `;
-        producerContainer.appendChild(div);
-      });
-      
-      // Substitution Grid
-      const subContainer = document.getElementById('substitutionGrid');
-      data.substitutionThreats.forEach(threat => {
-        const levelColors = {
-          'High': 'border-red-200 bg-red-50',
-          'Medium-High': 'border-orange-200 bg-orange-50',
-          'Medium': 'border-amber-200 bg-amber-50',
-          'Low': 'border-slate-200 bg-slate-50'
-        };
-        const div = document.createElement('div');
-        div.className = `p-4 rounded-lg border ${levelColors[threat.threatLevel] || 'border-slate-200'}`;
-        div.innerHTML = `
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-slate-900 text-sm">${threat.technology}</h4>
-            <span class="text-xs font-bold text-slate-600 bg-white px-2 py-1 rounded border">${threat.threatLevel}</span>
-          </div>
-          <div class="text-xs text-slate-500 mb-2 font-mono">Timeline: ${threat.timeline}</div>
-          <p class="text-xs text-slate-700 leading-relaxed">${threat.description}</p>
-        `;
-        subContainer.appendChild(div);
-      });
-      
-      // Supply Chain
-      const upstreamContainer = document.getElementById('upstreamInputs');
-      data.supplyChain.upstream.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between text-sm p-2 bg-slate-50 rounded border-l-2 border-red-400';
-        div.innerHTML = `
-          <span class="text-slate-700 font-medium">${item.material}</span>
-          <span class="text-xs text-slate-500 bg-white px-2 py-1 rounded border">${item.concentration}</span>
-        `;
-        upstreamContainer.appendChild(div);
-      });
-      
-      const downstreamContainer = document.getElementById('downstreamApps');
-      data.supplyChain.downstream.forEach(app => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between text-sm p-2 bg-slate-50 rounded border-l-2 border-blue-400';
-        div.innerHTML = `
-          <span class="text-slate-700 font-medium">${app.application}</span>
-          <div class="flex gap-2">
-            <span class="text-xs text-slate-500">${app.growth}</span>
-            <span class="text-xs font-mono text-slate-400">${app.margin} margin</span>
-          </div>
-        `;
-        downstreamContainer.appendChild(div);
-      });
-      
-      // Related Products
-      const relatedContainer = document.getElementById('relatedProducts');
-      data.relatedProducts.forEach(prod => {
-        const synergyColors = { High: 'bg-blue-100 text-blue-700', Critical: 'bg-purple-100 text-purple-700', Medium: 'bg-slate-100 text-slate-700' };
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:border-blue-300 transition-colors';
-        div.innerHTML = `
-          <div>
-            <div class="text-sm font-bold text-slate-900">${prod.name}</div>
-            <div class="text-xs text-slate-500">${prod.relationship}</div>
-          </div>
-          <span class="text-xs px-2 py-1 rounded-full font-medium ${synergyColors[prod.synergy]}">Synergy: ${prod.synergy}</span>
-        `;
-        relatedContainer.appendChild(div);
-      });
-      
-      // Risk Matrix
-      const riskContainer = document.getElementById('riskMatrix');
-      data.risks.forEach(risk => {
-        const levelColors = { High: 'bg-red-100 text-red-700 border-red-200', Medium: 'bg-amber-100 text-amber-700 border-amber-200', Low: 'bg-green-100 text-green-700 border-green-200' };
-        const div = document.createElement('div');
-        div.className = 'p-3 rounded border bg-white';
-        div.innerHTML = `
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-sm font-bold text-slate-800">${risk.type}</span>
-            <span class="text-xs px-2 py-0.5 rounded border ${levelColors[risk.level]}">${risk.level}</span>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">${risk.description}</p>
-        `;
-        riskContainer.appendChild(div);
-      });
+        </div>
+      `;
     }
 
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', init);
+    function renderInnovation(rd, sub) {
+      const el = document.getElementById('innovationSection');
+      
+      el.innerHTML = `
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <div class="text-xs text-base-400 uppercase mb-1">Global R&D Intensity</div>
+            <div class="text-xl font-bold text-base-800">${rd?.intensity || 'High'}</div>
+            <div class="text-xs text-base-500 mt-1">${rd?.trend || 'Increasing focus on efficiency'}</div>
+          </div>
+          <div>
+            <div class="text-xs text-base-400 uppercase mb-1">Key Innovation Areas</div>
+            <div class="text-sm font-medium text-base-700">${rd?.focusAreas ? rd.focusAreas.join(', ') : 'Process Optimization'}</div>
+          </div>
+        </div>
+
+        <div class="bg-warning/10 p-4 rounded border border-warning/20">
+          <h4 class="font-semibold text-warning text-sm mb-2 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+            Substitution Possibilities
+          </h4>
+          <p class="text-sm text-base-600 mb-2">${sub?.narrative || "Substitution options are currently limited due to performance requirements."}</p>
+          <div class="flex flex-wrap gap-2">
+            ${(sub?.alternatives || ['None Viable']).map(a => `<span class="px-2 py-0.5 bg-white text-xs font-medium text-base-600 rounded border border-base-200">${a}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProducers(producers) {
+      const el = document.getElementById('producerList');
+      if(!producers || producers.length === 0) {
+        el.innerHTML = `<div class="text-sm text-base-400 italic">No producer data available</div>`;
+        return;
+      }
+
+      el.innerHTML = `
+        <ul class="space-y-3">
+          ${producers.map(p => `
+            <li class="flex items-center justify-between p-2 rounded hover:bg-base-50">
+              <div>
+                <div class="font-medium text-base-700">${p.name}</div>
+                <div class="text-xs text-base-400">${p.region || 'Global'}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-semibold text-accent">${p.marketShare || 'N/A'}</div>
+                <div class="text-xs text-base-400">Share</div>
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    }
+
+    function renderSupplyChain(sc) {
+      const el = document.getElementById('supplyChainMap');
+      if(!sc) return;
+
+      el.innerHTML = `
+        <div class="space-y-4">
+          <div>
+            <h5 class="text-xs font-bold text-base-400 uppercase mb-2">Upstream Dependencies</h5>
+            <div class="space-y-1">
+              ${(sc.upstream || []).map(u => `
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-base-600">${u.name}</span>
+                  <span class="text-xs font-mono text-base-400">${u.criticality || 'Standard'}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="border-t border-base-100 pt-4">
+            <h5 class="text-xs font-bold text-base-400 uppercase mb-2">Downstream Sectors</h5>
+            <div class="flex flex-wrap gap-2">
+              ${(sc.downstream || []).map(d => `<span class="px-2 py-1 bg-base-100 text-xs text-base-600 rounded">${d}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRelated(rp) {
+      const el = document.getElementById('relatedProducts');
+      if(!rp || rp.length === 0) {
+        el.innerHTML = `<div class="text-sm text-base-400 italic">No related products defined</div>`;
+        return;
+      }
+
+      el.innerHTML = `
+        <ul class="space-y-2">
+          ${rp.map(r => `
+            <li>
+              <a href="?id=${r.id}" class="flex items-center gap-2 text-sm text-accent hover:text-accent-dark transition-colors group">
+                <svg class="w-4 h-4 text-base-300 group-hover:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                ${r.name}
+              </a>
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    }
+
+    init();
   </script>
 </body>
 </html>
