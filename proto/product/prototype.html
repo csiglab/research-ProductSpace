@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reverse-Engineering Techno-Industrial Systems | Product Analysis Framework</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Turbofan Engine Systems: Thermodynamic Constraint Analysis</title>
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a24;
-            --bg-card: #0f0f16;
-            --bg-card-hover: #141420;
-            --border-color: #2a2a3a;
-            --border-glow: #00d4ff33;
-            --text-primary: #e8e8f0;
-            --text-secondary: #8888a0;
-            --text-tertiary: #5a5a70;
-            --accent-cyan: #00d4ff;
-            --accent-cyan-dim: #00d4ff40;
-            --accent-cyan-glow: #00d4ff20;
-            --accent-orange: #ff6b35;
-            --accent-orange-dim: #ff6b3540;
-            --accent-orange-glow: #ff6b3520;
-            --accent-red: #ff3366;
-            --accent-green: #00ff88;
-            --accent-yellow: #ffcc00;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-sans: 'Inter', sans-serif;
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #1a1a1d;
+            --text-primary: #e8e8e6;
+            --text-secondary: #9a9a95;
+            --accent-heat: #ff6b35;
+            --accent-tech: #00d4ff;
+            --accent-warn: #ffb800;
+            --border-subtle: #2a2a2d;
+            --border-active: #3d3d42;
+            --font-mono: 'Courier New', Consolas, monospace;
+            --font-serif: 'Georgia', 'Times New Roman', serif;
+            --font-sans: system-ui, -apple-system, sans-serif;
         }
 
         * {
@@ -36,19 +27,15 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: var(--font-sans);
-            background: var(--bg-primary);
+            background-color: var(--bg-primary);
             color: var(--text-primary);
+            font-family: var(--font-sans);
             line-height: 1.6;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Scanline effect */
+        /* Noise texture overlay */
         body::before {
             content: '';
             position: fixed;
@@ -56,2087 +43,669 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.03) 2px,
-                rgba(0, 0, 0, 0.03) 4px
-            );
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 1000;
+            opacity: 0.4;
         }
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-primary) 80%, transparent 100%);
-            padding: 20px 40px 40px;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
+        header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 4rem 0 2rem;
+            margin-bottom: 4rem;
+            position: relative;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--accent-cyan);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .classification-banner {
+            display: inline-block;
+            background: var(--accent-heat);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
             font-family: var(--font-mono);
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 20px var(--accent-cyan-dim);
-        }
-
-        .logo-text {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-        }
-
-        .logo-text span {
-            color: var(--accent-cyan);
-        }
-
-        .product-selector {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .product-selector label {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--text-tertiary);
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
         }
 
-        .product-selector select {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            font-style: italic;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .meta-item {
             font-family: var(--font-mono);
-            font-size: 13px;
-            color: var(--text-primary);
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 0.85rem;
         }
 
-        .product-selector select:hover,
-        .product-selector select:focus {
-            border-color: var(--accent-cyan-dim);
-            box-shadow: 0 0 15px var(--accent-cyan-glow);
+        .meta-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
         }
 
-        /* Phase Progress */
-        .phase-progress {
-            display: flex;
-            gap: 0;
+        .meta-value {
+            color: var(--accent-tech);
+        }
+
+        section {
+            margin-bottom: 6rem;
             position: relative;
         }
 
-        .phase-indicator {
-            flex: 1;
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-active);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            position: relative;
-            cursor: pointer;
+            gap: 1rem;
         }
 
-        .phase-indicator::before {
+        .section-number {
+            font-family: var(--font-mono);
+            color: var(--accent-heat);
+            font-size: 0.9rem;
+        }
+
+        .definition-block {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-heat);
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .constraint-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background: var(--border-subtle);
+            margin: 2rem 0;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .matrix-header {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        .matrix-cell {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .matrix-cell.negative {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .matrix-cell.positive {
+            color: var(--text-primary);
+            border-left: 2px solid var(--accent-tech);
+        }
+
+        .physics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .physics-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-card::before {
             content: '';
             position: absolute;
-            top: 16px;
+            top: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             height: 2px;
-            background: var(--border-color);
-            z-index: 0;
+            background: linear-gradient(90deg, var(--accent-heat), transparent);
         }
 
-        .phase-indicator:first-child::before {
-            left: 50%;
-        }
-
-        .phase-indicator:last-child::before {
-            right: 50%;
-        }
-
-        .phase-indicator.completed::before {
-            background: var(--accent-cyan);
-        }
-
-        .phase-dot {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .card-label {
             font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            position: relative;
-            z-index: 1;
-            transition: all 0.3s;
-        }
-
-        .phase-indicator.completed .phase-dot {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            box-shadow: 0 0 20px var(--accent-cyan-dim);
-        }
-
-        .phase-indicator.active .phase-dot {
-            border-color: var(--accent-cyan);
-            background: var(--accent-cyan);
-            color: var(--bg-primary);
-            box-shadow: 0 0 30px var(--accent-cyan-dim);
-        }
-
-        .phase-label {
-            margin-top: 10px;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            text-align: center;
-            transition: color 0.3s;
-        }
-
-        .phase-indicator.active .phase-label,
-        .phase-indicator.completed .phase-label {
-            color: var(--text-secondary);
-        }
-
-        /* Main Content */
-        .main {
-            padding: 180px 40px 60px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Phase Section */
-        .phase-section {
-            margin-bottom: 80px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .phase-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .phase-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .phase-number {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            background: var(--accent-cyan-glow);
-            padding: 6px 12px;
-            border-radius: 4px;
-            border: 1px solid var(--accent-cyan-dim);
-        }
-
-        .phase-title {
-            font-family: var(--font-sans);
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .phase-divider {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--border-color), transparent);
-        }
-
-        /* Cards Grid */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .card:hover {
-            border-color: var(--border-glow);
-            box-shadow: 0 0 40px var(--accent-cyan-glow);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
+            color: var(--accent-heat);
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
         }
 
         .card-title {
-            font-family: var(--font-mono);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
         }
 
-        .card-badge {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            font-weight: 500;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-badge.core {
-            background: var(--accent-cyan-glow);
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan-dim);
-        }
-
-        .card-badge.critical {
-            background: var(--accent-orange-glow);
-            color: var(--accent-orange);
-            border: 1px solid var(--accent-orange-dim);
-        }
-
-        .card-badge.warning {
-            background: rgba(255, 51, 102, 0.1);
-            color: var(--accent-red);
-            border: 1px solid rgba(255, 51, 102, 0.3);
-        }
-
-        .card-toggle {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-tertiary);
-            transition: transform 0.3s;
-        }
-
-        .card.collapsed .card-toggle {
-            transform: rotate(-90deg);
-        }
-
-        .card-content {
-            padding: 20px;
-            max-height: 2000px;
-            overflow: hidden;
-            transition: max-height 0.5s ease, padding 0.5s ease;
-        }
-
-        .card.collapsed .card-content {
-            max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        /* Definition Items */
-        .definition-item {
-            margin-bottom: 24px;
-        }
-
-        .definition-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .definition-label {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .definition-text {
-            font-family: var(--font-sans);
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* Technical Specs */
-        .spec-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .spec-item {
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .spec-label {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-
-        .spec-value {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        /* Matrix Table */
-        .matrix-container {
-            overflow-x: auto;
-        }
-
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-mono);
-            font-size: 13px;
-        }
-
-        .matrix-table th {
-            text-align: left;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .matrix-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
-        }
-
-        .matrix-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .matrix-table tr:hover td {
-            background: var(--bg-secondary);
-        }
-
-        .matrix-table .is {
-            color: var(--accent-green);
-        }
-
-        .matrix-table .is-not {
-            color: var(--accent-red);
-        }
-
-        .matrix-table .dimension {
-            color: var(--accent-cyan);
-            font-weight: 500;
-        }
-
-        /* Topology Diagram */
-        .topology-container {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        .topology-svg {
-            width: 100%;
-            height: 400px;
-        }
-
-        .topology-legend {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .legend-dot.upstream { background: var(--accent-orange); }
-        .legend-dot.core { background: var(--accent-cyan); }
-        .legend-dot.downstream { background: var(--accent-green); }
-        .legend-dot.lateral { background: var(--accent-yellow); }
-
-        /* Hard Step Visualization */
-        .hardstep-container {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        .hardstep-flow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 30px;
-        }
-
-        .hardstep-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hardstep-box {
-            width: 140px;
-            height: 70px;
+        .hard-step {
             background: var(--bg-tertiary);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid var(--accent-warn);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .hard-step::after {
+            content: 'BINDING CONSTRAINT';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-warn);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
             font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-align: center;
-            padding: 10px;
-            transition: all 0.3s;
+            font-size: 0.65rem;
+            font-weight: bold;
         }
 
-        .hardstep-box.constraint {
-            border-color: var(--accent-orange);
-            background: var(--accent-orange-glow);
-            color: var(--accent-orange);
-            transform: scale(1.1);
-            box-shadow: 0 0 30px var(--accent-orange-dim);
+        .topology-map {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            position: relative;
         }
 
-        .hardstep-label {
+        .node {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-active);
             font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            margin: 0.5rem;
+            position: relative;
+            cursor: help;
+            transition: all 0.3s ease;
         }
 
-        .hardstep-label.constraint {
-            color: var(--accent-orange);
-            font-weight: 600;
+        .node:hover {
+            border-color: var(--accent-tech);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
 
-        .hardstep-arrow {
+        .node.critical {
+            border-color: var(--accent-heat);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .node.downstream {
+            border-color: var(--accent-tech);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .connector {
+            display: inline-block;
             width: 60px;
-            height: 2px;
-            background: var(--border-color);
+            height: 1px;
+            background: var(--border-active);
+            vertical-align: middle;
+            margin: 0 0.5rem;
             position: relative;
         }
 
-        .hardstep-arrow::after {
-            content: '';
+        .connector::after {
+            content: '→';
             position: absolute;
-            right: 0;
-            top: -4px;
-            border: 5px solid transparent;
-            border-left-color: var(--border-color);
+            right: -5px;
+            top: -10px;
+            color: var(--border-active);
+            font-size: 0.8rem;
         }
 
-        .hardstep-arrow.bottleneck {
-            background: var(--accent-orange);
-            box-shadow: 0 0 15px var(--accent-orange-dim);
-        }
-
-        .hardstep-arrow.bottleneck::after {
-            border-left-color: var(--accent-orange);
-        }
-
-        .hardstep-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .hardstep-metric {
-            text-align: center;
-            padding: 20px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .hardstep-metric-value {
-            font-family: var(--font-mono);
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-orange);
-            margin-bottom: 6px;
-        }
-
-        .hardstep-metric-label {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Typology Badge */
-        .typology-display {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            padding: 30px;
-        }
-
-        .typology-badge {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .typology-badge svg {
+        .chokepoint-indicator {
+            color: var(--accent-heat);
+            font-size: 0.7rem;
             position: absolute;
-            width: 100%;
-            height: 100%;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
         }
 
-        .typology-badge-inner {
-            width: 140px;
-            height: 140px;
+        .verdict-box {
             background: var(--bg-secondary);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid var(--accent-orange);
-            box-shadow: 0 0 40px var(--accent-orange-dim), inset 0 0 40px var(--accent-orange-glow);
-            z-index: 1;
+            border: 2px solid var(--text-primary);
+            padding: 3rem;
+            margin-top: 3rem;
         }
 
-        .typology-category {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
+        .verdict-title {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
+            letter-spacing: 0.05em;
         }
 
-        .typology-name {
+        .verdict-classification {
+            display: inline-block;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 0.5rem 1rem;
             font-family: var(--font-mono);
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-orange);
-            text-align: center;
-            line-height: 1.2;
+            font-weight: bold;
+            margin-bottom: 2rem;
         }
 
-        .typology-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            width: 100%;
+        .fragility-meter {
+            margin: 2rem 0;
         }
 
-        .typology-detail {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .typology-detail-label {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-
-        .typology-detail-value {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .typology-detail-value.critical {
-            color: var(--accent-red);
-        }
-
-        .typology-detail-value.warning {
-            color: var(--accent-orange);
-        }
-
-        .typology-detail-value.caution {
-            color: var(--accent-yellow);
-        }
-
-        /* Barriers Grid */
-        .barriers-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .barrier-card {
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            transition: border-color 0.3s;
-        }
-
-        .barrier-card:hover {
-            border-color: var(--accent-cyan-dim);
-        }
-
-        .barrier-header {
+        .meter-label {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .barrier-name {
             font-family: var(--font-mono);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
         }
 
-        .barrier-level {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .barrier-level.extreme {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--accent-red);
-            border: 1px solid rgba(255, 51, 102, 0.3);
-        }
-
-        .barrier-level.high {
-            background: var(--accent-orange-glow);
-            color: var(--accent-orange);
-            border: 1px solid var(--accent-orange-dim);
-        }
-
-        .barrier-level.medium {
-            background: rgba(255, 204, 0, 0.1);
-            color: var(--accent-yellow);
-            border: 1px solid rgba(255, 204, 0, 0.3);
-        }
-
-        .barrier-bar-container {
-            height: 6px;
+        .meter-bar {
+            width: 100%;
+            height: 4px;
             background: var(--bg-tertiary);
-            border-radius: 3px;
+            position: relative;
             overflow: hidden;
-            margin-bottom: 12px;
         }
 
-        .barrier-bar {
+        .meter-fill {
             height: 100%;
-            border-radius: 3px;
-            transition: width 0.8s ease;
+            background: var(--accent-heat);
+            width: 92%;
+            position: relative;
         }
 
-        .barrier-bar.extreme { background: var(--accent-red); }
-        .barrier-bar.high { background: var(--accent-orange); }
-        .barrier-bar.medium { background: var(--accent-yellow); }
-
-        .barrier-metrics {
-            display: flex;
-            gap: 20px;
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-heat), transparent);
+            animation: pulse 2s infinite;
         }
 
-        .barrier-metric {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .barrier-metric-label {
+        .technical-spec {
             font-family: var(--font-mono);
-            font-size: 9px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--accent-tech);
+            background: rgba(0, 212, 255, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
         }
 
-        .barrier-metric-value {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-secondary);
+        .highlight {
+            color: var(--accent-heat);
+            font-weight: 600;
         }
 
-        /* Market Diagram */
-        .market-container {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
+        ul.spec-list {
+            list-style: none;
+            margin: 1rem 0;
         }
 
-        .market-demand-svg {
-            width: 100%;
-            height: 250px;
+        ul.spec-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
         }
 
-        /* Innovation Trajectory */
-        .innovation-container {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
+        ul.spec-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--accent-heat);
         }
 
-        .innovation-svg {
-            width: 100%;
-            height: 250px;
-        }
-
-        .limits-list {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .limit-item {
-            background: var(--bg-tertiary);
-            padding: 16px;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-orange);
-        }
-
-        .limit-name {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-primary);
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .limit-description {
-            font-family: var(--font-sans);
-            font-size: 12px;
-            color: var(--text-tertiary);
-            line-height: 1.5;
-        }
-
-        /* Scroll to Top */
-        .scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            z-index: 100;
-        }
-
-        .scroll-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-top:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px var(--accent-cyan-glow);
-        }
-
-        .scroll-top svg {
-            color: var(--text-secondary);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .cards-grid {
+        @media (max-width: 768px) {
+            .constraint-matrix {
                 grid-template-columns: 1fr;
             }
-        }
-
-        @media (max-width: 900px) {
-            .header {
-                padding: 15px 20px 30px;
+            .connector {
+                display: block;
+                width: 1px;
+                height: 30px;
+                margin: 0.5rem auto;
             }
-
-            .header-top {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .phase-progress {
-                overflow-x: auto;
-                padding-bottom: 10px;
-            }
-
-            .phase-indicator {
-                min-width: 80px;
-            }
-
-            .main {
-                padding: 220px 20px 40px;
-            }
-
-            .spec-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hardstep-flow {
-                flex-direction: column;
-            }
-
-            .hardstep-arrow {
-                width: 2px;
-                height: 40px;
-            }
-
-            .hardstep-arrow::after {
+            .connector::after {
+                content: '↓';
                 right: -4px;
                 top: auto;
-                bottom: 0;
-                border: 5px solid transparent;
-                border-top-color: var(--border-color);
+                bottom: -10px;
             }
-
-            .hardstep-arrow.bottleneck::after {
-                border-top-color: var(--accent-orange);
-            }
-
-            .barriers-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .typology-details {
-                grid-template-columns: 1fr;
-            }
-
-            .limits-list {
-                grid-template-columns: 1fr;
-            }
-
-            .topology-legend {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
+            h1 { font-size: 2rem; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-top">
-                <div class="logo">
-                    <div class="logo-icon">RT</div>
-                    <div class="logo-text">REVERSE-ENGINEERING <span>FRAMEWORK</span></div>
-                </div>
-                <div class="product-selector">
-                    <label>Subject:</label>
-                    <select id="productSelect">
-                        <option value="lithography">5nm Semiconductor Lithography System</option>
-                        <option value="tesla">Electric Vehicle Battery Pack</option>
-                        <option value="aircraft">Commercial Aircraft Turbofan</option>
-                    </select>
-                </div>
+
+<header>
+    <div class="container">
+        <div class="classification-banner">Strategic Industrial Analysis</div>
+        <h1>High-Bypass Turbofan Engines</h1>
+        <p class="subtitle">Thermodynamic constraints and metallurgical chokepoints in aviation's critical path</p>
+        
+        <div class="metadata-grid">
+            <div class="meta-item">
+                <div class="meta-label">System Node Type</div>
+                <div class="meta-value">Capital Good / Mobility Enabler</div>
             </div>
-            <nav class="phase-progress">
-                <div class="phase-indicator active" data-phase="1">
-                    <div class="phase-dot">I</div>
-                    <div class="phase-label">Definition</div>
-                </div>
-                <div class="phase-indicator" data-phase="2">
-                    <div class="phase-dot">II</div>
-                    <div class="phase-label">Structure</div>
-                </div>
-                <div class="phase-indicator" data-phase="3">
-                    <div class="phase-dot">III</div>
-                    <div class="phase-label">Dynamics</div>
-                </div>
-                <div class="phase-indicator" data-phase="4">
-                    <div class="phase-dot">IV</div>
-                    <div class="phase-label">Industrialization</div>
-                </div>
-                <div class="phase-indicator" data-phase="5">
-                    <div class="phase-dot">V</div>
-                    <div class="phase-label">Synthesis</div>
-                </div>
-            </nav>
+            <div class="meta-item">
+                <div class="meta-label">Market Concentration</div>
+                <div class="meta-value">Duopoly (Effective)</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Binding Constraint</div>
+                <div class="meta-value">Single-Crystal Cast Yield</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Substitutability</div>
+                <div class="meta-value">None (Propulsion Essential)</div>
+            </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <!-- Phase I: Definition & Ontology -->
-        <section class="phase-section" id="phase1">
-            <div class="phase-header">
-                <span class="phase-number">PHASE I</span>
-                <h2 class="phase-title">Definition & Ontology</h2>
-                <div class="phase-divider"></div>
+<main class="container">
+
+    <section>
+        <h2><span class="section-number">01</span> Physical Definition</h2>
+        
+        <div class="definition-block">
+            A rotating thermal machine converting hydrocarbon bond energy into kinetic momentum via multi-stage axial compression (pressure ratio 40:1 to 60:1), annular combustion (TIT 1,700°C+), and cooled expansion through directionally-solidified nickel superalloy turbines, producing 20,000–130,000 lbf thrust through bypass ratios exceeding 10:1.
+        </div>
+
+        <div class="constraint-matrix">
+            <div class="matrix-header">It is NOT</div>
+            <div class="matrix-header">It IS</div>
+            
+            <div class="matrix-cell negative">A transportation service or logistics capability</div>
+            <div class="matrix-cell positive">A thermodynamic transformation system bound by metallurgical phase diagrams</div>
+            
+            <div class="matrix-cell negative">A standardized commodity with interchangeable suppliers</div>
+            <div class="matrix-cell positive">A geographically-concentrated precision casting monopoly with 10+ year lead times</div>
+            
+            <div class="matrix-cell negative">An end-user product</div>
+            <div class="matrix-cell positive">A captive intermediate good determining the operational envelope of global aviation</div>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="section-number">02</span> Thermodynamic Constraints</h2>
+        
+        <div class="physics-grid">
+            <div class="physics-card">
+                <div class="card-label">Materials Basis</div>
+                <div class="card-title">The Rhenium Bottleneck</div>
+                <p>High-pressure turbine blades utilize <span class="technical-spec">CMSX-4/RR3010</span> single-crystal alloys containing 3–6 wt% rhenium to retard creep at operating temperatures <span class="highlight">200°C above the alloy's melting point</span>. Rhenium is not mined directly; it exists only as a byproduct of Chilean copper porphyry deposits (90% of global supply).</p>
+                <br>
+                <p><strong>Purity requirement:</strong> 99.99% Re for superalloy doping. Supply inelastic to aviation demand.</p>
             </div>
-            <div class="cards-grid">
-                <!-- Product Definition Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Product Definition</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="definition-item">
-                            <div class="definition-label">Technical Essence</div>
-                            <div class="definition-text">
-                                Extreme ultraviolet (EUV) photolithography system utilizing 13.5nm wavelength light to pattern features below 10nm on silicon wafers, enabling the production of advanced logic and memory semiconductors through controlled photo-chemical reactions in photoresist materials.
-                            </div>
-                        </div>
-                        <div class="definition-item">
-                            <div class="definition-label">Functional Role</div>
-                            <div class="definition-text">
-                                Critical capital equipment in semiconductor fabrication, serving as the primary patterning engine for leading-edge logic processes (5nm, 3nm, 2nm nodes). Acts as the enabler for transistor density scaling and represents a mandatory step in producing modern CPU, GPU, and AI accelerator chips.
-                            </div>
-                        </div>
-                        <div class="definition-item">
-                            <div class="definition-label">System Position</div>
-                            <div class="definition-text">
-                                Downstream of wafer fabrication equipment and upstream of semiconductor design ecosystems. Functions as a systemic bottleneck in the semiconductor supply chain, with no viable substitute for EUV at sub-7nm nodes. Controls access to advanced process node technology.
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Technical Core Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Technical Core</span>
-                        <span class="card-badge core">Critical Path</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="spec-grid">
-                            <div class="spec-item">
-                                <div class="spec-label">Light Source</div>
-                                <div class="spec-value">13.5nm EUV Plasma</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Numerical Aperture</div>
-                                <div class="spec-value">0.33 NA (High-NA pending)</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Resolution</div>
-                                <div class="spec-value">13nm @ 0.33 NA</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Throughput</div>
-                                <div class="spec-value">185 WPH (source limited)</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Mirror Count</div>
-                                <div class="spec-value">11 reflective surfaces</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Mask Type</div>
-                                <div class="spec-value">Reflective multilayer</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 24px;">
-                            <div class="definition-label" style="margin-bottom: 12px;">Failure Modes</div>
-                            <div style="display: grid; gap: 8px;">
-                                <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: var(--bg-secondary); border-radius: 6px; border-left: 2px solid var(--accent-red);">
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-red);">01</span>
-                                    <span style="font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary);">Source output degradation (tin consumption, droplet targeting, plasma instability)</span>
-                                </div>
-                                <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: var(--bg-secondary); border-radius: 6px; border-left: 2px solid var(--accent-orange);">
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-orange);">02</span>
-                                    <span style="font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary);">Mirror contamination (hydrogen radicals, tin particles, outgassing)</span>
-                                </div>
-                                <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: var(--bg-secondary); border-radius: 6px; border-left: 2px solid var(--accent-yellow);">
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-yellow);">03</span>
-                                    <span style="font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary);">Mask defectivity (adder defects, pattern placement errors)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Is/Is Not Matrix Card -->
-                <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">Is / Is Not Matrix</span>
-                        <span class="card-badge critical">Definitional Boundaries</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="matrix-container">
-                            <table class="matrix-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 150px;">Dimension</th>
-                                        <th class="is" style="width: 35%;">IS</th>
-                                        <th class="is-not" style="width: 35%;">IS NOT</th>
-                                        <th style="width: 20%;">Rationale</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="dimension">Product Category</td>
-                                        <td>Capital equipment, Production asset, Manufacturing infrastructure</td>
-                                        <td>Consumable, Component, Software license, Finished device</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">Sold to fabs as investment goods; depreciated over 5-7 years</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dimension">Substitutability</td>
-                                        <td>Unsubstitutable at sub-7nm, Single-source critical</td>
-                                        <td> commodity equipment, DUV-extensible, Multi-vendor available</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">No alternative to EUV for leading-edge; ASML monopoly</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dimension">Demand Type</td>
-                                        <td>Derived demand, Dependency-driven, Lock-in amplified</td>
-                                        <td>Autonomous demand, Consumer-driven, Discretionary</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">Demand exists only because chipmakers must have it</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dimension">Competitive Position</td>
-                                        <td>Monopoly (ASML), IP moats, Learning curve leader</td>
-                                        <td>Commoditized, Competitive parity, Disruptable</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">Only EUV supplier; 20+ year lead in EUV development</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dimension">Strategic Role</td>
-                                        <td>Bottleneck, Choke point, System enabler</td>
-                                        <td>Commodity input, Auxiliary function, Optional enhancement</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">Controls access to advanced node production</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dimension">Failure Consequences</td>
-                                        <td>Fab stoppage, Yield collapse, Supply chain rupture</td>
-                                        <td>Performance degradation, Feature limitation, Cost increase</td>
-                                        <td style="color: var(--text-tertiary); font-size: 12px;">Equipment failure halts all production at that node</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="physics-card">
+                <div class="card-label">Thermal Physics</div>
+                <div class="card-title">Thermal Barrier Coating (TBC) Architecture</div>
+                <p>Electron-beam physical vapor deposition (EB-PVD) of <span class="technical-spec">YSZ (Yttria-Stabilized Zirconia)</span> creates a strain-tolerant columnar structure reducing metal temperature by 150–200°C. Failure mode: spallation during thermal cycling (takeoff-cruise-descent) due to CTE mismatch with bond coat.</p>
+                <br>
+                <p><strong>Hard limit:</strong> TBCs cannot exceed 1,200°C surface temperature; beyond this, sintering destroys strain tolerance.</p>
             </div>
-        </section>
 
-        <!-- Phase II: Structure & Production -->
-        <section class="phase-section" id="phase2">
-            <div class="phase-header">
-                <span class="phase-number">PHASE II</span>
-                <h2 class="phase-title">Structure & Production</h2>
-                <div class="phase-divider"></div>
+            <div class="physics-card">
+                <div class="card-label">Mechanical Stress</div>
+                <div class="card-title">Centrifugal Loading</div>
+                <p>A single high-pressure turbine blade (50g mass) experiences <span class="highlight">18 tonnes of centrifugal force</span> at redline RPM (15,000+). Creep life is determined by grain boundary sliding; hence the necessity of single-crystal elimination of grain boundaries entirely.</p>
             </div>
-            <div class="cards-grid">
-                <!-- Industrial Architecture Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Industrial Architecture</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div style="display: grid; gap: 20px;">
-                            <div class="definition-item">
-                                <div class="definition-label">Producer Map</div>
-                                <div class="definition-text">
-                                    <strong style="color: var(--accent-cyan);">ASML (Netherlands)</strong> — Sole global supplier of EUV lithography systems. Manufacturing concentrated in Veldhoven, Netherlands with limited localization. <strong style="color: var(--text-tertiary);"> Zeiss (Germany)</strong> supplies optics. <strong style="color: var(--text-tertiary);"> Cymer (US, acquired by ASML)</strong> manufactures light sources.
-                                </div>
-                            </div>
-                            <div class="definition-item">
-                                <div class="definition-label">Structural Drivers</div>
-                                <div style="display: grid; gap: 8px; margin-top: 8px;">
-                                    <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">R&D Intensity</span>
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--accent-cyan);">~15% of revenue</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Entry Timeline</span>
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--accent-orange);">20+ years to current capability</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Capital Intensity</span>
-                                        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--accent-cyan);">EUR 1.5B+ per system development</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="definition-item">
-                                <div class="definition-label">Geopolitical Friction</div>
-                                <div class="definition-text" style="background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.2); padding: 12px; border-radius: 6px; margin-top: 8px;">
-                                    <span style="color: var(--accent-red); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Export Controlled</span><br/>
-                                    <span style="font-size: 13px; color: var(--text-secondary); margin-top: 6px; display: block;">
-                                        Advanced EUV systems restricted under Wassenaar Arrangement. China fabs (SMIC) unable to acquire EUV. This creates bifurcation in global semiconductor capability and accelerates domestic alternative development.
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+
+        <div class="hard-step">
+            <h3 style="font-family: var(--font-serif); margin-bottom: 1rem;">The Hard Step: Directional Solidification</h3>
+            <p>The production of turbine blades requires maintaining a <span class="highlight">unidirectional thermal gradient of 100°C/cm</span> across a ceramic mold containing 50+ internal cooling channels (0.5mm wall thickness). The liquid metal must solidify from root to tip along the <span class="technical-spec">[001] crystallographic axis</span> with zero stray grains.</p>
+            <br>
+            <p><strong>Yield collapse point:</strong> 40% of castings fail grain orientation inspection. Each blade requires 3–6 weeks furnace time. This process, known as the Bridgman technique, represents the <span class="highlight">highest tacit knowledge density</span> in aerospace manufacturing—operators require 10+ years to master temperature ramp profiles.</p>
+            <br>
+            <p style="font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-warn);">
+                Result: Only PCC Structurals (US) and Howmet Aerospace (US/Europe) possess qualified capacity for single-crystal blade casting at aviation scale.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="section-number">03</span> Industrial Topology</h2>
+        
+        <div class="topology-map">
+            <div style="text-align: center;">
+                <div class="node critical">Chilean Cu Mines<br><span style="font-size:0.7rem; color:var(--accent-heat)">Re byproduct</span></div>
+                <span class="connector"></span>
+                <div class="node critical">PCC/Howmet<br><span style="font-size:0.7rem; color:var(--accent-heat)">SC Casting</span></div>
+                <span class="connector"></span>
+                <div class="node">GE/Safran<br>Pratt & Whitney</div>
+                <span class="connector"></span>
+                <div class="node downstream">Airbus/Boeing</div>
+                <span class="connector"></span>
+                <div class="node downstream">Global Aviation</div>
+                
+                <div class="chokepoint-indicator">Single Point of Failure</div>
+            </div>
+        </div>
+
+        <p style="margin-top: 2rem; color: var(--text-secondary);">
+            <strong>Structural Logic:</strong> The industry is not merely concentrated—it is <span class="highlight">vertically integrated by necessity</span>. CFM International (GE/Safran joint venture) and Pratt & Whitney control 90% of the narrowbody market not through collusion, but because the <span class="technical-spec">$5B+</span> R&D entry cost and 10-year certification timeline create a natural duopoly. Rolls-Royce exited the narrowbody segment (2000s) due to inability to amortize development costs across sufficient volume.
+        </p>
+
+        <ul class="spec-list" style="margin-top: 2rem;">
+            <li><strong>Geographic Concentration:</strong> Final assembly occurs in Ohio, Connecticut, and France, but the critical path runs through Albany, Oregon and Muskegon, Michigan (casting facilities).</li>
+            <li><strong>Export Control Regime:</strong> ITAR (International Traffic in Arms Regulations) and EAR (Export Administration Regulations) classify turbofans as munitions. Maintenance requires OEM technical data; MRO (Maintenance, Repair, Overhaul) shops cannot produce replacement single-crystal blades—they must source from OEM-controlled foundries.</li>
+            <li><strong>Certificate Limitation:</strong> Type certificates are non-transferable. A new entrant cannot simply "copy" a CFM56; FAA/EASA certification requires 100,000+ hours of icing, bird strike, and blade-off testing.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2><span class="section-number">04</span> Network Position & Dependencies</h2>
+        
+        <h3 style="font-family: var(--font-serif); margin: 2rem 0 1rem;">Upstream Chokepoints</h3>
+        <div class="physics-grid">
+            <div class="physics-card">
+                <div class="card-label">Raw Material</div>
+                <div class="card-title">Rhenium Supply Constraint</div>
+                <p>Annual production: <span class="highlight">45–50 tonnes</span>. Aviation consumes 75%. No viable substitute exists for creep resistance in single-crystal alloys. Price volatility: $3,000–$15,000/kg.</p>
+            </div>
+            <div class="physics-card">
+                <div class="card-label">Component</div>
+                <div class="card-title">CMC (Ceramic Matrix Composite) Turbine Shrouds</div>
+                <p>Silicon carbide fibers (Hi-Nicalon Type S) woven into enhanced SiC matrices. Only two qualified suppliers: <span class="technical-spec">COIC (China)</span> and <span class="technical-spec">NGS Advanced Fibers (Japan)</span>. Used exclusively in LEAP and GE9X engines for 1,300°C+ zones.</p>
+            </div>
+        </div>
+
+        <h3 style="font-family: var(--font-serif); margin: 2rem 0 1rem;">Downstream Enablement</h3>
+        <p>Without these propulsion systems:</p>
+        <ul class="spec-list">
+            <li>Single-aisle commercial aviation ceases (A320neo, B737MAX, C919 dependent on LEAP/PW1100G)</li>
+            <li>Global perishable goods logistics collapses (no narrowbody belly cargo capacity)</li>
+            <li>Low-cost carrier business model becomes thermodynamically impossible (turbofans provide 40% better TSFC than legacy engines)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2><span class="section-number">05</span> Demand Mechanics</h2>
+        
+        <div class="physics-card" style="margin: 2rem 0;">
+            <div class="card-label">Cyclicality Analysis</div>
+            <p>Demand is <span class="highlight">derived and cyclical</span>, tracking airline CAPEX cycles and oil price volatility (fuel efficiency drives replacement demand). 2020-2023 demonstrated extreme fragility: 60% order deferrals during demand collapse, followed by supply-constrained recovery where engine deliveries limit aircraft output.</p>
+            <br>
+            <p><strong>Substitution Envelope:</strong> None. Hydrogen fuel cells and battery electric propulsion lack the power density (specific energy) for narrowbody missions >500nm. Sustainable Aviation Fuel (SAF) requires identical engine architecture. This product is <span class="highlight">technologically locked-in</span> through 2050.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="section-number">06</span> Innovation Trajectory</h2>
+        
+        <div class="physics-grid">
+            <div class="physics-card">
+                <div class="card-label">Current Frontier</div>
+                <div class="card-title">CMC Expansion & Additive Manufacturing</div>
+                <p>Transitioning from superalloy turbine blades to SiC/SiC CMC blades (weight reduction 1/3) requires solving the <span class="highlight">"creep" problem in ceramics</span>—currently unsolved for rotating components. Additive manufacturing (3D printed fuel nozzles) now standard for complex internal cooling geometries.</p>
+            </div>
+            
+            <div class="physics-card">
+                <div class="card-label">Physical Limits</div>
+                <div class="card-title">The Temperature Wall</div>
+                <p>Turbine Entry Temperature (TIT) approaches <span class="technical-spec">1,750°C</span>—near the melting point of refractory metals. Cooling effectiveness (internal convective + film cooling) approaching theoretical maximum (70% of heat flux rejected). <span class="highlight">Moore's Law equivalent ending.</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="section-number">07</span> Entry Conditions</h2>
+        
+        <p style="margin-bottom: 2rem;">To build a competing turbofan system:</p>
+        
+        <ul class="spec-list">
+            <li><strong>Capital Requirement:</strong> $8–12B development cost (GE90 program reference), $2B+ for production tooling</li>
+            <li><strong>Time to Market:</strong> 12–15 years from concept to Entry Into Service (EIS)</li>
+            <li><strong>Human Capital:</strong> 500+ PhD-level aerothermal engineers, 200+ metallurgists specializing in nickel superalloys (aging workforce, retirement cliff)</li>
+            <li><strong>Ecosystem:</strong> Requires immediate proximity to single-crystal foundry capacity (currently fully booked through 2030)</li>
+            <li><strong>Certification:</strong> FAA/EASA dual certification requires 5+ years of destructive testing</li>
+        </ul>
+
+        <div class="hard-step" style="border-color: var(--accent-tech); margin-top: 2rem;">
+            <p style="font-family: var(--font-mono); color: var(--accent-tech);">
+                VERDICT: Entry feasible only for nation-state actors (China's CJ-1000A program) with 20-year horizons and tolerance for $20B+ losses. Commercial entry by private capital: Impossible.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="section-number">08</span> System Verdict</h2>
+        
+        <div class="verdict-box">
+            <div class="verdict-classification">Strategic Bottleneck</div>
+            
+            <div class="verdict-title">Classification</div>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">
+                This system exhibits <span class="highlight">extreme fragility</span> masked by industrial maturity. A geological event in Chile (copper belt) or industrial accident at PCC Structurals (Albany, OR) would halt global narrowbody production within 6 months. No strategic reserve exists for single-crystal turbine blades; they cannot be stockpiled (creep life begins at casting).
+            </p>
+
+            <div class="fragility-meter">
+                <div class="meter-label">
+                    <span>Systemic Fragility Index</span>
+                    <span>92/100</span>
                 </div>
-
-                <!-- System Topology Card -->
-                <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">System Topology</span>
-                        <span class="card-badge core">Dependency Mapping</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="topology-container">
-                            <svg class="topology-svg" viewBox="0 0 1000 400">
-                                <!-- Upstream Section -->
-                                <g id="upstream">
-                                    <rect x="30" y="50" width="160" height="60" rx="8" fill="#1a1a24" stroke="#ff6b35" stroke-width="2"/>
-                                    <text x="110" y="78" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="11" font-weight="600">LIGHT SOURCE</text>
-                                    <text x="110" y="95" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Cymer / ASML</text>
-
-                                    <rect x="30" y="130" width="160" height="60" rx="8" fill="#1a1a24" stroke="#ff6b35" stroke-width="2"/>
-                                    <text x="110" y="158" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="11" font-weight="600">OPTICS TRAIN</text>
-                                    <text x="110" y="175" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Carl Zeiss SMT</text>
-
-                                    <rect x="30" y="210" width="160" height="60" rx="8" fill="#1a1a24" stroke="#ff6b35" stroke-width="2"/>
-                                    <text x="110" y="238" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="11" font-weight="600">PRECISION STAGE</text>
-                                    <text x="110" y="255" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">VDL / Hermes</text>
-
-                                    <rect x="30" y="290" width="160" height="60" rx="8" fill="#1a1a24" stroke="#ff6b35" stroke-width="2"/>
-                                    <text x="110" y="318" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="11" font-weight="600">CONTROL SYSTEMS</text>
-                                    <text x="110" y="335" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Keyence / Beckhoff</text>
-
-                                    <!-- Upstream label -->
-                                    <text x="110" y="375" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="10" letter-spacing="2">UPSTREAM</text>
-                                </g>
-
-                                <!-- Core Section -->
-                                <g id="core">
-                                    <rect x="420" y="160" width="160" height="80" rx="8" fill="#0f0f16" stroke="#00d4ff" stroke-width="3"/>
-                                    <text x="500" y="195" text-anchor="middle" fill="#00d4ff" font-family="JetBrains Mono" font-size="13" font-weight="700">EUV LITHO</text>
-                                    <text x="500" y="215" text-anchor="middle" fill="#00d4ff" font-family="JetBrains Mono" font-size="13" font-weight="700">SYSTEM</text>
-                                    <text x="500" y="235" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">ASML NXE:3600D</text>
-
-                                    <!-- Core label -->
-                                    <text x="500" y="375" text-anchor="middle" fill="#00d4ff" font-family="JetBrains Mono" font-size="10" letter-spacing="2">CORE PRODUCT</text>
-                                </g>
-
-                                <!-- Downstream Section -->
-                                <g id="downstream">
-                                    <rect x="810" y="30" width="160" height="55" rx="8" fill="#1a1a24" stroke="#00ff88" stroke-width="2"/>
-                                    <text x="890" y="55" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11" font-weight="600">LOGIC FAB</text>
-                                    <text x="890" y="70" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">TSMC / Samsung / Intel</text>
-
-                                    <rect x="810" y="100" width="160" height="55" rx="8" fill="#1a1a24" stroke="#00ff88" stroke-width="2"/>
-                                    <text x="890" y="125" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11" font-weight="600">ADVANCED SOC</text>
-                                    <text x="890" y="140" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Apple / NVIDIA / AMD</text>
-
-                                    <rect x="810" y="170" width="160" height="55" rx="8" fill="#1a1a24" stroke="#00ff88" stroke-width="2"/>
-                                    <text x="890" y="195" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11" font-weight="600">AI ACCELERATORS</text>
-                                    <text x="890" y="210" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">NVIDIA / Google / Amazon</text>
-
-                                    <rect x="810" y="240" width="160" height="55" rx="8" fill="#1a1a24" stroke="#00ff88" stroke-width="2"/>
-                                    <text x="890" y="265" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11" font-weight="600">MOBILE SOC</text>
-                                    <text x="890" y="280" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Qualcomm / MediaTek</text>
-
-                                    <rect x="810" y="310" width="160" height="55" rx="8" fill="#1a1a24" stroke="#00ff88" stroke-width="2"/>
-                                    <text x="890" y="335" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11" font-weight="600">HIGH-BANDWIDTH MEM</text>
-                                    <text x="890" y="350" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="9">HBM3 / HBM4</text>
-
-                                    <!-- Downstream label -->
-                                    <text x="890" y="375" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="10" letter-spacing="2">DOWNSTREAM</text>
-                                </g>
-
-                                <!-- Lateral Section -->
-                                <g id="lateral">
-                                    <rect x="310" y="30" width="140" height="50" rx="8" fill="#1a1a24" stroke="#ffcc00" stroke-width="2"/>
-                                    <text x="380" y="52" text-anchor="middle" fill="#ffcc00" font-family="JetBrains Mono" font-size="10" font-weight="600">EUV RESIST</text>
-                                    <text x="380" y="67" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="8">JSR / Shin-Etsu</text>
-
-                                    <rect x="550" y="30" width="140" height="50" rx="8" fill="#1a1a24" stroke="#ffcc00" stroke-width="2"/>
-                                    <text x="620" y="52" text-anchor="middle" fill="#ffcc00" font-family="JetBrains Mono" font-size="10" font-weight="600">EUV MASK</text>
-                                    <text x="620" y="67" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="8">Toppan / Hoya</text>
-
-                                    <rect x="310" y="320" width="140" height="50" rx="8" fill="#1a1a24" stroke="#ffcc00" stroke-width="2"/>
-                                    <text x="380" y="342" text-anchor="middle" fill="#ffcc00" font-family="JetBrains Mono" font-size="10" font-weight="600">PELLET TARGET</text>
-                                    <text x="380" y="357" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="8">Shell / Indium Corp</text>
-
-                                    <rect x="550" y="320" width="140" height="50" rx="8" fill="#1a1a24" stroke="#ffcc00" stroke-width="2"/>
-                                    <text x="620" y="342" text-anchor="middle" fill="#ffcc00" font-family="JetBrains Mono" font-size="10" font-weight="600">GAS DELIVERY</text>
-                                    <text x="620" y="357" text-anchor="middle" fill="#8888a0" font-family="JetBrains Mono" font-size="8">Linde / Air Liquide</text>
-
-                                    <!-- Lateral label -->
-                                    <text x="500" y="12" text-anchor="middle" fill="#ffcc00" font-family="JetBrains Mono" font-size="10" letter-spacing="2">LATERAL ADJACENCIES</text>
-                                </g>
-
-                                <!-- Connection Lines -->
-                                <g id="connections" stroke-width="2" fill="none">
-                                    <!-- Upstream to Core -->
-                                    <path d="M190 80 L420 180" stroke="#ff6b35" stroke-opacity="0.6"/>
-                                    <path d="M190 160 L420 195" stroke="#ff6b35" stroke-opacity="0.6"/>
-                                    <path d="M190 240 L420 210" stroke="#ff6b35" stroke-opacity="0.6"/>
-                                    <path d="M190 320 L420 220" stroke="#ff6b35" stroke-opacity="0.6"/>
-
-                                    <!-- Lateral to Core -->
-                                    <path d="M450 80 L450 160" stroke="#ffcc00" stroke-opacity="0.6"/>
-                                    <path d="M550 80 L550 160" stroke="#ffcc00" stroke-opacity="0.6"/>
-                                    <path d="M450 320 L450 240" stroke="#ffcc00" stroke-opacity="0.6"/>
-                                    <path d="M550 320 L550 240" stroke="#ffcc00" stroke-opacity="0.6"/>
-
-                                    <!-- Core to Downstream -->
-                                    <path d="M580 180 L810 57" stroke="#00ff88" stroke-opacity="0.6"/>
-                                    <path d="M580 195 L810 127" stroke="#00ff88" stroke-opacity="0.6"/>
-                                    <path d="M580 210 L810 197" stroke="#00ff88" stroke-opacity="0.6"/>
-                                    <path d="M580 220 L810 267" stroke="#00ff88" stroke-opacity="0.6"/>
-                                    <path d="M580 230 L810 337" stroke="#00ff88" stroke-opacity="0.6"/>
-                                </g>
-                            </svg>
-                            <div class="topology-legend">
-                                <div class="legend-item">
-                                    <div class="legend-dot upstream"></div>
-                                    <span>Upstream Dependencies</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot core"></div>
-                                    <span>Core Product</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot downstream"></div>
-                                    <span>Downstream Enablement</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot lateral"></div>
-                                    <span>Lateral Adjacencies</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
                 </div>
             </div>
-        </section>
 
-        <!-- Phase III: Dynamics & Evolution -->
-        <section class="phase-section" id="phase3">
-            <div class="phase-header">
-                <span class="phase-number">PHASE III</span>
-                <h2 class="phase-title">Dynamics & Evolution</h2>
-                <div class="phase-divider"></div>
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle);">
+                <h4 style="font-family: var(--font-serif); margin-bottom: 1rem;">Value Capture Analysis</h4>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    <strong>Upstream:</strong> Rhenium traders and superalloy foundries capture scarcity rents.<br>
+                    <strong>OEMs:</strong> CFM and Pratt capture 60% gross margins on aftermarket (spare blades), creating <span class="highlight">captive demand</span>—airlines cannot source blades elsewhere.<br>
+                    <strong>Downstream:</strong> Airlines commoditize, competing on routes while paying engine OEMs monopoly rents for maintenance.<br><br>
+                    
+                    <span style="color: var(--text-primary);">The value concentrates at the metallurgical chokepoint: whoever controls the Bridgman furnaces controls aviation.</span>
+                </p>
             </div>
-            <div class="cards-grid">
-                <!-- Market Causality Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Market Causality</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="market-container">
-                            <svg class="market-demand-svg" viewBox="0 0 600 220">
-                                <!-- Grid lines -->
-                                <g stroke="#2a2a3a" stroke-width="1">
-                                    <line x1="50" y1="30" x2="50" y2="180"/>
-                                    <line x1="50" y1="180" x2="580" y2="180"/>
-                                    <line x1="50" y1="105" x2="580" y2="105" stroke-dasharray="4"/>
-                                    <line x1="182" y1="30" x2="182" y2="180" stroke-dasharray="4" opacity="0.5"/>
-                                    <line x1="315" y1="30" x2="315" y2="180" stroke-dasharray="4" opacity="0.5"/>
-                                    <line x1="447" y1="30" x2="447" y2="180" stroke-dasharray="4" opacity="0.5"/>
-                                </g>
+        </div>
+    </section>
 
-                                <!-- Y-axis labels -->
-                                <text x="45" y="35" text-anchor="end" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">100%</text>
-                                <text x="45" y="110" text-anchor="end" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">50%</text>
-                                <text x="45" y="185" text-anchor="end" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">0%</text>
+    <footer style="border-top: 1px solid var(--border-subtle); padding: 3rem 0; margin-top: 6rem; text-align: center; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.8rem;">
+        <p>Analysis generated: 2026-03-22 // System Status: Critical Path Identified</p>
+    </footer>
 
-                                <!-- X-axis labels -->
-                                <text x="116" y="200" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">2019</text>
-                                <text x="248" y="200" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">2021</text>
-                                <text x="381" y="200" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">2023</text>
-                                <text x="513" y="200" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">2025</text>
+</main>
 
-                                <!-- Derived demand area -->
-                                <path d="M50 160 L182 140 L315 100 L447 60 L580 40 L580 180 L50 180 Z" fill="#00d4ff" fill-opacity="0.15"/>
-                                <path d="M50 160 L182 140 L315 100 L447 60 L580 40" stroke="#00d4ff" stroke-width="2" fill="none"/>
-
-                                <!-- Autonomous demand area -->
-                                <path d="M50 165 L182 155 L315 145 L447 130 L580 115 L580 180 L50 180 Z" fill="#ff6b35" fill-opacity="0.15"/>
-                                <path d="M50 165 L182 155 L315 145 L447 130 L580 115" stroke="#ff6b35" stroke-width="2" fill="none" stroke-dasharray="6 4"/>
-
-                                <!-- Legend -->
-                                <g transform="translate(450, 20)">
-                                    <rect x="0" y="0" width="130" height="55" rx="6" fill="#0f0f16" stroke="#2a2a3a"/>
-                                    <line x1="10" y1="18" x2="40" y2="18" stroke="#00d4ff" stroke-width="2"/>
-                                    <text x="50" y="22" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Derived Demand</text>
-                                    <line x1="10" y1="40" x2="40" y2="40" stroke="#ff6b35" stroke-width="2" stroke-dasharray="6 4"/>
-                                    <text x="50" y="44" fill="#8888a0" font-family="JetBrains Mono" font-size="9">Autonomous Growth</text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;">
-                            <div style="background: var(--bg-secondary); padding: 14px; border-radius: 8px; text-align: center;">
-                                <div style="font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--accent-cyan);">94%</div>
-                                <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Derived from Chip Demand</div>
-                            </div>
-                            <div style="background: var(--bg-secondary); padding: 14px; border-radius: 8px; text-align: center;">
-                                <div style="font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--accent-orange);">High</div>
-                                <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Cyclicality Factor</div>
-                            </div>
-                            <div style="background: var(--bg-secondary); padding: 14px; border-radius: 8px; text-align: center;">
-                                <div style="font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--accent-yellow);">10-15yr</div>
-                                <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Substitution Horizon</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Innovation Trajectory Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Innovation Trajectory</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="innovation-container">
-                            <svg class="innovation-svg" viewBox="0 0 600 200">
-                                <!-- Axes -->
-                                <line x1="50" y1="170" x2="580" y2="170" stroke="#2a2a3a" stroke-width="2"/>
-                                <line x1="50" y1="170" x2="50" y2="20" stroke="#2a2a3a" stroke-width="2"/>
-
-                                <!-- Axis labels -->
-                                <text x="315" y="195" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="10">Technology Node (nm)</text>
-                                <text x="20" y="95" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="10" transform="rotate(-90 20 95)">Difficulty / Cost</text>
-
-                                <!-- Node labels -->
-                                <text x="80" y="185" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">14nm</text>
-                                <text x="170" y="185" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">7nm</text>
-                                <text x="260" y="185" text-anchor="middle" fill="#5a5a70" font-family="JetBrains Mono" font-size="9">5nm</text>
-                                <text x="350" y="185" text-anchor="middle" fill="#00d4ff" font-family="JetBrains Mono" font-size="9">3nm</text>
-                                <text x="440" y="185" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="9">2nm</text>
-                                <text x="530" y="185" text-anchor="middle" fill="#ff3366" font-family="JetBrains Mono" font-size="9">1.xnm</text>
-
-                                <!-- Cost curve -->
-                                <path d="M80 150 Q170 130 260 100 T440 45 T530 30" stroke="#00d4ff" stroke-width="3" fill="none"/>
-
-                                <!-- Current frontier marker -->
-                                <circle cx="260" cy="100" r="8" fill="#0a0a0f" stroke="#00d4ff" stroke-width="3"/>
-                                <text x="260" y="75" text-anchor="middle" fill="#00d4ff" font-family="JetBrains Mono" font-size="10" font-weight="600">CURRENT</text>
-
-                                <!-- Future frontier -->
-                                <circle cx="530" cy="30" r="6" fill="#0a0a0f" stroke="#ff3366" stroke-width="2" stroke-dasharray="3 2"/>
-                                <text x="530" y="18" text-anchor="middle" fill="#ff3366" font-family="JetBrains Mono" font-size="9">FUTURE LIMIT</text>
-
-                                <!-- High-NA transition marker -->
-                                <line x1="380" y1="165" x2="380" y2="55" stroke="#ff6b35" stroke-width="1" stroke-dasharray="4"/>
-                                <text x="380" y="55" text-anchor="middle" fill="#ff6b35" font-family="JetBrains Mono" font-size="8">High-NA EUV</text>
-                            </svg>
-                        </div>
-                        <div class="limits-list">
-                            <div class="limit-item">
-                                <div class="limit-name">Resolution Floor</div>
-                                <div class="limit-description">13.5nm wavelength imposes ~13nm resolution limit at 0.33 NA. High-NA (0.55) extends to ~8nm.</div>
-                            </div>
-                            <div class="limit-item">
-                                <div class="limit-name">Source Power</div>
-                                <div class="limit-description">250W EUV source power target for 200+ WPH throughput. Current systems at 185W sustained.</div>
-                            </div>
-                            <div class="limit-item">
-                                <div class="limit-name">Defectivity</div>
-                                <div class="limit-description">Mask and wafer defect levels must approach 0.1 defects/cm2 for viable yield at advanced nodes.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hard Step Visualization Card -->
-                <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">The "Hard Step" - Bottleneck Analysis</span>
-                        <span class="card-badge warning">Critical Constraint</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="hardstep-container">
-                            <div style="text-align: center; margin-bottom: 24px;">
-                                <p style="font-family: var(--font-sans); font-size: 14px; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
-                                    The <span style="color: var(--accent-orange); font-weight: 600;">"Hard Step"</span> represents the single constraint that dominates system throughput, determines overall progress rate, and cannot be bypassed through resource concentration alone.
-                                </p>
-                            </div>
-                            <div class="hardstep-flow">
-                                <div class="hardstep-step">
-                                    <div class="hardstep-box">Design Architecture</div>
-                                    <div class="hardstep-label">Enabling</div>
-                                </div>
-                                <div class="hardstep-arrow"></div>
-                                <div class="hardstep-step">
-                                    <div class="hardstep-box">Mask Fabrication</div>
-                                    <div class="hardstep-label">Supporting</div>
-                                </div>
-                                <div class="hardstep-arrow bottleneck"></div>
-                                <div class="hardstep-step">
-                                    <div class="hardstep-box constraint">EUV SOURCE<br/><span style="font-size: 9px; opacity: 0.8">HARD STEP</span></div>
-                                    <div class="hardstep-label constraint">Binding Constraint</div>
-                                </div>
-                                <div class="hardstep-arrow"></div>
-                                <div class="hardstep-step">
-                                    <div class="hardstep-box">Wafer Exposure</div>
-                                    <div class="hardstep-label">Throughput</div>
-                                </div>
-                                <div class="hardstep-arrow"></div>
-                                <div class="hardstep-step">
-                                    <div class="hardstep-box">Metrology</div>
-                                    <div class="hardstep-label">Verification</div>
-                                </div>
-                            </div>
-                            <div class="hardstep-metrics">
-                                <div class="hardstep-metric">
-                                    <div class="hardstep-metric-value">185W</div>
-                                    <div class="hardstep-metric-label">Current Source Output</div>
-                                </div>
-                                <div class="hardstep-metric">
-                                    <div class="hardstep-metric-value">250W</div>
-                                    <div class="hardstep-metric-label">Target Output</div>
-                                </div>
-                                <div class="hardstep-metric">
-                                    <div class="hardstep-metric-value">4-6yr</div>
-                                    <div class="hardstep-metric-label">Improvement Timeline</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Phase IV: Industrialization Requirements -->
-        <section class="phase-section" id="phase4">
-            <div class="phase-header">
-                <span class="phase-number">PHASE IV</span>
-                <h2 class="phase-title">Industrialization Requirements</h2>
-                <div class="phase-divider"></div>
-            </div>
-            <div class="cards-grid">
-                <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">Entry Barriers Analysis</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="barriers-grid">
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Infrastructure Requirements</span>
-                                    <span class="barrier-level extreme">Extreme</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar extreme" style="width: 95%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Cleanroom Class</span>
-                                        <span class="barrier-metric-value">ISO 1-2</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Vibration Isolation</span>
-                                        <span class="barrier-metric-value">VC-E spec</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Investment</span>
-                                        <span class="barrier-metric-value">EUR 2B+ facility</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Human Capital</span>
-                                    <span class="barrier-level extreme">Extreme</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar extreme" style="width: 92%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">PhD Engineers</span>
-                                        <span class="barrier-metric-value">500+ required</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Domain Expertise</span>
-                                        <span class="barrier-metric-value">10+ years</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Knowledge Tacit</span>
-                                        <span class="barrier-metric-value">>80%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Time-to-Yield</span>
-                                    <span class="barrier-level high">High</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar high" style="width: 78%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">R&D Cycle</span>
-                                        <span class="barrier-metric-value">5-7 years</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Yield Learning</span>
-                                        <span class="barrier-metric-value">3-5 years</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Total Timeline</span>
-                                        <span class="barrier-metric-value">10-15 years</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Ecosystem Dependencies</span>
-                                    <span class="barrier-level high">High</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar high" style="width: 85%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Tier-1 Suppliers</span>
-                                        <span class="barrier-metric-value">12 critical</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">IP Dependencies</span>
-                                        <span class="barrier-metric-value">10,000+ patents</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Standards Bodies</span>
-                                        <span class="barrier-metric-value">SEMI, ISO</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Capital Requirements</span>
-                                    <span class="barrier-level extreme">Extreme</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar extreme" style="width: 98%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Per System Cost</span>
-                                        <span class="barrier-metric-value">$380M USD</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">R&D Budget</span>
-                                        <span class="barrier-metric-value">EUR 2B+/year</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Cumulative</span>
-                                        <span class="barrier-metric-value">EUR 20B+ invested</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="barrier-card">
-                                <div class="barrier-header">
-                                    <span class="barrier-name">Regulatory/Geopolitical</span>
-                                    <span class="barrier-level high">High</span>
-                                </div>
-                                <div class="barrier-bar-container">
-                                    <div class="barrier-bar high" style="width: 75%;"></div>
-                                </div>
-                                <div class="barrier-metrics">
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Export Controls</span>
-                                        <span class="barrier-metric-value">Wassenaar</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">ITAR Restrictions</span>
-                                        <span class="barrier-metric-value">Yes</span>
-                                    </div>
-                                    <div class="barrier-metric">
-                                        <span class="barrier-metric-label">Dual-Use Classification</span>
-                                        <span class="barrier-metric-value">Applied</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Phase V: Synthesis -->
-        <section class="phase-section" id="phase5">
-            <div class="phase-header">
-                <span class="phase-number">PHASE V</span>
-                <h2 class="phase-title">Synthesis</h2>
-                <div class="phase-divider"></div>
-            </div>
-            <div class="cards-grid">
-                <!-- Strategic Typology Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Strategic Typology</span>
-                        <div class="card-badge critical">Classification</div>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="typology-display">
-                            <div class="typology-badge">
-                                <svg viewBox="0 0 200 200">
-                                    <circle cx="100" cy="100" r="95" fill="none" stroke="#2a2a3a" stroke-width="2"/>
-                                    <circle cx="100" cy="100" r="95" fill="none" stroke="#ff6b35" stroke-width="3" stroke-dasharray="200 400" stroke-dashoffset="0" stroke-linecap="round">
-                                        <animate attributeName="stroke-dashoffset" from="0" to="-600" dur="2s" repeatCount="indefinite"/>
-                                    </circle>
-                                </svg>
-                                <div class="typology-badge-inner">
-                                    <div class="typology-category">Classification</div>
-                                    <div class="typology-name">CRITICAL ENABLER</div>
-                                </div>
-                            </div>
-                            <div class="typology-details">
-                                <div class="typology-detail">
-                                    <div class="typology-detail-label">Typology</div>
-                                    <div class="typology-detail-value">Critical Enabler</div>
-                                </div>
-                                <div class="typology-detail">
-                                    <div class="typology-detail-label">Competitive Structure</div>
-                                    <div class="typology-detail-value critical">Monopoly</div>
-                                </div>
-                                <div class="typology-detail">
-                                    <div class="typology-detail-label">Switching Cost</div>
-                                    <div class="typology-detail-value critical">Prohibitive</div>
-                                </div>
-                                <div class="typology-detail">
-                                    <div class="typology-detail-label">Demand Character</div>
-                                    <div class="typology-detail-value warning">Inelastic</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Binding Constraint Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Binding Constraint</span>
-                        <span class="card-badge warning">Hard Step</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="background: var(--bg-secondary); padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent-orange);">
-                                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Primary Constraint</div>
-                                <div style="font-family: var(--font-sans); font-size: 15px; color: var(--text-primary); font-weight: 500;">
-                                    EUV Source Power - Tin Droplet Targeting & Plasma Efficiency
-                                </div>
-                            </div>
-                            <div style="background: var(--bg-secondary); padding: 20px; border-radius: 8px;">
-                                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Why This Constrains</div>
-                                <ul style="font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary); line-height: 1.8; list-style: none; padding: 0;">
-                                    <li style="display: flex; gap: 10px;">
-                                        <span style="color: var(--accent-cyan);">-</span>
-                                        <span>Source output directly determines maximum throughput (WPH)</span>
-                                    </li>
-                                    <li style="display: flex; gap: 10px;">
-                                        <span style="color: var(--accent-cyan);">-</span>
-                                        <span>No pathway to increase throughput without source power gains</span>
-                                    </li>
-                                    <li style="display: flex; gap: 10px;">
-                                        <span style="color: var(--accent-cyan);">-</span>
-                                        <span>Physics-limited improvement rate (~5% per year)</span>
-                                    </li>
-                                    <li style="display: flex; gap: 10px;">
-                                        <span style="color: var(--accent-cyan);">-</span>
-                                        <span>Demand growth outpaces capability improvement</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div style="background: var(--bg-secondary); padding: 20px; border-radius: 8px;">
-                                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Constraint Persistence</div>
-                                <div style="display: flex; gap: 16px;">
-                                    <div style="flex: 1; text-align: center; padding: 12px; background: var(--bg-tertiary); border-radius: 6px;">
-                                        <div style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--accent-orange);">5-7yr</div>
-                                        <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); margin-top: 4px;">Current projection</div>
-                                    </div>
-                                    <div style="flex: 1; text-align: center; padding: 12px; background: var(--bg-tertiary); border-radius: 6px;">
-                                        <div style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--text-secondary);">High-NA Only</div>
-                                        <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-tertiary); margin-top: 4px;">Partial relief</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Systemic Fragility Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Systemic Fragility</span>
-                        <span class="card-badge warning">Risk Assessment</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Single Point of Failure</span>
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-red); font-weight: 600;">CRITICAL</span>
-                                </div>
-                                <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                    <div style="height: 100%; width: 95%; background: var(--accent-red); border-radius: 3px;"></div>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Geopolitical Concentration</span>
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-orange); font-weight: 600;">HIGH</span>
-                                </div>
-                                <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                    <div style="height: 100%; width: 80%; background: var(--accent-orange); border-radius: 3px;"></div>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Supply Chain Complexity</span>
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-orange); font-weight: 600;">HIGH</span>
-                                </div>
-                                <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                    <div style="height: 100%; width: 75%; background: var(--accent-orange); border-radius: 3px;"></div>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Technology Substitution Risk</span>
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-yellow); font-weight: 600;">MODERATE</span>
-                                </div>
-                                <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                    <div style="height: 100%; width: 45%; background: var(--accent-yellow); border-radius: 3px;"></div>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Demand Concentration</span>
-                                    <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-red); font-weight: 600;">CRITICAL</span>
-                                </div>
-                                <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                    <div style="height: 100%; width: 88%; background: var(--accent-red); border-radius: 3px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Evolutionary Forecast Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Evolutionary Forecast</span>
-                        <span class="card-badge core">Trajectory</span>
-                        <div class="card-toggle">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div style="display: flex; flex-direction: column; gap: 20px;">
-                            <div style="display: flex; gap: 20px;">
-                                <div style="flex: 1; background: var(--bg-secondary); padding: 16px; border-radius: 8px; text-align: center;">
-                                    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Near-term (2024-2027)</div>
-                                    <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); font-weight: 500;">High-NA EUV deployment</div>
-                                    <div style="font-family: var(--font-sans); font-size: 11px; color: var(--text-tertiary); margin-top: 6px;">0.55 NA systems to 3nm/2nm nodes</div>
-                                </div>
-                                <div style="flex: 1; background: var(--bg-secondary); padding: 16px; border-radius: 8px; text-align: center;">
-                                    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Mid-term (2027-2032)</div>
-                                    <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-orange); font-weight: 500;">Source power ceiling</div>
-                                    <div style="font-family: var(--font-sans); font-size: 11px; color: var(--text-tertiary); margin-top: 6px;">250W target, diminishing returns</div>
-                                </div>
-                                <div style="flex: 1; background: var(--bg-secondary); padding: 16px; border-radius: 8px; text-align: center;">
-                                    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Long-term (2032+)</div>
-                                    <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-yellow); font-weight: 500;">Alternative patterning</div>
-                                    <div style="font-family: var(--font-sans); font-size: 11px; color: var(--text-tertiary); margin-top: 6px;">Direct write, nanoimprint, EUV发展规划</div>
-                                </div>
-                            </div>
-                            <div style="background: var(--accent-orange-glow); border: 1px solid var(--accent-orange-dim); padding: 16px; border-radius: 8px;">
-                                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Key Uncertainty</div>
-                                <div style="font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                                    Whether logic scaling continues at historical pace. If compute demand plateaus or novel architectures (e.g., chiplet, 3D stacking) reduce node requirements, the strategic calculus shifts significantly.
-                                </div>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                    <div style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%;"></div>
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">ASML monopoly persists</span>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                    <div style="width: 8px; height: 8px; background: var(--accent-cyan); border-radius: 50%;"></div>
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">High-NA extends EUV life</span>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                    <div style="width: 8px; height: 8px; background: var(--accent-yellow); border-radius: 50%;"></div>
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">China alternatives limited</span>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg-secondary); border-radius: 6px;">
-                                    <div style="width: 8px; height: 8px; background: var(--accent-orange); border-radius: 50%;"></div>
-                                    <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Demand remains inelastic</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Scroll to Top Button -->
-    <button class="scroll-top" id="scrollTop">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M10 15V5M5 10L10 5L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-
-    <script>
-        // Card collapse/expand functionality
-        document.querySelectorAll('.card-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const card = header.parentElement;
-                card.classList.toggle('collapsed');
-            });
+<script>
+    // Interactive hover effects for topology nodes
+    document.querySelectorAll('.node').forEach(node => {
+        node.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.zIndex = '10';
         });
-
-        // Phase navigation
-        const phaseIndicators = document.querySelectorAll('.phase-indicator');
-        const phaseSections = document.querySelectorAll('.phase-section');
-
-        phaseIndicators.forEach(indicator => {
-            indicator.addEventListener('click', () => {
-                const phaseNum = indicator.dataset.phase;
-                const targetSection = document.getElementById('phase' + phaseNum);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
+        node.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+            this.style.zIndex = '1';
         });
+    });
 
-        // Scroll spy for phase indicators
-        const observerOptions = {
-            root: null,
-            rootMargin: '-50% 0px -50% 0px',
-            threshold: 0
-        };
+    // Scroll-triggered animations for cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-        const phaseObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const phaseId = entry.target.id.replace('phase', '');
-                    phaseIndicators.forEach(indicator => {
-                        indicator.classList.remove('active', 'completed');
-                        if (parseInt(indicator.dataset.phase) < parseInt(phaseId)) {
-                            indicator.classList.add('completed');
-                        } else if (parseInt(indicator.dataset.phase) === parseInt(phaseId)) {
-                            indicator.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
-
-        phaseSections.forEach(section => {
-            phaseObserver.observe(section);
-        });
-
-        // Animate sections on scroll
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        phaseSections.forEach(section => {
-            sectionObserver.observe(section);
-        });
-
-        // Scroll to top button
-        const scrollTopBtn = document.getElementById('scrollTop');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 800) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
         });
+    }, observerOptions);
 
-        scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+    document.querySelectorAll('.physics-card, .hard-step').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+</script>
 
-        // Barrier bars animation on scroll
-        const barrierObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const bars = entry.target.querySelectorAll('.barrier-bar');
-                    bars.forEach(bar => {
-                        const width = bar.style.width;
-                        bar.style.width = '0';
-                        setTimeout(() => {
-                            bar.style.width = width;
-                        }, 100);
-                    });
-                }
-            });
-        }, { threshold: 0.2 });
-
-        document.querySelectorAll('.barrier-card').forEach(card => {
-            barrierObserver.observe(card);
-        });
-
-        // Product selector (demo functionality)
-        const productSelect = document.getElementById('productSelect');
-        productSelect.addEventListener('change', (e) => {
-            // In a real application, this would load different product data
-            console.log('Product selected:', e.target.value);
-        });
-    </script>
 </body>
 </html>
