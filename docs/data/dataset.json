@@ -506,11 +506,7 @@
     "domainScope": ["Semiconductors", "Microelectronics"],
     "historicalContext": "Core enabling material in post-1970s semiconductor industrialization.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Silicon"],
-      "enables": ["Integrated Circuits"],
-      "dependsOn": ["Czochralski process"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "IEEE Standards",
       "hsCode": "2804.61"
@@ -528,11 +524,7 @@
     "domainScope": ["Microelectronics", "Computing"],
     "historicalContext": "Central artifact of the microelectronics revolution beginning in the 1960s.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Silicon Wafers", "Copper"],
-      "enables": ["Microprocessors", "Memory Modules"],
-      "dependsOn": ["Photolithography"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "IEEE Standards",
       "hsCode": "8542.31"
@@ -550,10 +542,7 @@
     "domainScope": ["Electronics Manufacturing"],
     "historicalContext": "Standardized in mid-20th century electronics manufacturing.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Fiberglass", "Copper"],
-      "enables": ["Integrated Circuits assembly", "Consumer Electronics"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "IPC Standards",
       "hsCode": "8534.00"
@@ -571,11 +560,7 @@
     "domainScope": ["Computing", "Microelectronics"],
     "historicalContext": "Emerged in the 1970s as scaling of integrated circuits enabled CPU-on-chip designs.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Integrated Circuits"],
-      "enables": ["Laptops", "Smartphones"],
-      "dependsOn": ["Photolithography"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "TechSpecs",
       "hsCode": "8542.31"
@@ -593,10 +578,7 @@
     "domainScope": ["Computing"],
     "historicalContext": "Evolved alongside microprocessor-based computing systems.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Integrated Circuits", "Printed Circuit Boards"],
-      "enables": ["Computers", "Servers"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "TechSpecs",
       "hsCode": "8542.32"
@@ -614,10 +596,7 @@
     "domainScope": ["Electronics"],
     "historicalContext": "Fundamental component since early electrical engineering.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Tantalum", "Ceramic"],
-      "enables": ["Power regulation circuits"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "EIA",
       "hsCode": "8532.21"
@@ -635,10 +614,7 @@
     "domainScope": ["Electronics"],
     "historicalContext": "Foundational component in analog and digital electronics.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Carbon", "Metal Film"],
-      "enables": ["Circuit stabilization"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "EIA",
       "hsCode": "8533.21"
@@ -656,10 +632,7 @@
     "domainScope": ["Consumer Electronics", "Telecommunications"],
     "historicalContext": "Converged device category emerging post-2007 smartphone revolution.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Microprocessors", "LCD Screens", "Batteries (Li-Ion)"],
-      "enables": ["Digital services consumption"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "GSMA",
       "hsCode": "8517.12"
@@ -677,10 +650,7 @@
     "domainScope": ["Computing"],
     "historicalContext": "Mainstream personal computing platform since the 1990s.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Microprocessors", "Memory Modules", "LCD Screens"],
-      "enables": ["Software execution", "Digital work"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "TechSpecs",
       "hsCode": "8471.30"
@@ -698,10 +668,7 @@
     "domainScope": ["Consumer Electronics"],
     "historicalContext": "Popularized after 2010 as a new mobile computing form factor.",
     "specific": true,
-    "relationships": {
-      "inputs": ["Microprocessors", "LCD Screens", "Batteries (Li-Ion)"],
-      "enables": ["Media consumption", "Mobile applications"]
-    },
+    "relationships": [],
     "metadata": {
       "source": "TechSpecs",
       "hsCode": "8471.30"
