@@ -22,20 +22,9 @@
             --rule: #c8c2b0;
             --rule-light: #ddd8cc;
             --white: #fffdf7;
-            --cat-product: #2c5f7c;
-            --cat-process: #7c3b2c;
-            --cat-technique: #6b5b2c;
-            --cat-capability: #5b2c6b;
-            --cat-infrastructure: #2c6b5b;
-            --cat-market: #3d6b2c;
-            --cat-valuechain: #6b4a2c;
-            --cat-constraint: #6b6b6b;
-            --cat-institution: #3a3a4a;
-            --cat-strategy: #6b3a2c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
 
         body {
@@ -47,36 +36,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        ::selection {
-            background: var(--gold);
-            color: var(--white);
-        }
+        ::selection { background: var(--gold); color: var(--white); }
 
-        /* ─── UTILITIES ─── */
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        .rule {
-            border: none;
-            height: 1px;
-            background: var(--rule);
-            margin: 0;
-        }
-
-        .rule-thin {
-            border: none;
-            height: 0.5px;
-            background: var(--rule-light);
-        }
-
-        .rule-gold {
-            border: none;
-            height: 1px;
-            background: var(--gold-dim);
-        }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 40px; }
+        .rule { border: none; height: 1px; background: var(--rule); margin: 0; }
+        .rule-thin { border: none; height: 0.5px; background: var(--rule-light); }
 
         .section-label {
             font-family: 'EB Garamond', serif;
@@ -90,869 +54,281 @@
 
         /* ─── HEADER ─── */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
+            position: fixed; top: 0; width: 100%; z-index: 100;
             background: rgba(250, 248, 240, 0.95);
             backdrop-filter: blur(8px);
             border-bottom: 0.5px solid var(--rule-light);
         }
-
         header .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
+            display: flex; align-items: center; justify-content: space-between; height: 60px;
         }
-
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--navy);
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700;
+            color: var(--navy); text-decoration: none; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 12px;
         }
-
         .logo-mark {
-            width: 28px;
-            height: 28px;
-            border: 1.5px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: var(--gold);
+            width: 28px; height: 28px; border: 1.5px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: var(--gold);
         }
-
         nav { display: flex; align-items: center; gap: 32px; }
-
         nav a {
-            font-family: 'EB Garamond', serif;
-            font-size: 15px;
-            color: var(--text-light);
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-            position: relative;
+            font-family: 'EB Garamond', serif; font-size: 15px; color: var(--text-light);
+            text-decoration: none; letter-spacing: 0.5px; transition: color 0.3s; position: relative;
         }
-
         nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 0.5px;
-            background: var(--gold);
-            transition: width 0.3s;
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 0.5px; background: var(--gold); transition: width 0.3s;
         }
-
         nav a:hover { color: var(--navy); }
         nav a:hover::after { width: 100%; }
-
         .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: var(--navy);
-            cursor: pointer;
+            display: none; background: none; border: none;
+            font-size: 20px; color: var(--navy); cursor: pointer;
         }
 
         /* ─── HERO ─── */
-        #hero {
-            padding: 160px 0 100px;
-            text-align: center;
-            position: relative;
-        }
-
+        #hero { padding: 160px 0 100px; text-align: center; position: relative; }
         #hero::before {
-            content: '';
-            position: absolute;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--rule-light);
+            content: ''; position: absolute; top: 60px; left: 0;
+            width: 100%; height: 1px; background: var(--rule-light);
         }
-
         .hero-ornament {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 40px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 40px;
         }
-
-        .hero-ornament span {
-            display: block;
-            width: 40px;
-            height: 0.5px;
-            background: var(--gold);
-        }
-
-        .hero-ornament i {
-            color: var(--gold-dim);
-            font-size: 10px;
-        }
-
+        .hero-ornament span { display: block; width: 40px; height: 0.5px; background: var(--gold); }
+        .hero-ornament i { color: var(--gold-dim); font-size: 10px; }
         .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 58px;
-            font-weight: 900;
-            color: var(--navy);
-            line-height: 1.15;
-            margin-bottom: 32px;
-            letter-spacing: -0.5px;
+            font-family: 'Playfair Display', serif; font-size: 58px; font-weight: 900;
+            color: var(--navy); line-height: 1.15; margin-bottom: 32px; letter-spacing: -0.5px;
         }
-
         .hero-subtitle {
-            font-size: 20px;
-            color: var(--text-light);
-            max-width: 640px;
-            margin: 0 auto 48px;
-            line-height: 1.8;
-            font-style: italic;
-            font-weight: 400;
+            font-size: 20px; color: var(--text-light); max-width: 640px;
+            margin: 0 auto 48px; line-height: 1.8; font-style: italic; font-weight: 400;
         }
-
         .hero-cta {
-            display: inline-block;
-            padding: 14px 40px;
-            border: 1px solid var(--gold);
-            color: var(--gold-dim);
-            text-decoration: none;
-            font-family: 'EB Garamond', serif;
-            font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: all 0.4s;
+            display: inline-block; padding: 14px 40px; border: 1px solid var(--gold);
+            color: var(--gold-dim); text-decoration: none; font-family: 'EB Garamond', serif;
+            font-size: 14px; letter-spacing: 3px; text-transform: uppercase; transition: all 0.4s;
         }
-
-        .hero-cta:hover {
-            background: var(--navy);
-            border-color: var(--navy);
-            color: var(--cream);
-        }
-
-        /* ─── NETWORK VIS ─── */
-        #network-section {
-            padding: 80px 0;
-            background: var(--white);
-            border-top: 0.5px solid var(--rule-light);
-            border-bottom: 0.5px solid var(--rule-light);
-        }
-
-        .network-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .network-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-
-        .network-subtitle {
-            font-size: 15px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        #network-visualization {
-            width: 100%;
-            height: 420px;
-            position: relative;
-            cursor: grab;
-        }
-
-        #network-visualization:active { cursor: grabbing; }
-
-        #network-visualization canvas {
-            width: 100%;
-            height: 100%;
-        }
-
-        .network-legend {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 0.5px solid var(--rule-light);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-muted);
-            letter-spacing: 0.3px;
-        }
-
-        .legend-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
+        .hero-cta:hover { background: var(--navy); border-color: var(--navy); color: var(--cream); }
 
         /* ─── ABOUT ─── */
-        #about {
-            padding: 100px 0;
-        }
-
+        #about { padding: 100px 0; }
         .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: start;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: start;
         }
-
         .about-text p {
-            margin-bottom: 24px;
-            font-size: 17px;
-            color: var(--text-light);
-            text-align: justify;
-            hyphens: auto;
+            margin-bottom: 24px; font-size: 17px; color: var(--text-light);
+            text-align: justify; hyphens: auto;
         }
-
         .about-text p:first-child::first-letter {
-            font-family: 'Playfair Display', serif;
-            font-size: 64px;
-            float: left;
-            line-height: 0.8;
-            margin: 4px 12px 0 0;
-            color: var(--navy);
-            font-weight: 700;
+            font-family: 'Playfair Display', serif; font-size: 64px; float: left;
+            line-height: 0.8; margin: 4px 12px 0 0; color: var(--navy); font-weight: 700;
         }
-
-        .about-sidebar {
-            border-left: 0.5px solid var(--rule);
-            padding-left: 40px;
-        }
-
+        .about-sidebar { border-left: 0.5px solid var(--rule); padding-left: 40px; }
         .sidebar-quote {
-            font-style: italic;
-            font-size: 17px;
-            color: var(--text-light);
-            line-height: 1.8;
-            margin-bottom: 24px;
-            position: relative;
-            padding-left: 20px;
+            font-style: italic; font-size: 17px; color: var(--text-light); line-height: 1.8;
+            margin-bottom: 24px; position: relative; padding-left: 20px;
             border-left: 2px solid var(--gold-light);
         }
-
-        .sidebar-stat {
-            margin-bottom: 28px;
-        }
-
+        .sidebar-stat { margin-bottom: 28px; }
         .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1;
-            margin-bottom: 4px;
+            font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700;
+            color: var(--navy); line-height: 1; margin-bottom: 4px;
         }
-
         .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 13px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;
         }
 
         /* ─── GOALS ─── */
         #goals {
-            padding: 100px 0;
-            background: var(--white);
+            padding: 100px 0; background: var(--white);
             border-top: 0.5px solid var(--rule-light);
             border-bottom: 0.5px solid var(--rule-light);
         }
-
-        .section-heading {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
+        .section-heading { text-align: center; margin-bottom: 60px; }
         .section-heading h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 12px;
+            font-family: 'Playfair Display', serif; font-size: 32px;
+            font-weight: 700; color: var(--navy); margin-bottom: 12px;
         }
-
-        .section-heading p {
-            font-size: 16px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .goals-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-        }
-
+        .section-heading p { font-size: 16px; color: var(--text-muted); font-style: italic; }
+        .goals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
         .goal-item {
-            padding: 32px 0;
-            border-bottom: 0.5px solid var(--rule-light);
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            cursor: default;
-            transition: padding-left 0.3s;
+            padding: 32px 0; border-bottom: 0.5px solid var(--rule-light);
+            display: flex; gap: 20px; align-items: flex-start;
+            cursor: default; transition: padding-left 0.3s;
         }
-
-        .goal-item:hover {
-            padding-left: 12px;
-        }
-
+        .goal-item:hover { padding-left: 12px; }
         .goal-item:nth-child(odd) {
-            padding-right: 40px;
-            border-right: 0.5px solid var(--rule-light);
+            padding-right: 40px; border-right: 0.5px solid var(--rule-light);
         }
-
-        .goal-item:nth-child(even) {
-            padding-left: 40px;
-        }
-
+        .goal-item:nth-child(even) { padding-left: 40px; }
         .goal-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--gold-dim);
-            min-width: 28px;
-            line-height: 1.3;
+            font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;
+            color: var(--gold-dim); min-width: 28px; line-height: 1.3;
         }
-
         .goal-text h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 6px;
+            font-family: 'Playfair Display', serif; font-size: 17px;
+            font-weight: 700; color: var(--navy); margin-bottom: 6px;
         }
+        .goal-text p { font-size: 15px; color: var(--text-light); line-height: 1.7; }
 
-        .goal-text p {
-            font-size: 15px;
-            color: var(--text-light);
-            line-height: 1.7;
-        }
-
-        /* ─── EXPLORER ─── */
+        /* ─── EXPLORER PREVIEW ─── */
         #explorer {
-            padding: 100px 0;
-        }
-
-        .explorer-filters {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 48px;
-            border-bottom: 0.5px solid var(--rule);
-        }
-
-        .filter-btn {
-            background: none;
-            border: none;
-            padding: 12px 16px;
-            font-family: 'EB Garamond', serif;
-            font-size: 14px;
-            color: var(--text-muted);
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            border-bottom: 1.5px solid transparent;
-            margin-bottom: -0.5px;
-        }
-
-        .filter-btn:hover { color: var(--navy); }
-
-        .filter-btn.active {
-            color: var(--navy);
-            border-bottom-color: var(--gold);
-        }
-
-        .nodes-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-        }
-
-        .node-card {
-            padding: 36px 0;
+            padding: 100px 0; background: var(--white);
+            border-top: 0.5px solid var(--rule-light);
             border-bottom: 0.5px solid var(--rule-light);
+        }
+        .explorer-preview {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            border: 0.5px solid var(--rule);
+            overflow: hidden;
             cursor: pointer;
-            display: none;
-            transition: opacity 0.3s;
         }
-
-        .node-card.visible { display: block; }
-
-        .node-card:nth-child(odd) {
-            padding-right: 32px;
-            border-right: 0.5px solid var(--rule-light);
+        .explorer-preview canvas {
+            width: 100%; height: 100%; display: block;
         }
-
-        .node-card:nth-child(even) {
-            padding-left: 32px;
+        .explorer-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: rgba(250, 248, 240, 0.7);
+            backdrop-filter: blur(2px);
+            transition: background 0.5s;
+            text-decoration: none;
+            color: inherit;
         }
-
-        .node-card-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
+        .explorer-overlay:hover {
+            background: rgba(250, 248, 240, 0.45);
         }
-
-        .node-cat-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            flex-shrink: 0;
+        .explorer-overlay-icon {
+            width: 64px; height: 64px;
+            border: 1.5px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.4s;
         }
-
-        .node-card-title {
+        .explorer-overlay:hover .explorer-overlay-icon {
+            background: var(--navy);
+            border-color: var(--navy);
+        }
+        .explorer-overlay-icon i {
+            font-size: 22px; color: var(--gold);
+            transition: color 0.4s;
+        }
+        .explorer-overlay:hover .explorer-overlay-icon i { color: var(--cream); }
+        .explorer-overlay-title {
             font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1.3;
+            font-size: 24px; font-weight: 700;
+            color: var(--navy); margin-bottom: 8px;
         }
-
-        .node-card-category {
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+        .explorer-overlay-sub {
+            font-size: 15px; color: var(--text-muted);
+            font-style: italic; margin-bottom: 20px;
         }
-
-        .node-card-desc {
-            font-size: 15px;
-            color: var(--text-light);
-            line-height: 1.7;
-            margin-bottom: 12px;
-        }
-
-        .node-card-rel {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .node-card-rel strong {
-            color: var(--text-light);
-            font-style: normal;
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-        }
-
-        .node-card-arrow {
+        .explorer-overlay-cta {
+            font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
             color: var(--gold-dim);
-            margin: 0 6px;
+            border-bottom: 0.5px solid var(--gold-dim);
+            padding-bottom: 2px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .explorer-overlay:hover .explorer-overlay-cta {
+            color: var(--navy); border-color: var(--navy);
         }
 
         /* ─── METHODOLOGY ─── */
-        #methodology {
-            padding: 100px 0;
-            background: var(--navy);
-            color: var(--cream);
-        }
-
+        #methodology { padding: 100px 0; background: var(--navy); color: var(--cream); }
         #methodology .section-label { color: var(--gold-light); }
         #methodology .section-heading h2 { color: var(--cream); }
         #methodology .section-heading p { color: rgba(250,248,240,0.5); }
-
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-        }
-
+        .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
         .method-item {
-            padding: 40px 28px;
-            border: 0.5px solid rgba(250,248,240,0.1);
-            transition: background 0.4s;
+            padding: 40px 28px; border: 0.5px solid rgba(250,248,240,0.1); transition: background 0.4s;
         }
-
-        .method-item:hover {
-            background: rgba(250,248,240,0.04);
-        }
-
-        .method-icon {
-            color: var(--gold);
-            font-size: 18px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
+        .method-item:hover { background: rgba(250,248,240,0.04); }
+        .method-icon { color: var(--gold); font-size: 18px; margin-bottom: 20px; display: block; }
         .method-item h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--cream);
-            margin-bottom: 12px;
+            font-family: 'Playfair Display', serif; font-size: 17px;
+            font-weight: 700; color: var(--cream); margin-bottom: 12px;
         }
-
-        .method-item p {
-            font-size: 14px;
-            color: rgba(250,248,240,0.55);
-            line-height: 1.7;
-        }
+        .method-item p { font-size: 14px; color: rgba(250,248,240,0.55); line-height: 1.7; }
 
         /* ─── REFERENCES ─── */
-        #references {
-            padding: 100px 0;
-            border-top: 0.5px solid var(--rule-light);
-        }
-
+        #references { padding: 100px 0; border-top: 0.5px solid var(--rule-light); }
         .ref-item {
-            display: flex;
-            gap: 24px;
-            padding: 32px 0;
-            border-bottom: 0.5px solid var(--rule-light);
+            display: flex; gap: 24px; padding: 32px 0; border-bottom: 0.5px solid var(--rule-light);
             align-items: flex-start;
         }
-
         .ref-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--rule);
-            min-width: 32px;
+            font-family: 'Playfair Display', serif; font-size: 28px;
+            font-weight: 700; color: var(--rule); min-width: 32px;
         }
-
         .ref-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 6px;
+            font-family: 'Playfair Display', serif; font-size: 18px;
+            font-weight: 700; color: var(--navy); margin-bottom: 6px;
         }
-
-        .ref-content p {
-            font-size: 15px;
-            color: var(--text-light);
-            margin-bottom: 8px;
-            line-height: 1.7;
-        }
-
+        .ref-content p { font-size: 15px; color: var(--text-light); margin-bottom: 8px; line-height: 1.7; }
         .ref-link {
-            font-size: 13px;
-            color: var(--gold-dim);
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            border-bottom: 0.5px solid var(--gold-dim);
-            padding-bottom: 1px;
-            transition: color 0.3s;
+            font-size: 13px; color: var(--gold-dim); text-decoration: none;
+            letter-spacing: 0.5px; border-bottom: 0.5px solid var(--gold-dim);
+            padding-bottom: 1px; transition: color 0.3s;
         }
-
         .ref-link:hover { color: var(--navy); border-color: var(--navy); }
 
         /* ─── FOOTER ─── */
         footer {
-            padding: 60px 0 40px;
-            background: var(--dark);
-            color: rgba(250,248,240,0.4);
-            font-size: 14px;
+            padding: 60px 0 40px; background: var(--dark);
+            color: rgba(250,248,240,0.4); font-size: 14px;
         }
-
         .footer-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 40px;
-            padding-bottom: 40px;
+            display: flex; justify-content: space-between; align-items: start;
+            margin-bottom: 40px; padding-bottom: 40px;
             border-bottom: 0.5px solid rgba(250,248,240,0.08);
         }
-
         .footer-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            color: rgba(250,248,240,0.7);
-            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif; font-size: 16px;
+            color: rgba(250,248,240,0.7); margin-bottom: 8px;
         }
-
-        .footer-brand-desc {
-            font-size: 13px;
-            max-width: 300px;
-            line-height: 1.7;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 48px;
-        }
-
+        .footer-brand-desc { font-size: 13px; max-width: 300px; line-height: 1.7; }
+        .footer-links { display: flex; gap: 48px; }
         .footer-col h4 {
-            font-family: 'EB Garamond', serif;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(250,248,240,0.5);
-            margin-bottom: 16px;
+            font-family: 'EB Garamond', serif; font-size: 11px; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(250,248,240,0.5); margin-bottom: 16px;
         }
-
         .footer-col a {
-            display: block;
-            color: rgba(250,248,240,0.35);
-            text-decoration: none;
-            font-size: 14px;
-            margin-bottom: 8px;
-            transition: color 0.3s;
+            display: block; color: rgba(250,248,240,0.35); text-decoration: none;
+            font-size: 14px; margin-bottom: 8px; transition: color 0.3s;
         }
-
         .footer-col a:hover { color: var(--gold-light); }
-
         .footer-bottom {
-            text-align: center;
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: rgba(250,248,240,0.2);
-        }
-
-        /* ─── MODAL ─── */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(13, 27, 42, 0.85);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 60px 20px;
-            overflow-y: auto;
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal-panel {
-            background: var(--white);
-            width: 100%;
-            max-width: 720px;
-            padding: 60px;
-            position: relative;
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 24px; right: 24px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.3s;
-            font-family: 'EB Garamond', serif;
-            line-height: 1;
-        }
-
-        .modal-close:hover { color: var(--navy); }
-
-        .modal-cat-label {
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gold-dim);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .modal-cat-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .modal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-            line-height: 1.2;
-        }
-
-        .modal-id {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-            letter-spacing: 1px;
-        }
-
-        .modal-rule { margin: 28px 0; }
-
-        .modal-desc {
-            font-size: 16px;
-            color: var(--text-light);
-            line-height: 1.85;
-            text-align: justify;
-        }
-
-        .modal-section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--navy);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .modal-detail-row {
-            display: flex;
-            padding: 10px 0;
-            border-bottom: 0.5px solid var(--rule-light);
-            font-size: 15px;
-        }
-
-        .modal-detail-label {
-            min-width: 140px;
-            color: var(--text-muted);
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding-top: 2px;
-        }
-
-        .modal-detail-value {
-            color: var(--text);
-            flex: 1;
-        }
-
-        .modal-rel-item {
-            padding: 16px 0;
-            border-bottom: 0.5px solid var(--rule-light);
-        }
-
-        .modal-rel-type {
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--gold-dim);
-            margin-bottom: 4px;
-        }
-
-        .modal-rel-target {
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 4px;
-        }
-
-        .modal-rel-desc {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .modal-timeline-item {
-            display: flex;
-            gap: 20px;
-            padding: 12px 0;
-            border-bottom: 0.5px solid var(--rule-light);
-        }
-
-        .modal-timeline-year {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--navy);
-            min-width: 50px;
-        }
-
-        .modal-timeline-text {
-            font-size: 15px;
-            color: var(--text-light);
-        }
-
-        .modal-timeline-text strong {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .modal-ref-item {
-            padding: 12px 0;
-            border-bottom: 0.5px solid var(--rule-light);
-        }
-
-        .modal-ref-title {
-            font-weight: 600;
-            color: var(--text);
-            font-size: 15px;
-            margin-bottom: 2px;
-        }
-
-        .modal-ref-link {
-            font-size: 12px;
-            color: var(--gold-dim);
-            text-decoration: none;
-            letter-spacing: 0.3px;
-        }
-
-        .modal-ref-link:hover { text-decoration: underline; }
-
-        .modal-ref-desc {
-            font-size: 14px;
-            color: var(--text-light);
-            margin-top: 4px;
+            text-align: center; font-size: 12px;
+            letter-spacing: 1px; color: rgba(250,248,240,0.2);
         }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
-
             nav { display: none; }
             .menu-toggle { display: block; }
-
             .hero-title { font-size: 36px; }
             .hero-subtitle { font-size: 17px; }
-
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .about-sidebar { border-left: none; padding-left: 0; border-top: 0.5px solid var(--rule); padding-top: 32px; }
-
             .goals-grid { grid-template-columns: 1fr; }
             .goal-item:nth-child(odd) { padding-right: 0; border-right: none; }
             .goal-item:nth-child(even) { padding-left: 0; }
-
-            .nodes-grid { grid-template-columns: 1fr; }
-            .node-card:nth-child(odd) { padding-right: 0; border-right: none; }
-            .node-card:nth-child(even) { padding-left: 0; }
-
+            .explorer-preview { height: 320px; }
             .method-grid { grid-template-columns: 1fr; }
-
             .footer-top { flex-direction: column; gap: 32px; }
             .footer-links { gap: 32px; }
-
-            .modal-panel { padding: 32px; }
-            .modal-title { font-size: 24px; }
-            .modal-detail-row { flex-direction: column; gap: 4px; }
-            .modal-detail-label { min-width: unset; }
         }
     </style>
 </head>
@@ -991,18 +367,6 @@
     </div>
 </section>
 
-<section id="network-section">
-    <div class="container">
-        <div class="network-header">
-            <div class="section-label">Network Topology</div>
-            <h2 class="network-title">Relational Structure</h2>
-            <p class="network-subtitle">Click any node to inspect its properties and connections</p>
-        </div>
-        <div id="network-visualization"></div>
-        <div class="network-legend" id="network-legend"></div>
-    </div>
-</section>
-
 <section id="about">
     <div class="container">
         <div class="section-label">Introduction</div>
@@ -1017,19 +381,19 @@
                     "To understand what a society can produce, one must first understand what it is capable of producing — and that requires mapping the space of possibilities."
                 </div>
                 <div class="sidebar-stat">
-                    <div class="stat-number">10</div>
-                    <div class="stat-label">Initial Nodes</div>
+                    <div class="stat-number" id="stat-nodes">&mdash;</div>
+                    <div class="stat-label">Nodes in Dataset</div>
                 </div>
                 <div class="sidebar-stat">
-                    <div class="stat-number">10</div>
+                    <div class="stat-number" id="stat-rels">&mdash;</div>
                     <div class="stat-label">Relationships Mapped</div>
                 </div>
                 <div class="sidebar-stat">
-                    <div class="stat-number">8</div>
+                    <div class="stat-number" id="stat-cats">&mdash;</div>
                     <div class="stat-label">Distinct Categories</div>
                 </div>
                 <div class="sidebar-stat">
-                    <div class="stat-number">6</div>
+                    <div class="stat-number" id="stat-fams">&mdash;</div>
                     <div class="stat-label">Relationship Families</div>
                 </div>
             </div>
@@ -1055,10 +419,17 @@
         <div class="section-heading">
             <div class="section-label">Catalogue</div>
             <h2>Product Space Explorer</h2>
-            <p>Browse and inspect each node in the current dataset</p>
+            <p>Interactive graph visualization of the dataset</p>
         </div>
-        <div class="explorer-filters" id="explorer-filters"></div>
-        <div class="nodes-grid" id="nodes-grid"></div>
+        <div class="explorer-preview" id="explorer-preview">
+            <canvas id="explorer-canvas"></canvas>
+            <a href="graph.html" class="explorer-overlay">
+                <div class="explorer-overlay-icon"><i class="fas fa-arrow-up-right-from-square"></i></div>
+                <div class="explorer-overlay-title">Open Explorer</div>
+                <div class="explorer-overlay-sub">Full interactive graph with filtering, inspection, and navigation</div>
+                <div class="explorer-overlay-cta">Launch graph.html</div>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -1126,7 +497,7 @@
                     <h4>Sections</h4>
                     <a href="#about">About</a>
                     <a href="#goals">Goals</a>
-                    <a href="#explorer">Explorer</a>
+                    <a href="graph.html">Explorer</a>
                     <a href="#methodology">Methodology</a>
                 </div>
                 <div class="footer-col">
@@ -1142,159 +513,9 @@
     </div>
 </footer>
 
-<div class="modal-overlay" id="modal">
-    <div class="modal-panel" id="modal-panel"></div>
-</div>
-
 <script>
-const DATA = [
-    {
-        "id": "N1", "name": "Smartphone", "category": "Product", "inheritanceLevel": 0,
-        "description": "Portable multifunctional computing and communication device.",
-        "longDescription": "A smartphone integrates telecommunication, computing, sensing, and application execution into a handheld device, enabling digital communication, media consumption, and productivity applications.",
-        "functionalRoles": ["communication device", "computing platform", "sensor hub"],
-        "domainScope": ["consumer electronics", "telecommunications", "digital services"],
-        "historicalContext": { "summary": "Emerged from convergence of mobile phones and PDAs.", "chronology": [{ "year": 2007, "event": "Modern smartphone paradigm established", "context": "Touchscreen-based smartphone architectures became dominant." }] },
-        "specific": { "materiality": "electronic device with semiconductor components", "useCase": "personal communication and computing", "lifeCycleStage": "consumption" },
-        "relationships": [{ "relationshipFamily": "VALUE_CHAIN", "relationshipType": "CONSUMES", "targetNodeId": "N2", "description": "Relies on battery assembly process for energy storage systems." }],
-        "metadata": { "tags": ["electronics", "mobile", "consumer tech"], "confidenceScore": 0.95, "sourceReference": "industrial systems synthesis" },
-        "references": [{ "title": "Mobile Computing Systems Overview", "link": "https://example.org/mobile-systems", "description": "Overview of smartphone system architectures." }]
-    },
-    {
-        "id": "N2", "name": "Lithium Battery Assembly", "category": "ProductionProcess", "inheritanceLevel": 1,
-        "description": "Manufacturing process for assembling lithium-ion battery cells.",
-        "longDescription": "A multi-stage electrochemical assembly process involving electrode preparation, cell stacking, electrolyte filling, and sealing under controlled conditions.",
-        "functionalRoles": ["energy storage production", "component fabrication"],
-        "domainScope": ["battery manufacturing", "electronics supply chain"],
-        "historicalContext": { "summary": "Evolved with demand for portable electronics and EVs.", "chronology": [{ "year": 1991, "event": "Commercial lithium-ion batteries introduced", "context": "Sony commercialized lithium-ion technology." }] },
-        "specific": { "inputs": ["lithium compounds", "cathode materials", "anode materials", "electrolyte"], "outputs": ["battery cells"], "transformationLogic": "electrochemical energy storage assembly under controlled environment" },
-        "relationships": [{ "relationshipFamily": "FUNCTIONAL", "relationshipType": "TRANSFORMS_INTO", "targetNodeId": "N1", "description": "Provides energy storage components for smartphones." }],
-        "metadata": { "tags": ["battery", "manufacturing", "energy"], "confidenceScore": 0.9 },
-        "references": [{ "title": "Lithium-Ion Manufacturing Processes", "link": "https://example.org/battery-manufacturing", "description": "Technical overview of battery assembly." }]
-    },
-    {
-        "id": "N3", "name": "Surface Mount Technology (SMT)", "category": "Technique", "inheritanceLevel": 2,
-        "description": "Technique for mounting electronic components directly onto PCB surfaces.",
-        "longDescription": "SMT is a highly automated electronics assembly technique enabling miniaturization and high-density circuit design through pick-and-place machines and reflow soldering.",
-        "functionalRoles": ["electronics assembly", "miniaturization enablement"],
-        "domainScope": ["electronics manufacturing", "PCB production"],
-        "historicalContext": { "summary": "Replaced through-hole assembly in modern electronics.", "chronology": [{ "year": 1980, "event": "SMT adoption begins in industry", "context": "Driven by demand for smaller electronics." }] },
-        "specific": { "knowledgeType": "manufacturing engineering knowledge", "codificationLevel": "explicit", "transferMechanism": "training manuals and machine programming" },
-        "relationships": [{ "relationshipFamily": "CAPABILITY_DEPENDENCY", "relationshipType": "ENABLES", "targetNodeId": "N2", "description": "Enables automated battery electronics assembly." }],
-        "metadata": { "tags": ["electronics", "manufacturing technique"], "confidenceScore": 0.92 },
-        "references": [{ "title": "SMT Process Fundamentals", "link": "https://example.org/smt", "description": "Explanation of surface mount assembly." }]
-    },
-    {
-        "id": "N4", "name": "Precision Manufacturing Capability", "category": "Capability", "inheritanceLevel": 2,
-        "description": "Organizational capability to manufacture high-tolerance components.",
-        "longDescription": "Represents the ability of a production system to achieve micron-level tolerances in fabrication processes using advanced machinery and quality control systems.",
-        "functionalRoles": ["quality assurance", "high-precision fabrication"],
-        "domainScope": ["advanced manufacturing", "aerospace", "electronics"],
-        "historicalContext": { "summary": "Developed alongside CNC machining and semiconductor fabrication.", "chronology": [{ "year": 1970, "event": "CNC machining adoption", "context": "Enabled repeatable precision manufacturing." }] },
-        "specific": { "capabilityType": "manufacturing precision", "proficiencyLevel": "high", "measurability": "defect rate per million units" },
-        "relationships": [{ "relationshipFamily": "CAPABILITY_DEPENDENCY", "relationshipType": "ENABLES", "targetNodeId": "N3", "description": "Supports SMT component placement precision." }],
-        "metadata": { "tags": ["precision", "manufacturing", "capability"], "confidenceScore": 0.93 },
-        "references": [{ "title": "Precision Manufacturing Systems", "link": "https://example.org/precision-manufacturing", "description": "Study of high-accuracy production systems." }]
-    },
-    {
-        "id": "N5", "name": "Semiconductor Fab Plant", "category": "Infrastructure", "inheritanceLevel": 3,
-        "description": "Industrial facility for manufacturing semiconductor chips.",
-        "longDescription": "A semiconductor fabrication plant is a highly controlled industrial environment used to manufacture integrated circuits using photolithography and chemical processing.",
-        "functionalRoles": ["chip production", "advanced fabrication environment"],
-        "domainScope": ["semiconductors", "electronics manufacturing"],
-        "historicalContext": { "summary": "Evolved with the rise of integrated circuits.", "chronology": [{ "year": 1960, "event": "First semiconductor fabs established", "context": "Enabled mass production of integrated circuits." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "STRUCTURAL", "relationshipType": "ENABLES", "targetNodeId": "N3", "description": "Provides infrastructure for SMT-enabled electronics assembly." }],
-        "metadata": { "tags": ["semiconductor", "infrastructure", "fab"], "confidenceScore": 0.96 },
-        "references": [{ "title": "Semiconductor Fabrication Overview", "link": "https://example.org/fab", "description": "Overview of chip manufacturing plants." }]
-    },
-    {
-        "id": "N6", "name": "Global Smartphone Market", "category": "Market", "inheritanceLevel": 1,
-        "description": "Global economic market for smartphones.",
-        "longDescription": "Represents global supply-demand dynamics, pricing structures, competition, and consumer adoption patterns for smartphones.",
-        "functionalRoles": ["price formation", "demand aggregation", "competition structure"],
-        "domainScope": ["consumer electronics", "global trade"],
-        "historicalContext": { "summary": "Rapid expansion after smartphone adoption in 2000s.", "chronology": [{ "year": 2010, "event": "Mass smartphone adoption", "context": "Market expansion driven by app ecosystems." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "MARKET_RELATION", "relationshipType": "COMPETES_WITH", "targetNodeId": "N1", "description": "Defines competitive environment for smartphone products." }],
-        "metadata": { "tags": ["market", "smartphones", "economics"], "confidenceScore": 0.9 },
-        "references": [{ "title": "Global Electronics Market Report", "link": "https://example.org/market-report", "description": "Analysis of smartphone market dynamics." }]
-    },
-    {
-        "id": "N7", "name": "Electronics Assembly Stage", "category": "ValueChainStage", "inheritanceLevel": 1,
-        "description": "Stage in the value chain where electronic components are assembled.",
-        "longDescription": "This stage includes PCB assembly, component integration, and system testing prior to product distribution.",
-        "functionalRoles": ["assembly coordination", "system integration"],
-        "domainScope": ["manufacturing value chain", "electronics"],
-        "historicalContext": { "summary": "Standardized in modern electronics manufacturing pipelines.", "chronology": [{ "year": 1995, "event": "Global outsourcing of assembly", "context": "Shift to specialized EMS providers." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "VALUE_CHAIN", "relationshipType": "PART_OF", "targetNodeId": "N2", "description": "Includes battery assembly as a subprocess." }],
-        "metadata": { "tags": ["value chain", "assembly", "electronics"], "confidenceScore": 0.88 },
-        "references": [{ "title": "Electronics Value Chain Analysis", "link": "https://example.org/value-chain", "description": "Breakdown of electronics production stages." }]
-    },
-    {
-        "id": "N8", "name": "Rare Earth Supply Constraint", "category": "Constraint", "inheritanceLevel": 2,
-        "description": "Constraint arising from limited availability of rare earth materials.",
-        "longDescription": "Represents supply-side limitations affecting production of electronics due to geopolitical concentration of rare earth element mining and refining.",
-        "functionalRoles": ["supply limitation", "production bottleneck"],
-        "domainScope": ["mining", "electronics supply chain", "geopolitics"],
-        "historicalContext": { "summary": "Increasing relevance due to geopolitical supply concentration.", "chronology": [{ "year": 2010, "event": "Rare earth export restrictions", "context": "Highlighted global dependency risks." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "STRUCTURAL", "relationshipType": "CONSTRAINED_BY", "targetNodeId": "N2", "description": "Limits availability of materials for battery production." }],
-        "metadata": { "tags": ["resources", "constraint", "supply chain"], "confidenceScore": 0.91 },
-        "references": [{ "title": "Rare Earth Supply Chains", "link": "https://example.org/rare-earth", "description": "Analysis of global rare earth dependencies." }]
-    },
-    {
-        "id": "N9", "name": "ISO Quality Standards Body", "category": "Institution", "inheritanceLevel": 2,
-        "description": "Institution responsible for defining international quality standards.",
-        "longDescription": "Represents formal standardization bodies such as ISO that define quality, safety, and interoperability standards for global industries.",
-        "functionalRoles": ["standardization", "regulatory coordination"],
-        "domainScope": ["global manufacturing", "compliance systems"],
-        "historicalContext": { "summary": "Established to harmonize international industrial standards.", "chronology": [{ "year": 1947, "event": "ISO founded", "context": "Created to unify global standards." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "GOVERNANCE", "relationshipType": "COMPLIES_WITH", "targetNodeId": "N3", "description": "SMT processes comply with ISO manufacturing standards." }],
-        "metadata": { "tags": ["standards", "institution", "compliance"], "confidenceScore": 0.94 },
-        "references": [{ "title": "ISO Standards Overview", "link": "https://example.org/iso", "description": "Information on international standards systems." }]
-    },
-    {
-        "id": "N10", "name": "Just-in-Time Manufacturing Strategy", "category": "Strategy", "inheritanceLevel": 3,
-        "description": "Production strategy focused on minimizing inventory and optimizing flow.",
-        "longDescription": "Just-in-time manufacturing reduces waste by synchronizing production with demand, minimizing inventory holding costs and improving responsiveness.",
-        "functionalRoles": ["inventory minimization", "production optimization"],
-        "domainScope": ["manufacturing systems", "supply chain management"],
-        "historicalContext": { "summary": "Developed in Japanese automotive industry.", "chronology": [{ "year": 1970, "event": "Toyota Production System expansion", "context": "Formalization of JIT principles." }] },
-        "specific": {},
-        "relationships": [{ "relationshipFamily": "FUNCTIONAL", "relationshipType": "ORCHESTRATED_BY", "targetNodeId": "N7", "description": "Implemented within electronics assembly stages." }],
-        "metadata": { "tags": ["strategy", "manufacturing", "supply chain"], "confidenceScore": 0.92 },
-        "references": [{ "title": "Just-in-Time Production Systems", "link": "https://example.org/jit", "description": "Overview of JIT manufacturing principles." }]
-    }
-];
-
-const CAT_COLORS = {
-    Product: "var(--cat-product)",
-    ProductionProcess: "var(--cat-process)",
-    Technique: "var(--cat-technique)",
-    Capability: "var(--cat-capability)",
-    Infrastructure: "var(--cat-infrastructure)",
-    Market: "var(--cat-market)",
-    ValueChainStage: "var(--cat-valuechain)",
-    Constraint: "var(--cat-constraint)",
-    Institution: "var(--cat-institution)",
-    Strategy: "var(--cat-strategy)"
-};
-
-const CAT_LABELS = {
-    Product: "Product",
-    ProductionProcess: "Production Process",
-    Technique: "Technique",
-    Capability: "Capability",
-    Infrastructure: "Infrastructure",
-    Market: "Market",
-    ValueChainStage: "Value Chain Stage",
-    Constraint: "Constraint",
-    Institution: "Institution",
-    Strategy: "Strategy"
-};
+/* ─── CONFIGURATION ─── */
+const DATA_PATH = 'data/dataset.json';
 
 const GOALS = [
     { title: "Formal Representation", desc: "Develop a formal representation of the product space, including products, product categories, and their relationships." },
@@ -1313,15 +534,29 @@ const REFERENCES = [
     { title: "Arbitriologia", desc: "A framework for understanding decision-making processes in complex systems, providing theoretical foundations for analyzing production decisions.", link: "https://github.com/csiglab/Arbitriologia" }
 ];
 
-function getNode(id) { return DATA.find(n => n.id === id); }
+/* ─── STATS ─── */
+function animateCounter(elId, target) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const duration = 600;
+    const start = performance.now();
+    function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * ease);
+        if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+}
 
-function getComputedColor(cssVar) {
-    const temp = document.createElement('div');
-    temp.style.color = cssVar;
-    document.body.appendChild(temp);
-    const c = getComputedStyle(temp).color;
-    document.body.removeChild(temp);
-    return c;
+function updateStats(data) {
+    const relCount = data.reduce((sum, n) => sum + (n.relationships ? n.relationships.length : 0), 0);
+    const catCount = new Set(data.map(n => n.category)).size;
+    const famCount = new Set(data.flatMap(n => (n.relationships || []).map(r => r.relationshipFamily).filter(Boolean))).size;
+    animateCounter('stat-nodes', data.length);
+    animateCounter('stat-rels', relCount);
+    animateCounter('stat-cats', catCount);
+    animateCounter('stat-fams', famCount);
 }
 
 /* ─── GOALS ─── */
@@ -1338,61 +573,6 @@ function getComputedColor(cssVar) {
             </div>
         `;
         grid.appendChild(el);
-    });
-})();
-
-/* ─── EXPLORER ─── */
-(function renderExplorer() {
-    const filtersEl = document.getElementById('explorer-filters');
-    const gridEl = document.getElementById('nodes-grid');
-    const categories = [...new Set(DATA.map(n => n.category))];
-
-    // All button
-    const allBtn = document.createElement('button');
-    allBtn.className = 'filter-btn active';
-    allBtn.dataset.filter = 'all';
-    allBtn.textContent = 'All';
-    filtersEl.appendChild(allBtn);
-
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.dataset.filter = cat;
-        btn.textContent = CAT_LABELS[cat] || cat;
-        filtersEl.appendChild(btn);
-    });
-
-    DATA.forEach(node => {
-        const card = document.createElement('div');
-        card.className = 'node-card visible';
-        card.dataset.category = node.category;
-        card.dataset.id = node.id;
-
-        const rel = node.relationships[0];
-        const target = rel ? getNode(rel.targetNodeId) : null;
-
-        card.innerHTML = `
-            <div class="node-card-category">${CAT_LABELS[node.category] || node.category}</div>
-            <div class="node-card-header">
-                <div class="node-cat-dot" style="background:${CAT_COLORS[node.category]}"></div>
-                <div class="node-card-title">${node.name}</div>
-            </div>
-            <div class="node-card-desc">${node.description}</div>
-            ${rel ? `<div class="node-card-rel"><strong>${rel.relationshipType}</strong><span class="node-card-arrow">&mdash;</span>${target ? target.name : ''}</div>` : ''}
-        `;
-
-        card.addEventListener('click', () => openModal(node));
-        gridEl.appendChild(card);
-    });
-
-    filtersEl.addEventListener('click', e => {
-        if (!e.target.classList.contains('filter-btn')) return;
-        filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        const f = e.target.dataset.filter;
-        gridEl.querySelectorAll('.node-card').forEach(c => {
-            c.classList.toggle('visible', f === 'all' || c.dataset.category === f);
-        });
     });
 })();
 
@@ -1414,90 +594,10 @@ function getComputedColor(cssVar) {
     });
 })();
 
-/* ─── MODAL ─── */
-const modalOverlay = document.getElementById('modal');
-const modalPanel = document.getElementById('modal-panel');
-
-modalOverlay.addEventListener('click', e => {
-    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
-});
-
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') modalOverlay.classList.remove('active');
-});
-
-function openModal(node) {
-    const color = CAT_COLORS[node.category] || '#666';
-    let html = `<button class="modal-close" onclick="document.getElementById('modal').classList.remove('active')">&times;</button>`;
-
-    html += `<div class="modal-cat-label"><span class="modal-cat-dot" style="background:${color}"></span>${CAT_LABELS[node.category] || node.category}</div>`;
-    html += `<h2 class="modal-title">${node.name}</h2>`;
-    html += `<div class="modal-id">${node.id} &middot; Inheritance Level ${node.inheritanceLevel}</div>`;
-    html += `<hr class="rule">`;
-    html += `<p class="modal-desc">${node.longDescription || node.description}</p>`;
-
-    // Details
-    const details = [];
-    if (node.functionalRoles && node.functionalRoles.length) details.push(['Functional Roles', node.functionalRoles.join(', ')]);
-    if (node.domainScope && node.domainScope.length) details.push(['Domain Scope', node.domainScope.join(', ')]);
-    if (node.specific) Object.entries(node.specific).forEach(([k, v]) => details.push([k, Array.isArray(v) ? v.join(', ') : v]));
-    if (node.metadata && node.metadata.tags) details.push(['Tags', node.metadata.tags.join(', ')]);
-    if (node.metadata && node.metadata.confidenceScore) details.push(['Confidence', (node.metadata.confidenceScore * 100).toFixed(0) + '%']);
-
-    if (details.length) {
-        html += `<hr class="rule modal-rule"><div class="modal-section-title">Properties</div>`;
-        details.forEach(([label, value]) => {
-            html += `<div class="modal-detail-row"><div class="modal-detail-label">${label}</div><div class="modal-detail-value">${value}</div></div>`;
-        });
-    }
-
-    // Relationships
-    if (node.relationships.length) {
-        html += `<hr class="rule modal-rule"><div class="modal-section-title">Relationships</div>`;
-        node.relationships.forEach(rel => {
-            const target = getNode(rel.targetNodeId);
-            html += `<div class="modal-rel-item">
-                <div class="modal-rel-type">${rel.relationshipFamily} &middot; ${rel.relationshipType}</div>
-                <div class="modal-rel-target">${target ? target.name : rel.targetNodeId}</div>
-                <div class="modal-rel-desc">${rel.description}</div>
-            </div>`;
-        });
-    }
-
-    // Historical
-    if (node.historicalContext) {
-        html += `<hr class="rule modal-rule"><div class="modal-section-title">Historical Context</div>`;
-        html += `<p class="modal-desc" style="margin-bottom:16px;font-style:italic">${node.historicalContext.summary}</p>`;
-        if (node.historicalContext.chronology && node.historicalContext.chronology.length) {
-            node.historicalContext.chronology.forEach(item => {
-                html += `<div class="modal-timeline-item">
-                    <div class="modal-timeline-year">${item.year}</div>
-                    <div class="modal-timeline-text"><strong>${item.event}</strong><br>${item.context}</div>
-                </div>`;
-            });
-        }
-    }
-
-    // References
-    if (node.references && node.references.length) {
-        html += `<hr class="rule modal-rule"><div class="modal-section-title">References</div>`;
-        node.references.forEach(ref => {
-            html += `<div class="modal-ref-item">
-                <div class="modal-ref-title">${ref.title}</div>
-                <a href="${ref.link}" target="_blank" class="modal-ref-link">${ref.link}</a>
-                <div class="modal-ref-desc">${ref.description}</div>
-            </div>`;
-        });
-    }
-
-    modalPanel.innerHTML = html;
-    modalOverlay.classList.add('active');
-}
-
-/* ─── NETWORK VISUALIZATION ─── */
-(function renderNetwork() {
-    const container = document.getElementById('network-visualization');
-    const canvas = document.createElement('canvas');
+/* ─── EXPLORER PREVIEW CANVAS ─── */
+(function renderPreview() {
+    const container = document.getElementById('explorer-preview');
+    const canvas = document.getElementById('explorer-canvas');
     const dpr = window.devicePixelRatio || 1;
 
     function resize() {
@@ -1508,196 +608,106 @@ function openModal(node) {
         canvas.style.height = rect.height + 'px';
     }
     resize();
-    container.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
 
+    const ctx = canvas.getContext('2d');
     const W = () => canvas.width / dpr;
     const H = () => canvas.height / dpr;
 
-    // Resolve actual colors
-    const resolvedColors = {};
-    Object.entries(CAT_COLORS).forEach(([cat, cssVar]) => {
-        resolvedColors[cat] = getComputedColor(cssVar);
-    });
+    // Generate abstract ghost nodes
+    const NODE_COUNT = 40;
+    const nodes = [];
+    for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+            x: Math.random() * 1200,
+            y: Math.random() * 600,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.1,
+            r: 2 + Math.random() * 4,
+            alpha: 0.08 + Math.random() * 0.12
+        });
+    }
 
-    // Build nodes
-    const nodes = DATA.map(n => ({
-        ...n,
-        x: W() * 0.2 + Math.random() * W() * 0.6,
-        y: H() * 0.2 + Math.random() * H() * 0.6,
-        vx: 0, vy: 0,
-        r: 6 + (3 - n.inheritanceLevel) * 4,
-        color: resolvedColors[n.category] || '#888'
-    }));
-
+    // Precompute edges between nearby nodes
     const edges = [];
-    DATA.forEach(n => {
-        n.relationships.forEach(rel => {
-            const s = nodes.find(nd => nd.id === n.id);
-            const t = nodes.find(nd => nd.id === rel.targetNodeId);
-            if (s && t) edges.push({ s, t });
-        });
-    });
-
-    // Legend
-    const legendEl = document.getElementById('network-legend');
-    [...new Set(DATA.map(n => n.category))].forEach(cat => {
-        const el = document.createElement('div');
-        el.className = 'legend-item';
-        el.innerHTML = `<span class="legend-dot" style="background:${CAT_COLORS[cat]}"></span>${CAT_LABELS[cat] || cat}`;
-        legendEl.appendChild(el);
-    });
-
-    let hovered = null;
-    let dragging = null;
-    let mouseX = 0, mouseY = 0;
-
-    function getPos(e) {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches ? e.touches[0] : e;
-        return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
-    }
-
-    function findNode(x, y) {
-        for (let i = nodes.length - 1; i >= 0; i--) {
-            const dx = x - nodes[i].x, dy = y - nodes[i].y;
-            if (dx * dx + dy * dy < (nodes[i].r + 6) * (nodes[i].r + 6)) return nodes[i];
-        }
-        return null;
-    }
-
-    canvas.addEventListener('mousemove', e => {
-        const p = getPos(e);
-        mouseX = p.x; mouseY = p.y;
-        if (dragging) { dragging.x = p.x; dragging.y = p.y; dragging.vx = 0; dragging.vy = 0; }
-        else { hovered = findNode(p.x, p.y); canvas.style.cursor = hovered ? 'pointer' : 'grab'; }
-    });
-
-    canvas.addEventListener('mousedown', e => {
-        const p = getPos(e);
-        const n = findNode(p.x, p.y);
-        if (n) { dragging = n; canvas.style.cursor = 'grabbing'; }
-    });
-
-    canvas.addEventListener('mouseup', () => { dragging = null; });
-    canvas.addEventListener('mouseleave', () => { hovered = null; dragging = null; });
-
-    canvas.addEventListener('click', e => {
-        if (dragging) return;
-        const p = getPos(e);
-        const n = findNode(p.x, p.y);
-        if (n) openModal(n);
-    });
-
-    // Touch
-    canvas.addEventListener('touchstart', e => {
-        e.preventDefault();
-        const p = getPos(e);
-        const n = findNode(p.x, p.y);
-        if (n) { dragging = n; }
-    }, { passive: false });
-
-    canvas.addEventListener('touchmove', e => {
-        e.preventDefault();
-        if (dragging) { const p = getPos(e); dragging.x = p.x; dragging.y = p.y; dragging.vx = 0; dragging.vy = 0; }
-    }, { passive: false });
-
-    canvas.addEventListener('touchend', e => {
-        if (dragging) { openModal(dragging); }
-        dragging = null;
-    });
-
-    function simulate() {
-        const w = W(), h = H();
-        for (let i = 0; i < nodes.length; i++) {
-            const a = nodes[i];
-            if (a === dragging) continue;
-            // Center gravity
-            a.vx += (w / 2 - a.x) * 0.0005;
-            a.vy += (h / 2 - a.y) * 0.0005;
-            // Repulsion
-            for (let j = i + 1; j < nodes.length; j++) {
-                const b = nodes[j];
-                let dx = a.x - b.x, dy = a.y - b.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-                dist = Math.max(dist, 1);
-                const minDist = (a.r + b.r) * 3;
-                if (dist < minDist) {
-                    const f = (minDist - dist) / dist * 0.3;
-                    a.vx += dx * f; a.vy += dy * f;
-                    b.vx -= dx * f; b.vy -= dy * f;
-                }
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            if (dx * dx + dy * dy < 180 * 180) {
+                edges.push([i, j]);
             }
-            a.vx *= 0.88; a.vy *= 0.88;
-            a.x += a.vx; a.y += a.vy;
-            a.x = Math.max(a.r + 4, Math.min(w - a.r - 4, a.x));
-            a.y = Math.max(a.r + 4, Math.min(h - a.r - 4, a.y));
         }
-        // Edge spring
-        edges.forEach(e => {
-            const dx = e.t.x - e.s.x, dy = e.t.y - e.s.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            dist = Math.max(dist, 1);
-            const target = 130;
-            const f = (dist - target) / dist * 0.008;
-            if (e.s !== dragging) { e.s.vx += dx * f; e.s.vy += dy * f; }
-            if (e.t !== dragging) { e.t.vx -= dx * f; e.t.vy -= dy * f; }
-        });
     }
 
     function draw() {
         const w = W(), h = H();
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, w, h);
 
+        // Scale positions to fit container
+        const sx = w / 1200, sy = h / 600;
+
         // Edges
-        edges.forEach(e => {
+        edges.forEach(([i, j]) => {
+            const a = nodes[i], b = nodes[j];
             ctx.beginPath();
-            ctx.moveTo(e.s.x, e.s.y);
-            ctx.lineTo(e.t.x, e.t.y);
-            ctx.strokeStyle = hovered && (hovered === e.s || hovered === e.t) ? 'rgba(184,150,62,0.35)' : 'rgba(200,194,176,0.25)';
-            ctx.lineWidth = hovered && (hovered === e.s || hovered === e.t) ? 1 : 0.5;
+            ctx.moveTo(a.x * sx, a.y * sy);
+            ctx.lineTo(b.x * sx, b.y * sy);
+            ctx.strokeStyle = 'rgba(200, 194, 176, 0.12)';
+            ctx.lineWidth = 0.5;
             ctx.stroke();
         });
 
         // Nodes
         nodes.forEach(n => {
-            const isHovered = n === hovered;
+            // Drift
+            n.x += n.vx;
+            n.y += n.vy;
+            if (n.x < -20) n.x = 1220;
+            if (n.x > 1220) n.x = -20;
+            if (n.y < -20) n.y = 620;
+            if (n.y > 620) n.y = -20;
+
             ctx.beginPath();
-            ctx.arc(n.x, n.y, isHovered ? n.r + 3 : n.r, 0, Math.PI * 2);
-            ctx.fillStyle = n.color;
+            ctx.arc(n.x * sx, n.y * sy, n.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(154, 125, 50, ${n.alpha})`;
             ctx.fill();
+        });
 
-            if (isHovered) {
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, n.r + 8, 0, Math.PI * 2);
-                ctx.strokeStyle = n.color;
-                ctx.lineWidth = 0.5;
-                ctx.globalAlpha = 0.4;
-                ctx.stroke();
-                ctx.globalAlpha = 1;
-            }
+        requestAnimationFrame(draw);
+    }
 
-            // Label
-            const showLabel = n.r > 10 || isHovered;
-            if (showLabel) {
-                ctx.font = `${isHovered ? '500 13px' : '400 11px'} 'EB Garamond', serif`;
-                ctx.textAlign = 'center';
-                ctx.fillStyle = isHovered ? '#0d1b2a' : '#5a5a5a';
-                ctx.fillText(n.name, n.x, n.y + n.r + 16);
-            }
+    window.addEventListener('resize', () => { resize(); });
+    draw();
+})();
+
+/* ─── DATA LOADING (stats only) ─── */
+async function loadData() {
+    try {
+        const response = await fetch(DATA_PATH);
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const json = await response.json();
+
+        let data;
+        if (Array.isArray(json)) {
+            data = json;
+        } else if (json.nodes && Array.isArray(json.nodes)) {
+            data = json.nodes;
+        } else {
+            throw new Error('Invalid dataset format: expected an array or { nodes: [...] }');
+        }
+
+        data = data.filter(n => n && n.id && n.name && n.category);
+        data.forEach(n => { if (!n.relationships) n.relationships = []; });
+
+        updateStats(data);
+    } catch (err) {
+        console.error('Failed to load dataset:', err);
+        ['stat-nodes', 'stat-rels', 'stat-cats', 'stat-fams'].forEach(id => {
+            document.getElementById(id).textContent = '0';
         });
     }
-
-    function loop() {
-        simulate();
-        draw();
-        requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('resize', () => { resize(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); });
-    loop();
-})();
+}
 
 /* ─── MOBILE MENU ─── */
 document.getElementById('menuToggle').addEventListener('click', function() {
@@ -1723,7 +733,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         e.preventDefault();
         const t = document.querySelector(a.getAttribute('href'));
         if (t) window.scrollTo({ top: t.offsetTop - 60, behavior: 'smooth' });
-        // close mobile nav
         const nav = document.querySelector('nav');
         if (window.innerWidth <= 768) nav.style.display = 'none';
     });
@@ -1748,11 +757,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         observer.observe(s);
     });
 
-    // Don't hide hero
-    const hero = document.getElementById('hero');
-    hero.style.opacity = '1';
-    hero.style.transform = 'none';
+    document.getElementById('hero').style.opacity = '1';
+    document.getElementById('hero').style.transform = 'none';
 })();
+
+/* ─── INIT ─── */
+loadData();
 </script>
 </body>
 </html>
