@@ -1143,7 +1143,7 @@
     // =============================================
     async function loadData() {
       try {
-        const response = await fetch('data/data.json');
+        const response = await fetch('data/index.json');
         if (!response.ok) throw new Error('Network response was not ok');
         
         const data = await response.json();
@@ -1166,7 +1166,7 @@
         console.error('Error loading data:', error);
         loadingSkeleton.innerHTML = `
           <div class="col-span-full text-center py-10 text-red-400 border border-red-500/20 bg-red-500/5 rounded-xl">
-            <p class="font-mono text-sm">Failed to load data/data.json</p>
+            <p class="font-mono text-sm">Failed to load data/index.json</p>
             <p class="text-xs mt-2 opacity-60">Ensure file exists and is valid JSON.</p>
           </div>
         `;
