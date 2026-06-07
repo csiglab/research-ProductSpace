@@ -6,7 +6,7 @@
 
 > The core objectives of this project are also supported by concepts and frameworks developed in Arbitriologia, Produceologia, Social Ontology, and related fields.
 
-Goals:
+## Goal Set
 
 - **Develop a formal representation of the product space**, including products, product categories, and their relationships.
 - **Model production processes** by identifying the activities, transformations, inputs, outputs, resources, and constraints involved in creating products.
@@ -19,6 +19,11 @@ Goals:
 - **Analyze capability accumulation and diffusion**, including how techniques emerge, combine, transfer, and contribute to the production of increasingly complex products.
 - **Develop a knowledge base of production systems** that can be used to study industrial development, economic complexity, technological capabilities, and productive structures.
 
+## Appendix
+
+- Specific Market Research - Will be Done in [Social Ontology](https://bremontix.xyz/lab/research/onto/).
+
 ## References
 
 - [Arbitriologia](https://github.com/csiglab/Arbitriologia)
+- [Social Ontology](https://bremontix.xyz/lab/research/onto/)
